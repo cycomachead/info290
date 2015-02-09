@@ -1,0 +1,12 @@
+import socket
+HOST = socket.gethostname().replace('.local', '')
+
+# Relative File paths based on each computer we have.
+yelp_data = {
+    'Yosemite-Pro': '../yelp.txt',
+    'Yosemite-Retina': '../yelp.txt',
+    'Peters Computer':'404.html'
+}
+
+def yelpFile():
+    return yelp_data[HOST]
