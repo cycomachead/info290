@@ -7,6 +7,11 @@ import numpy as np
 from file_utils import reviewers
 import csv
 
+### utility functions
+
+def na_rm(data):
+    return data[~np.isnan(data).any(axis=1)]
+
 D = recfromcsv(reviewers(), delimiter='|')
 D2 = np.array(D[["q4", "q5", "q6"]].tolist())
 
@@ -33,3 +38,19 @@ def question2():
                 print(str(i) + " clusters had a problem:")
                 print(e.message)
 
+### Question 3
+D3 = np.array(D[["q7", "q8", "q9"]].tolist())
+def question3():
+    with open('q2.feature', 'w+') as f:
+        file_writer = csv.writer(f)
+        file_writer.writerow(['num_clusters', 'silhouette_coeff'])
+        for i in range(2, 9):
+            try:
+                clustering = get_clustering(i, D3)
+                cluster_fits[i] = clustering
+                m = metrics.silhouette_score(D2, clustering.labels_, metric='euclidean', sample_size = 10000)
+                silhouettes[i] = m
+                file_writer.writerow([i, m])
+            except Exception as e:
+                print(str(i) + " clusters had a problem:")
+                print(e.message)
