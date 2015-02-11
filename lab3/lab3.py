@@ -1,12 +1,21 @@
+from __future__ import print_function
+
 from sklearn import cluster, metrics
 from numpy import recfromcsv
 import numpy as np
 
-D = recfromcsv('yelp_reviewers.txt', delimiter='|')
+# from sys import path
+# from os import getcwd
+# print(getcwd() + '/..')
+# path.append(getcwd() + '/..')
+#
+# import file_utils
+
+D = recfromcsv('../yelp.txt', delimiter='|')
 D2 = np.array(D[["q4", "q5", "q6"]].tolist())
 
 ### Question 2
-cluster_fits = {}
+cluster_fits     = {}
 def get_clustering(n):
     clusterer = cluster.KMeans(n_clusters = 3)
     clustering = clusterer.fit(D2)
@@ -17,7 +26,7 @@ for i in range(1, 9):
     try:
         cluster_fits[i] = get_clustering(i)
     except Exception as e:
-        print str(i) + " clusters had a problem:"
-        print e.message
+        print(str(i) + " clusters had a problem:")
+        print(e.message)
 
 
