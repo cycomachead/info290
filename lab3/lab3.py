@@ -12,12 +12,24 @@ import csv
 def na_rm(data):
     return data[~np.isnan(data).any(axis=1)]
 
-D = recfromcsv("yelp_reviewers.txt", delimiter='|')
+def returnNaNs(data):
+    return [i for i in data if np.isnan(i)]
+
+D = recfromcsv("../yelp_reviewers.txt", delimiter='|')
 D2 = np.array(D[["q4", "q5", "q6"]].tolist())
 D3 = np.array(D[["q8", "q9", "q10"]].tolist())
 D3 = na_rm(D3)
 D4 = np.array(D[["q11", "q12", "q13"]].tolist())
 D4 = na_rm(D4)
+
+D18 = np.array(D[['q8', 'q9', 'q10', 'q11', 'q12', 'q13',
+                  'q18_group2', 'q18_group3', 'q18_group5', 'q18_group6',
+                  'q18_group7', 'q18_group11', 'q18_group13', 'q18_group14',
+                  'q18_group15', 'q18_group16_a', 'q18_group16_b',
+                  'q18_group16_c', 'q18_group16_d', 'q18_group16_e',
+                  'q18_group16_f', 'q18_group16_g', 'q18_group16_h']].tolist())
+
+print(D18)
 
 ### Question 2
 cluster_fits = {}
@@ -73,6 +85,42 @@ def question4():
                 print(str(i) + " clusters had a problem:")
                 print(e.message)
 
+
+def pctNaN(col):
+    return len(returnNaNs(col))/len(col)
+
+def question7(item):
+    i = 0
+    realCol = 0
+    while i < item.shape[1]:
+        row = item[:, i]
+        pct = pctNaN(row)
+        print(pct)
+        if pct > 0.25:
+            # The last 1 specifies to delete a column not a row
+            print(str.format('Deleting column {0}, w/ {1} NaN values', realCol, round(pct * 100)))
+            item = np.delete(item, i, 1)
+        else:
+            i += 1
+        realCol += 1
+    print(realCol)
+    print(item.shape)
+    return item
+    # with open('q7.feature', 'w+') as f:
+    #     file_writer = csv.writer(f)
+    #     file_writer.writerow(['num_clusters', 'silhouette_coeff'])
+    #     for i in range(2, 9):
+    #         try:
+    #             clustering = get_clustering(i, D4)
+    #             cluster_fits[i] = clustering
+    #             m = metrics.silhouette_score(D4, clustering.labels_, metric='euclidean', sample_size = 10000)
+    #             silhouettes[i] = m
+    #             file_writer.writerow([i, m])
+    #         except Exception as e:
+    #             print(str(i) + " clusters had a problem:")
+    #             print(e.message)
+
 #question2()
 #question3()
 #question4()
+question7(D18)
