@@ -13,11 +13,11 @@ def get_clustering(n, data):
     clustering = clusterer.fit(data)
     return clustering
 
-for i in range(1, 9):
+for i in range(2, 9):
     try:
         clustering = get_clustering(i, D2)
         cluster_fits[i] = clustering
-        m = metrics.silhouette_score(D2, clustering.labels_, metric='euclidean', sample_size = 500)
+        m = metrics.silhouette_score(D2, clustering.labels_, metric='euclidean', sample_size = 10000)
         silhouettes[i] = m
     except Exception as e:
         print str(i) + " clusters had a problem:"
