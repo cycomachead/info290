@@ -13,7 +13,7 @@ def na_rm(data):
     return data[~np.isnan(data).any(axis=1)]
 
 D = recfromcsv("yelp_reviewers.txt", delimiter='|')
-D[["q17"][0]] = np.log(D[["q17"][0]])
+D["q17"][0] = np.log(D["q17"][0])
 D2 = np.array(D[["q4", "q5", "q6"]].tolist())
 D3 = np.array(D[["q8", "q9", "q10"]].tolist())
 D3 = na_rm(D3)
@@ -94,4 +94,3 @@ def question6():
 #question3()
 #question4()
 question6()
-
