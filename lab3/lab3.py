@@ -26,5 +26,3 @@ for i in range(2, 9):
     except Exception as e:
         print(str(i) + " clusters had a problem:")
         print(e.message)
-
-
