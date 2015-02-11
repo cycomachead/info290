@@ -4,6 +4,7 @@
 .thumbs.db
 # DONT COMMIT LARGE ASS FILES, YO!
 yelp_*.txt
+yelp.txt
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

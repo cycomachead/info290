@@ -1,8 +1,12 @@
+from __future__ import print_function
+
 from sklearn import cluster, metrics
 from numpy import recfromcsv
 import numpy as np
 
-D = recfromcsv('yelp_reviewers.txt', delimiter='|')
+from file_utils import reviewers
+
+D = recfromcsv(reviewers(), delimiter='|')
 D2 = np.array(D[["q4", "q5", "q6"]].tolist())
 
 ### Question 2
@@ -20,7 +24,7 @@ for i in range(2, 9):
         m = metrics.silhouette_score(D2, clustering.labels_, metric='euclidean', sample_size = 10000)
         silhouettes[i] = m
     except Exception as e:
-        print str(i) + " clusters had a problem:"
-        print e.message
+        print(str(i) + " clusters had a problem:")
+        print(e.message)
 
 
