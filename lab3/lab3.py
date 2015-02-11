@@ -4,14 +4,9 @@ from sklearn import cluster, metrics
 from numpy import recfromcsv
 import numpy as np
 
-from sys import path
-from os import getcwd
-print(getcwd() + '/..')
-path.insert(0, getcwd() + '/../')
+from file_utils import reviewers
 
-import file_utils
-
-D = recfromcsv('../yelp.txt', delimiter='|')
+D = recfromcsv(reviewers(), delimiter='|')
 D2 = np.array(D[["q4", "q5", "q6"]].tolist())
 
 ### Question 2

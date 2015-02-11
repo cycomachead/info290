@@ -8,5 +8,13 @@ yelp_data = {
     'Peters Computer':'404.html'
 }
 
+review = {
+    'Yosemite-Pro': '../yelp_reviewers.txt',
+    'Yosemite-Retina': '../yelp_reviewers.txt',
+    'Peters Computer':'404.html'
+}
 def yelpFile():
     return yelp_data[HOST]
+
+def reviewers():
+    return review[HOST]
