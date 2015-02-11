@@ -12,15 +12,11 @@ import csv
 def na_rm(data):
     return data[~np.isnan(data).any(axis=1)]
 
-<<<<<<< HEAD
 def returnNaNs(data):
     return [i for i in data if np.isnan(i)]
 
 D = recfromcsv("../yelp_reviewers.txt", delimiter='|')
-=======
-D = recfromcsv("yelp_reviewers.txt", delimiter='|')
 D[["q17"][0]] = np.log(D[["q17"][0]])
->>>>>>> edd95ba815d167fdfade45cc597f884ac6827a9a
 D2 = np.array(D[["q4", "q5", "q6"]].tolist())
 D3 = np.array(D[["q8", "q9", "q10"]].tolist())
 D3 = na_rm(D3)
@@ -35,7 +31,6 @@ D18 = np.array(D[['q8', 'q9', 'q10', 'q11', 'q12', 'q13',
                   'q18_group15', 'q18_group16_a', 'q18_group16_b',
                   'q18_group16_c', 'q18_group16_d', 'q18_group16_e',
                   'q18_group16_f', 'q18_group16_g', 'q18_group16_h']].tolist())
-
 
 ### Question 2
 cluster_fits = {}
