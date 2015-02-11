@@ -4,7 +4,7 @@ from sklearn import cluster, metrics
 from numpy import recfromcsv
 import numpy as np
 
-from file_utils import reviewers
+#from file_utils import reviewers
 import csv
 
 ### utility functions
@@ -12,10 +12,12 @@ import csv
 def na_rm(data):
     return data[~np.isnan(data).any(axis=1)]
 
-D = recfromcsv(reviewers(), delimiter='|')
+D = recfromcsv("yelp_reviewers.txt", delimiter='|')
 D2 = np.array(D[["q4", "q5", "q6"]].tolist())
 D3 = np.array(D[["q8", "q9", "q10"]].tolist())
+D3 = na_rm(D3)
 D4 = np.array(D[["q11", "q12", "q13"]].tolist())
+D4 = na_rm(D4)
 
 ### Question 2
 cluster_fits = {}
@@ -41,7 +43,6 @@ def question2():
                 print(e.message)
 
 ### Question 3
-D3 = np.array(D[["q7", "q8", "q9"]].tolist())
 def question3():
     with open('q3.feature', 'w+') as f:
         file_writer = csv.writer(f)
@@ -72,6 +73,24 @@ def question4():
                 print(str(i) + " clusters had a problem:")
                 print(e.message)
 
+
 ### Question 5
+# cool, funny, useful
 best_clustering = get_clustering(8, D4)
+# a
+for i in range(8):
+    print("C%i: %i"%(i, np.sum(best_clustering.labels_ == i)))
+
+# b
+print best_clustering.cluster_centers_
+# the fifth cluster has a much higher funny rating than useful rating
+
+# c
+# the sixth cluster has the most evenly distributed votes
+print np.sum(best_clustering.labels_ == 5)
+
+#question2()
+#question3()
+#question4()
+
 
