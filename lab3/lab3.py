@@ -72,5 +72,6 @@ def question4():
                 print(str(i) + " clusters had a problem:")
                 print(e.message)
 
-question2()
+### Question 5
+best_clustering = get_clustering(8, D4)
 
