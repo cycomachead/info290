@@ -4,10 +4,10 @@ from sklearn import cluster, metrics
 from numpy import recfromcsv
 import numpy as np
 
-#from file_utils import reviewers
+from file_utils import reviewers
 import csv
 
-D = recfromcsv("yelp_reviewers.txt", delimiter='|')
+D = recfromcsv(reviewers(), delimiter='|')
 D2 = np.array(D[["q4", "q5", "q6"]].tolist())
 D3 = np.array(D[["q8", "q9", "q10"]].tolist())
 D4 = np.array(D[["q11", "q12", "q13"]].tolist())
