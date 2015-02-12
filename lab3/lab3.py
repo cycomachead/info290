@@ -157,5 +157,5 @@ def question6():
 #question2()
 #question3()
 #question4()
-#question6()
-question7(D18)
+question6()
+#question7(D18)
