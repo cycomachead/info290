@@ -5,6 +5,8 @@ from numpy import recfromcsv
 import numpy as np
 from sklearn.preprocessing import normalize
 
+import matplotlib.pyplot as plt
+
 #from file_utils import reviewers
 import csv
 
@@ -187,9 +189,31 @@ for i in range(2, 9):
 """
 
 best_clust = get_clustering(2, D8)
+
+D['q4'] = D['q4'] / D['q3']
+D['q5'] = D['q5'] / D['q3']
+D['q6'] = D['q6'] / D['q3']
+
 D_filtered = D[~which_na(D8),:]
 C0 = D_filtered[best_clust.labels_ == 0,:]
 C1 = D_filtered[best_clust.labels_ == 1,:]
+
+# plotting 
+"""
+plt.scatter(D['q3'], D['q18_group7'], c = best_clust.labels_)
+plt.scatter(best_clust.cluster_centers_[:,0], best_clust.cluster_centers_[:,1], c = "green")
+plt.title("Clustering of Num. Reviews and Time Between Reviews")
+plt.xlabel("Number of Reviews")
+plt.ylabel("Average Time Between Reviews")
+plt.show()
+"""
+
+for name in D.dtype.names[1:]:
+    current0 = C0[name]
+    current1 = C1[name]
+    m1 = np.mean(current0[~np.isnan(current0)])
+    m2 = np.mean(current1[~np.isnan(current1)])
+    print("%s: cluster0: %f    cluster1: %f"%(name, m1, m2))
 
 #question2()
 #question3()
