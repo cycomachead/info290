@@ -91,37 +91,64 @@ def question4():
 def pctNaN(col):
     return len(returnNaNs(col))/len(col)
 
-def question7(item):
+q7c = None
+def question7(data):
+    global q7c
     i = 0
     realCol = 0
-    while i < item.shape[1]:
-        row = item[:, i]
+    while i < data.shape[1]:
+        row = data[:, i]
         pct = pctNaN(row)
         print(pct)
         if pct > 0.35:
             # The last 1 specifies to delete a column not a row
             print(str.format('Deleting column {0}, w/ {1} NaN values', realCol, round(pct * 100)))
-            item = np.delete(item, i, 1)
+            data = np.delete(data, i, 1)
         else:
             i += 1
         realCol += 1
     print(realCol)
-    print(item.shape)
-    item = na_rm(item)
-    print(item.shape)
+    print(data.shape)
+    data = na_rm(data)
+    print(data.shape)
+    with open('q7b.feature', 'w+') as f:
+        file_writer = csv.writer(f)
+        file_writer.writerow(['num_clusters', 'sum_win_var_clust'])
+        for i in range(2, 9):
+            try:
+                clustering = get_clustering(i, data)
+                cluster_fits[i] = clustering
+                values = {}
+                sums = {}
+                for j in range(i):
+                    values[j] = data[cluster_fits[i].labels_ == j,:]
+                    mean = sum(values[j])/len(values[j])
+                    iterim = map(lambda x: (x-mean)**2, values[j])
+                    ssd  = sum(iterim)
+                    if sums[i]:
+                        sums[i] += [ssd]
+                    else:
+                        sums[i] = [ssd]
+                print('I: ', i, 'Len of Sums: ', len(sums[i]))
+                file_writer.writerow([i, sum(sums[i])])
+            except Exception as e:
+                print(str(i) + " clusters had a problem:")
+                print(e)
+
     with open('q7a.feature', 'w+') as f:
         file_writer = csv.writer(f)
         file_writer.writerow(['num_clusters', 'silhouette_coeff'])
         for i in range(2, 9):
             try:
-                clustering = get_clustering(i, item)
+                clustering = get_clustering(i, data)
                 cluster_fits[i] = clustering
-                m = metrics.silhouette_score(item, clustering.labels_, metric='euclidean', sample_size = 10000)
+                m = metrics.silhouette_score(data, clustering.labels_, metric='euclidean', sample_size = 10000)
                 silhouettes[i] = m
                 file_writer.writerow([i, m])
             except Exception as e:
                 print(str(i) + " clusters had a problem:")
                 print(e)
+        q7c = cluster_fits
 
 ### Question 5
 # cool, funny, useful
@@ -159,5 +186,5 @@ def question6():
 #question2()
 #question3()
 #question4()
-question6()
-#question7(D18)
+#question6()
+question7(D18)
