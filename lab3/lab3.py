@@ -15,15 +15,16 @@ def na_rm(data):
 def returnNaNs(data):
     return [i for i in data if np.isnan(i)]
 
-D = recfromcsv("../yelp_reviewers.txt", delimiter='|')
-D[["q17"][0]] = np.log(D[["q17"][0]])
+D = recfromcsv("yelp_reviewers.txt", delimiter='|')
+D["q17"] = np.log(D["q17"])
 D2 = np.array(D[["q4", "q5", "q6"]].tolist())
 D3 = np.array(D[["q8", "q9", "q10"]].tolist())
 D3 = na_rm(D3)
 D4 = np.array(D[["q11", "q12", "q13"]].tolist())
 D4 = na_rm(D4)
-D6 = np.array(D[["q8", "q9", "q10", "q11", "q12", "q13", "q16", "q17"]].tolist())
-D6 = na_rm(D6)
+D61 = np.array(D[["q8", "q9", "q10", "q11", "q12", "q13", "q16a", "q16b", "q16c", "q16d", "q16e", "q16f", "q16g", "q16h", "q16i", "q17", "q14"]].tolist())
+D61 = na_rm(D61)
+D6 = np.array([i[:-1] for i in D61])
 
 D18 = np.array(D[['q8', 'q9', 'q10', 'q11', 'q12', 'q13',
                   'q18_group2', 'q18_group3', 'q18_group5', 'q18_group6',
@@ -145,14 +146,13 @@ def question6():
             clustering = get_clustering(5, D6)
             cluster_fits[5] = clustering
             for i in range(5):
-                print("C%i: %f"%(i+1, np.sum(D[clustering.labels_ == i,]["q14"])/np.sum(clustering.labels_ == i)))
+                print("C%i: %f"%(i+1, np.mean([D61[j][-1] for j in range(len(D61)) if clustering.labels_[j] == i])))
             m = metrics.silhouette_score(D6, clustering.labels_, metric='euclidean', sample_size = 10000)
             silhouettes[5] = m
             file_writer.writerow([5, m])
         except Exception as e:
             print(str(5) + " clusters had a problem:")
             print(e.message)
-
 
 #question2()
 #question3()
