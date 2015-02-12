@@ -1,0 +1,41 @@
+q3,total number of reviews
+q4,total number of cool votes
+q5,total number of funny votes
+q6,total number of userful votes
+q7,natural log of q3 (total reviews)
+q8,natural log of q4 (cool votes)
+q9,natural log of q5 (funny votes)
+q10,natural log of q3 (useful votes)
+q11,percentage of total cool votes to total votes
+q12,percentage of total funny votes to total votes
+q13,percentage of total useful votes to total votes
+q14,average star rating
+q15,year in which reviewer wrote the most review (starting from year 0)
+q16a,binary- 2005 was the year with the most reviews
+q16b,binary- 2006 was the year with the most reviews
+q16c,binary- 2007 was the year with the most reviews
+q16d,binary- 2008 was the year with the most reviews
+q16e,binary- 2009 was the year with the most reviews
+q16f,binary- 2010 was the year with the most reviews
+q16g,binary- 2011 was the year with the most reviews
+q16h,binary- 2012 was the year with the most reviews
+q16i,binary- 2012 was the year with the most reviews
+q17,average review character length
+q18_group2,how many stars above/below average does the reviewer rate on average
+q18_group3,More useful bad reviews or good reviews? Find average votes.useful for reviews greater than and less than 3.5 stars. 0 for higher bad review average 1 for higher good review average.
+q18_group5,z-score of total cool votes
+q18_group6,Days active (date of most recent review - first review)
+q18_group7,average number of days between two reviews
+q18_group11,Avg of % of reviews with at least 1 cool  funny  AND useful vote
+q18_group13,median number of total reviews for the each restaurant that a user reviewed
+q18_group14,number of unique words used by a reviewer
+q18_group15,Percent of reviews with at least one superlative (ending in 'est')
+q18_group16_a,% change in reviews  2005-2006
+q18_group16_b,% change in reviews  2006-2007
+q18_group16_c,% change in reviews  2007-2008
+q18_group16_d,% change in reviews  2008-2009
+q18_group16_e,% change in reviews  2009-2010
+q18_group16_f,% change in reviews  2010-2011
+q18_group16_g,% change in reviews  2011-2012
+q18_group16_h,% change in reviews  2012-2013
+,
