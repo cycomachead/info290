@@ -76,6 +76,23 @@ def question4():
                 print(str(i) + " clusters had a problem:")
                 print(e.message)
 
+
+### Question 5
+# cool, funny, useful
+best_clustering = get_clustering(8, D4)
+# a
+for i in range(8):
+    print("C%i: %i"%(i, np.sum(best_clustering.labels_ == i)))
+
+# b
+print(best_clustering.cluster_centers_)
+# the fifth cluster has a much higher funny rating than useful rating
+
+# c
+# the sixth cluster has the most evenly distributed votes
+print(np.sum(best_clustering.labels_ == 5))
+
+
 def question6():
     with open('q6.feature', 'w+') as f:
         file_writer = csv.writer(f)
@@ -83,6 +100,8 @@ def question6():
         try:
             clustering = get_clustering(5, D6)
             cluster_fits[5] = clustering
+            for i in range(5):
+                print("C%i: %f"%(i+1, np.sum(D[clustering.labels_ == i,]["q14"])/np.sum(clustering.labels_ == i)))
             m = metrics.silhouette_score(D6, clustering.labels_, metric='euclidean', sample_size = 10000)
             silhouettes[5] = m
             file_writer.writerow([5, m])
