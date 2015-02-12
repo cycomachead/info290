@@ -85,12 +85,12 @@ for i in range(8):
     print("C%i: %i"%(i, np.sum(best_clustering.labels_ == i)))
 
 # b
-print best_clustering.cluster_centers_
+print(best_clustering.cluster_centers_)
 # the fifth cluster has a much higher funny rating than useful rating
 
 # c
 # the sixth cluster has the most evenly distributed votes
-print np.sum(best_clustering.labels_ == 5)
+print(np.sum(best_clustering.labels_ == 5))
 
 
 def question6():
