@@ -101,39 +101,21 @@ def question7(data):
         row = data[:, i]
         pct = pctNaN(row)
         print(pct)
-        if pct > 0.35:
+        if pct > 0.40:
             # The last 1 specifies to delete a column not a row
-            print(str.format('Deleting column {0}, w/ {1} NaN values', realCol, round(pct * 100)))
             data = np.delete(data, i, 1)
         else:
             i += 1
         realCol += 1
-    print(realCol)
-    print(data.shape)
     data = na_rm(data)
-    print(data.shape)
     with open('q7b.feature', 'w+') as f:
         file_writer = csv.writer(f)
         file_writer.writerow(['num_clusters', 'sum_win_var_clust'])
         for i in range(2, 9):
             try:
                 clustering = get_clustering(i, data)
-                cluster_fits[i] = clustering
-                values = {}
-                sums = {}
-                for j in range(i):
-                    values[j] = data[cluster_fits[i].labels_ == j,:]
-                    mean = sum(values[j])/len(values[j])
-                    iterim = map(lambda x: (x-mean)**2, values[j])
-                    ssd  = sum(iterim)
-                    if i in sums:
-                        sums[i] += [ssd]
-                    else:
-                        print('new item arr ', i)
-                        sums[i] = [ssd]
-                print('I: ', i, ' Len of Sums: ', len(sums[i]))
-                print('SUM: ', sums[i])
-                file_writer.writerow([i, sum(sum(sums[i]))])
+                print('I: ', i, 'VALUE: ',  clustering.inertia_)
+                file_writer.writerow([i, clustering.inertia_])
             except Exception as e:
                 print(str(i) + " clusters had a problem:")
                 print(e)
