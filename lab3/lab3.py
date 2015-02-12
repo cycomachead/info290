@@ -9,8 +9,10 @@ import csv
 
 ### utility functions
 
+
 def na_rm(data):
     return data[~np.isnan(data).any(axis=1)]
+
 
 def returnNaNs(data):
     return [i for i in data if np.isnan(i)]
@@ -22,8 +24,8 @@ D3 = np.array(D[["q8", "q9", "q10"]].tolist())
 D3 = na_rm(D3)
 D4 = np.array(D[["q11", "q12", "q13"]].tolist())
 D4 = na_rm(D4)
-D6 = np.array(D[["q8", "q9", "q10", "q11", "q12", "q13", "q16", "q17"]].tolist())
-D6 = na_rm(D6)
+#D6 = np.array(D[["q8", "q9", "q10", "q11", "q12", "q13", "q16", "q17"]].tolist())
+#D6 = na_rm(D6)
 
 D18 = np.array(D[['q8', 'q9', 'q10', 'q11', 'q12', 'q13',
                   'q18_group2', 'q18_group3', 'q18_group5', 'q18_group6',
@@ -31,6 +33,9 @@ D18 = np.array(D[['q8', 'q9', 'q10', 'q11', 'q12', 'q13',
                   'q18_group15', 'q18_group16_a', 'q18_group16_b',
                   'q18_group16_c', 'q18_group16_d', 'q18_group16_e',
                   'q18_group16_f', 'q18_group16_g', 'q18_group16_h']].tolist())
+
+D8 = np.array(D[['q3', 'q6', 'q10', 'q17', 'q18_group6', 'q18_group7', 'q18_group14']].tolist())
+D8 = na_rm(D8)
 
 ### Question 2
 cluster_fits = {}
@@ -154,8 +159,28 @@ def question6():
             print(e.message)
 
 
+
+### Question 8
+def question8():
+    pass
+
+cluster_fits = {}
+silhouettes = {}
+for i in range(2, 9):
+    try:
+        clustering = get_clustering(i, D8)
+        cluster_fits[i] = clustering
+        m = metrics.silhouette_score(D8, clustering.labels_, metric='euclidean', sample_size = 500)
+        silhouettes[i] = m
+    except Exception as e:
+        print(str(i) + " clusters had a problem:")
+        print(e.message)
+
+
 #question2()
 #question3()
 #question4()
-question6()
+#question6()
 #question7(D18)
+
+
