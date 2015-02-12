@@ -97,7 +97,7 @@ def question7(item):
         row = item[:, i]
         pct = pctNaN(row)
         print(pct)
-        if pct > 0.25:
+        if pct > 0.50:
             # The last 1 specifies to delete a column not a row
             print(str.format('Deleting column {0}, w/ {1} NaN values', realCol, round(pct * 100)))
             item = np.delete(item, i, 1)
@@ -123,18 +123,18 @@ def question7(item):
 
 ### Question 5
 # cool, funny, useful
-best_clustering = get_clustering(8, D4)
+# best_clustering = get_clustering(8, D4)
 # a
-for i in range(8):
-    print("C%i: %i"%(i, np.sum(best_clustering.labels_ == i)))
+# for i in range(8):
+#    print("C%i: %i"%(i, np.sum(best_clustering.labels_ == i)))
 
 # b
-print(best_clustering.cluster_centers_)
+# print(best_clustering.cluster_centers_)
 # the fifth cluster has a much higher funny rating than useful rating
 
 # c
 # the sixth cluster has the most evenly distributed votes
-print(np.sum(best_clustering.labels_ == 5))
+# print(np.sum(best_clustering.labels_ == 5))
 
 
 def question6():
