@@ -10,7 +10,8 @@ import csv
 ### utility functions
 
 def na_rm(data):
-    return data[~np.isnan(data).any(axis=1)]
+    data = data[~np.isnan(data).any(axis=1)]
+    return data[~np.isinf(data).any(axis=1)]
 
 def returnNaNs(data):
     return [i for i in data if np.isnan(i)]
@@ -97,7 +98,7 @@ def question7(item):
         row = item[:, i]
         pct = pctNaN(row)
         print(pct)
-        if pct > 0.50:
+        if pct > 0.35:
             # The last 1 specifies to delete a column not a row
             print(str.format('Deleting column {0}, w/ {1} NaN values', realCol, round(pct * 100)))
             item = np.delete(item, i, 1)
@@ -106,20 +107,21 @@ def question7(item):
         realCol += 1
     print(realCol)
     print(item.shape)
-    return item
-    # with open('q7.feature', 'w+') as f:
-    #     file_writer = csv.writer(f)
-    #     file_writer.writerow(['num_clusters', 'silhouette_coeff'])
-    #     for i in range(2, 9):
-    #         try:
-    #             clustering = get_clustering(i, D4)
-    #             cluster_fits[i] = clustering
-    #             m = metrics.silhouette_score(D4, clustering.labels_, metric='euclidean', sample_size = 10000)
-    #             silhouettes[i] = m
-    #             file_writer.writerow([i, m])
-    #         except Exception as e:
-    #             print(str(i) + " clusters had a problem:")
-    #             print(e.message)
+    item = na_rm(item)
+    print(item.shape)
+    with open('q7a.feature', 'w+') as f:
+        file_writer = csv.writer(f)
+        file_writer.writerow(['num_clusters', 'silhouette_coeff'])
+        for i in range(2, 9):
+            try:
+                clustering = get_clustering(i, item)
+                cluster_fits[i] = clustering
+                m = metrics.silhouette_score(item, clustering.labels_, metric='euclidean', sample_size = 10000)
+                silhouettes[i] = m
+                file_writer.writerow([i, m])
+            except Exception as e:
+                print(str(i) + " clusters had a problem:")
+                print(e)
 
 ### Question 5
 # cool, funny, useful
@@ -134,7 +136,7 @@ def question7(item):
 
 # c
 # the sixth cluster has the most evenly distributed votes
-# print(np.sum(best_clustering.labels_ == 5))
+    # print(np.sum(best_clustering.labels_ == 5))
 
 
 def question6():
