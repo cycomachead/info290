@@ -3,16 +3,18 @@ from __future__ import print_function
 from sklearn import cluster, metrics
 from numpy import recfromcsv
 import numpy as np
+from sklearn.preprocessing import normalize
 
 #from file_utils import reviewers
 import csv
 
 ### utility functions
 
+def which_na(data):
+    return np.logical_or(np.isnan(data).any(axis=1), np.isinf(data).any(axis=1))
 
 def na_rm(data):
-    data = data[~np.isnan(data).any(axis=1)]
-    return data[~np.isinf(data).any(axis=1)]
+    return data[~which_na(data)]
 
 
 def returnNaNs(data):
@@ -35,8 +37,6 @@ D18 = np.array(D[['q8', 'q9', 'q10', 'q11', 'q12', 'q13',
                   'q18_group16_c', 'q18_group16_d', 'q18_group16_e',
                   'q18_group16_f', 'q18_group16_g', 'q18_group16_h']].tolist())
 
-D8 = np.array(D[['q3', 'q6', 'q10', 'q17', 'q18_group6', 'q18_group7', 'q18_group14']].tolist())
-D8 = na_rm(D8)
 
 ### Question 2
 cluster_fits = {}
@@ -163,9 +163,16 @@ def question6():
 
 
 ### Question 8
+
+#D8 = np.array(D[['q3', 'q6', 'q17', 'q18_group6', 'q18_group7', 'q18_group14']].tolist())
+#D8[:,1] = D8[:,1] / D8[:,0] # make this useful votes per review
+D8 = np.array(D[['q3', 'q18_group7']].tolist())
+D8 = na_rm(D8)
+
 def question8():
     pass
 
+"""
 cluster_fits = {}
 silhouettes = {}
 for i in range(2, 9):
@@ -177,7 +184,12 @@ for i in range(2, 9):
     except Exception as e:
         print(str(i) + " clusters had a problem:")
         print(e.message)
+"""
 
+best_clust = get_clustering(2, D8)
+D_filtered = D[~which_na(D8),:]
+C0 = D_filtered[best_clust.labels_ == 0,:]
+C1 = D_filtered[best_clust.labels_ == 1,:]
 
 #question2()
 #question3()
