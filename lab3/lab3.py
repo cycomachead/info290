@@ -23,14 +23,15 @@ def returnNaNs(data):
     return [i for i in data if np.isnan(i)]
 
 D = recfromcsv("../yelp_reviewers.txt", delimiter='|')
-D[["q17"][0]] = np.log(D[["q17"][0]])
+D["q17"] = np.log(D["q17"])
 D2 = np.array(D[["q4", "q5", "q6"]].tolist())
 D3 = np.array(D[["q8", "q9", "q10"]].tolist())
 D3 = na_rm(D3)
 D4 = np.array(D[["q11", "q12", "q13"]].tolist())
 D4 = na_rm(D4)
-#D6 = np.array(D[["q8", "q9", "q10", "q11", "q12", "q13", "q16", "q17"]].tolist())
-#D6 = na_rm(D6)
+D61 = np.array(D[["q8", "q9", "q10", "q11", "q12", "q13", "q16a", "q16b", "q16c", "q16d", "q16e", "q16f", "q16g", "q16h", "q16i", "q17", "q14"]].tolist())
+D61 = na_rm(D61)
+D6 = np.array([i[:-1] for i in D61])
 
 D18 = np.array(D[['q8', 'q9', 'q10', 'q11', 'q12', 'q13',
                   'q18_group2', 'q18_group3', 'q18_group5', 'q18_group6',
@@ -98,52 +99,63 @@ def question4():
 def pctNaN(col):
     return len(returnNaNs(col))/len(col)
 
-def question7(item):
+q7c = None
+def question7(data):
+    global q7c
     i = 0
     realCol = 0
-    while i < item.shape[1]:
-        row = item[:, i]
+    while i < data.shape[1]:
+        row = data[:, i]
         pct = pctNaN(row)
         print(pct)
-        if pct > 0.35:
+        if pct > 0.40:
             # The last 1 specifies to delete a column not a row
-            print(str.format('Deleting column {0}, w/ {1} NaN values', realCol, round(pct * 100)))
-            item = np.delete(item, i, 1)
+            data = np.delete(data, i, 1)
         else:
             i += 1
         realCol += 1
-    print(realCol)
-    print(item.shape)
-    item = na_rm(item)
-    print(item.shape)
+    data = na_rm(data)
+    with open('q7b.feature', 'w+') as f:
+        file_writer = csv.writer(f)
+        file_writer.writerow(['num_clusters', 'sum_win_var_clust'])
+        for i in range(2, 9):
+            try:
+                clustering = get_clustering(i, data)
+                print('I: ', i, 'VALUE: ',  clustering.inertia_)
+                file_writer.writerow([i, clustering.inertia_])
+            except Exception as e:
+                print(str(i) + " clusters had a problem:")
+                print(e)
+
     with open('q7a.feature', 'w+') as f:
         file_writer = csv.writer(f)
         file_writer.writerow(['num_clusters', 'silhouette_coeff'])
         for i in range(2, 9):
             try:
-                clustering = get_clustering(i, item)
+                clustering = get_clustering(i, data)
                 cluster_fits[i] = clustering
-                m = metrics.silhouette_score(item, clustering.labels_, metric='euclidean', sample_size = 10000)
+                m = metrics.silhouette_score(data, clustering.labels_, metric='euclidean', sample_size = 10000)
                 silhouettes[i] = m
                 file_writer.writerow([i, m])
             except Exception as e:
                 print(str(i) + " clusters had a problem:")
                 print(e)
+        q7c = cluster_fits
 
 ### Question 5
 # cool, funny, useful
-# best_clustering = get_clustering(8, D4)
+best_clustering = get_clustering(8, D4)
 # a
-# for i in range(8):
-#    print("C%i: %i"%(i, np.sum(best_clustering.labels_ == i)))
+for i in range(8):
+   print("C%i: %i"%(i, np.sum(best_clustering.labels_ == i)))
 
 # b
-# print(best_clustering.cluster_centers_)
+print(best_clustering.cluster_centers_)
 # the fifth cluster has a much higher funny rating than useful rating
 
 # c
 # the sixth cluster has the most evenly distributed votes
-    # print(np.sum(best_clustering.labels_ == 5))
+print(np.sum(best_clustering.labels_ == 5))
 
 
 def question6():
@@ -154,14 +166,13 @@ def question6():
             clustering = get_clustering(5, D6)
             cluster_fits[5] = clustering
             for i in range(5):
-                print("C%i: %f"%(i+1, np.sum(D[clustering.labels_ == i,]["q14"])/np.sum(clustering.labels_ == i)))
+                print("C%i: %f"%(i+1, np.mean([D61[j][-1] for j in range(len(D61)) if clustering.labels_[j] == i])))
             m = metrics.silhouette_score(D6, clustering.labels_, metric='euclidean', sample_size = 10000)
             silhouettes[5] = m
             file_writer.writerow([5, m])
         except Exception as e:
             print(str(5) + " clusters had a problem:")
             print(e.message)
-
 
 
 ### Question 8
@@ -171,10 +182,6 @@ def question6():
 D8 = np.array(D[['q3', 'q18_group7']].tolist())
 D8 = na_rm(D8)
 
-def question8():
-    pass
-
-"""
 cluster_fits = {}
 silhouettes = {}
 for i in range(2, 9):
@@ -186,7 +193,6 @@ for i in range(2, 9):
     except Exception as e:
         print(str(i) + " clusters had a problem:")
         print(e.message)
-"""
 
 best_clust = get_clustering(2, D8)
 
@@ -199,14 +205,13 @@ C0 = D_filtered[best_clust.labels_ == 0,:]
 C1 = D_filtered[best_clust.labels_ == 1,:]
 
 # plotting 
-"""
 plt.scatter(D['q3'], D['q18_group7'], c = best_clust.labels_)
 plt.scatter(best_clust.cluster_centers_[:,0], best_clust.cluster_centers_[:,1], c = "green")
 plt.title("Clustering of Num. Reviews and Time Between Reviews")
 plt.xlabel("Number of Reviews")
 plt.ylabel("Average Time Between Reviews")
 plt.show()
-"""
+
 
 for name in D.dtype.names[1:]:
     current0 = C0[name]
@@ -220,5 +225,4 @@ for name in D.dtype.names[1:]:
 #question4()
 #question6()
 #question7(D18)
-
 
