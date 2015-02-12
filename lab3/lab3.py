@@ -16,7 +16,7 @@ def na_rm(data):
 def returnNaNs(data):
     return [i for i in data if np.isnan(i)]
 
-D = recfromcsv("yelp_reviewers.txt", delimiter='|')
+D = recfromcsv("../yelp_reviewers.txt", delimiter='|')
 D["q17"] = np.log(D["q17"])
 D2 = np.array(D[["q4", "q5", "q6"]].tolist())
 D3 = np.array(D[["q8", "q9", "q10"]].tolist())
@@ -126,12 +126,14 @@ def question7(data):
                     mean = sum(values[j])/len(values[j])
                     iterim = map(lambda x: (x-mean)**2, values[j])
                     ssd  = sum(iterim)
-                    if sums[i]:
+                    if i in sums:
                         sums[i] += [ssd]
                     else:
+                        print('new item arr ', i)
                         sums[i] = [ssd]
-                print('I: ', i, 'Len of Sums: ', len(sums[i]))
-                file_writer.writerow([i, sum(sums[i])])
+                print('I: ', i, ' Len of Sums: ', len(sums[i]))
+                print('SUM: ', sums[i])
+                file_writer.writerow([i, sum(sum(sums[i]))])
             except Exception as e:
                 print(str(i) + " clusters had a problem:")
                 print(e)
