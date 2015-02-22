@@ -33,7 +33,7 @@ def question2(retrain = False, goal = 0.1):
         return question2train(goal)
     return question2load()
 
-net = question2(retrain = False, goal = 0.2)
+net = question2(retrain = False, goal = 0.1)
 
 q2_train_error = np.mean(np.round(net.sim(train.loc[:,["TRANSACTION_AMT"]])[:,0]) == train.CAND_ID)
 q2_test_error = np.mean(np.round(net.sim(test.loc[:,["TRANSACTION_AMT"]])[:,0]) == test.CAND_ID)
