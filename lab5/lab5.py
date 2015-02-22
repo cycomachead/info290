@@ -28,12 +28,12 @@ def question2train(goal):
 def question2load():
     return(nl.load("question2NN.net"))
 
-def question2(retrain = False, goal = 0.01):
+def question2(retrain = False, goal = 0.1):
     if retrain:
         return question2train(goal)
     return question2load()
 
-net = question2(retrain = True, goal = 0.1)
+net = question2(retrain = False, goal = 0.2)
 
 q2_train_error = np.mean(np.round(net.sim(train.loc[:,["TRANSACTION_AMT"]])[:,0]) == train.CAND_ID)
 q2_test_error = np.mean(np.round(net.sim(test.loc[:,["TRANSACTION_AMT"]])[:,0]) == test.CAND_ID)
