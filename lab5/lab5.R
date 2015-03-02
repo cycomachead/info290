@@ -63,7 +63,7 @@ q3.rbf.test.log.accuracy <- mean((predict(svm.q3.rbf.log, newdata = test.log) > 
 ################
 
 # 
-keep.cols <- c("CMTE_ID", "AMNDT_IND", "RPT_TP", "ENTITY_TP", "STATE", "CAND_ID", "ZIP_CODE", "TRANSACTION_DT")
+keep.cols <- c("CMTE_ID", "AMNDT_IND", "RPT_TP", "ENTITY_TP", "STATE", "CAND_ID") #, "ZIP_CODE", "TRANSACTION_DT")
 train <- train[, keep.cols]
 test <- test[, keep.cols]
 remove.cols <- which(sapply(train, class) == "factor")
@@ -73,8 +73,11 @@ test <- cbind(test, model.matrix(~.+0, test))
 test <- test[,-remove.cols]
 
 # normalize columns that aren't the response variable
-train[,-which(names(train) == "CAND_ID")] <- scale(train[,-which(names(train) == "CAND_ID")])
-test[,-which(names(test) == "CAND_ID")] <- scale(test[,-which(names(test) == "CAND_ID")])
+#train[,-which(names(train) == "CAND_ID")] <- scale(train[,-which(names(train) == "CAND_ID")])
+#test[,-which(names(test) == "CAND_ID")] <- scale(test[,-which(names(test) == "CAND_ID")])
+
+#train[,c("ZIP_CODE", "TRANSACTION_DT")] <- scale(train[,c("ZIP_CODE", "TRANSACTION_DT")])
+#test[,c("ZIP_CODE", "TRANSACTION_DT")] <- scale(test[,c("ZIP_CODE", "TRANSACTION_DT")])
 
 # need to add the columns of TRAIN in order to pass TEST into PREDICT
 missing.cols <- setdiff(names(train), names(test))
