@@ -5,9 +5,6 @@ train <- read.csv("lab5_train.csv")
 test <- read.csv("lab5_test.csv")
 
 # fix the data types of some variables
-#train$ZIP_CODE <- as.factor(train$ZIP_CODE)
-#test$ZIP_CODE <- as.factor(test$ZIP_CODE)
-
 train$CAND_ID <- as.integer(train$CAND_ID == "Romney")
 test$CAND_ID <- as.integer(test$CAND_ID == "Romney")
 
@@ -62,7 +59,6 @@ q3.rbf.test.log.accuracy <- mean((predict(svm.q3.rbf.log, newdata = test.log) > 
 ## question 4 ##
 ################
 
-# 
 keep.cols <- c("CMTE_ID", "AMNDT_IND", "RPT_TP", "ENTITY_TP", "STATE", "CAND_ID") #, "ZIP_CODE", "TRANSACTION_DT")
 train <- train[, keep.cols]
 test <- test[, keep.cols]
@@ -72,12 +68,6 @@ train <- train[,-remove.cols]
 test <- cbind(test, model.matrix(~.+0, test))
 test <- test[,-remove.cols]
 
-# normalize columns that aren't the response variable
-#train[,-which(names(train) == "CAND_ID")] <- scale(train[,-which(names(train) == "CAND_ID")])
-#test[,-which(names(test) == "CAND_ID")] <- scale(test[,-which(names(test) == "CAND_ID")])
-
-#train[,c("ZIP_CODE", "TRANSACTION_DT")] <- scale(train[,c("ZIP_CODE", "TRANSACTION_DT")])
-#test[,c("ZIP_CODE", "TRANSACTION_DT")] <- scale(test[,c("ZIP_CODE", "TRANSACTION_DT")])
 
 # need to add the columns of TRAIN in order to pass TEST into PREDICT
 missing.cols <- setdiff(names(train), names(test))
@@ -86,5 +76,58 @@ test[,missing.cols] = 0
 q4.net <- nnet(formula = CAND_ID~., data = train, size = 10,
                MaxNWts = 5000, maxit = 50)
 q4.net.train.accuracy <- mean((q4.net$fitted.values > 0.5) == train$CAND_ID)
-
 q4.net.test.accuracy <- mean((predict(q4.net, test) > 0.5) == test$CAND_ID)
+
+
+################
+## question 6 ##
+################
+
+train <- read.csv("lab5_train.csv")
+test <- read.csv("lab5_test.csv")
+
+# fix the data types of some variables
+train$CAND_ID <- as.integer(train$CAND_ID == "Romney")
+test$CAND_ID <- as.integer(test$CAND_ID == "Romney")
+
+# convert TRANSACTION_DT to seconds
+train$TRANSACTION_DT <- sapply(as.character(train$TRANSACTION_DT), function(x) {ifelse(nchar(x) == 7, paste("0", x, sep=""), x)})
+train$TRANSACTION_DT <- as.POSIXct(train$TRANSACTION_DT, format='%m%d%Y')
+train$TRANSACTION_DT <- sapply(train$TRANSACTION_DT, function(x) {as.integer(x)})
+
+keep.cols <- c("CAND_ID", "ZIP_CODE", "TRANSACTION_DT")
+train <- train[, keep.cols]
+test <- test[, keep.cols]
+
+# part a
+q5.orig.net <- nnet(formula = CAND_ID~., data = train, size = 10,
+                    maxit = 50)
+
+q5.orig.train.accuracy <- mean((q5.orig.net$fitted.values > 0.5) == train$CAND_ID)
+q5.orig.test.accuracy <- mean((predict(q5.orig.net, test) > 0.5) == test$CAND_ID)
+
+# part b
+train.log <- train
+test.log <- test
+train.log[,c("ZIP_CODE", "TRANSACTION_DT")] <- log(train.log[,c("ZIP_CODE", "TRANSACTION_DT")])
+test.log[,c("ZIP_CODE", "TRANSACTION_DT")] <- log(test.log[,c("ZIP_CODE", "TRANSACTION_DT")])
+q5.log.net <- nnet(formula = CAND_ID~., data = train.log, size = 10,
+                   maxit = 50)
+
+q5.log.train.accuracy <- mean((q5.log.net$fitted.values > 0.5) == train$CAND_ID)
+q5.log.test.accuracy <- mean((predict(q5.log.net, test) > 0.5) == test$CAND_ID)
+
+
+# part c
+# normalize columns that aren't the response variable
+train.z <- train
+test.z <- test
+train.z[,c("ZIP_CODE", "TRANSACTION_DT")] <- scale(train.z[,c("ZIP_CODE", "TRANSACTION_DT")])
+test.z[,c("ZIP_CODE", "TRANSACTION_DT")] <- scale(test.z[,c("ZIP_CODE", "TRANSACTION_DT")])
+q5.z.net <- nnet(formula = CAND_ID~., data = train.z, size = 10,
+                   maxit = 50)
+
+q5.z.train.accuracy <- mean((q5.z.net$fitted.values > 0.5) == train$CAND_ID)
+q5.z.test.accuracy <- mean((predict(q5.z.net, test) > 0.5) == test$CAND_ID)
+
+
