@@ -94,6 +94,9 @@ test$CAND_ID <- as.integer(test$CAND_ID == "Romney")
 train$TRANSACTION_DT <- sapply(as.character(train$TRANSACTION_DT), function(x) {ifelse(nchar(x) == 7, paste("0", x, sep=""), x)})
 train$TRANSACTION_DT <- as.POSIXct(train$TRANSACTION_DT, format='%m%d%Y')
 train$TRANSACTION_DT <- sapply(train$TRANSACTION_DT, function(x) {as.integer(x)})
+test$TRANSACTION_DT <- sapply(as.character(test$TRANSACTION_DT), function(x) {ifelse(nchar(x) == 7, paste("0", x, sep=""), x)})
+test$TRANSACTION_DT <- as.POSIXct(test$TRANSACTION_DT, format='%m%d%Y')
+test$TRANSACTION_DT <- sapply(test$TRANSACTION_DT, function(x) {as.integer(x)})
 
 keep.cols <- c("CAND_ID", "ZIP_CODE", "TRANSACTION_DT")
 train <- train[, keep.cols]
