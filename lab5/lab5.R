@@ -58,9 +58,6 @@ q3.rbf.test.log.accuracy <- mean((predict(svm.q3.rbf.log, newdata = test.log) > 
 ## question 4 ##
 ################
 
-train <- read.csv("lab5_train.csv")
-test <- read.csv("lab5_test.csv")
-
 keep.cols <- c("CMTE_ID", "AMNDT_IND", "RPT_TP", "ENTITY_TP", "STATE", "CAND_ID") #, "ZIP_CODE", "TRANSACTION_DT")
 train <- train[, keep.cols]
 test <- test[, keep.cols]
