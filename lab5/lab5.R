@@ -52,7 +52,16 @@ svm.q3.rbf.log <- svm(CAND_ID~TRANSACTION_AMT, data = train.log, kernel = "radia
 q3.rbf.train.log.accuracy <- mean((predict(svm.q3.rbf.log, newdata = train.log) > 0.5) == train.log$CAND_ID)
 q3.rbf.test.log.accuracy <- mean((predict(svm.q3.rbf.log, newdata = test.log) > 0.5) == test.log$CAND_ID) # f
 
-# g ???
+# g
+
+zscore=train.log
+zscore.test=test.log
+zscore$TRANSACTION_AMT=scale(train.log$TRANSACTION_AMT, center=TRUE, scale= TRUE)
+zscore.test$TRANSACTION_AMT=scale(test.log$TRANSACTION_AMT, center=TRUE, scale= TRUE)
+
+svm.q3.rbf.zscore <- svm(CAND_ID~TRANSACTION_AMT, data = zscore, kernel = "radial")
+q3.rbf.train.zscore.accuracy <- mean((predict(svm.q3.rbf.zscore, newdata = zscore) > 0.5) == zscore$CAND_ID)
+q3.rbf.test.zscore.accuracy <- mean((predict(svm.q3.rbf.zscore, newdata = zscore.test) > 0.5) == zscore.test$CAND_ID)
 
 ################
 ## question 4 ##
@@ -405,16 +414,21 @@ best.C <- 0
 best.mu <- 0
 C <- 2^seq(-5, 5, by = 5)
 mu <- 2^seq(-15, 5, by = 5)
+# C <- 2^seq(-1, 1, by = 1)
+# mu <- 2^seq(-7, -1, by = 1)
+accuracies <- matrix(nrow = length(C), ncol = length(mu))
 for (i in 1:length(C)) {
   for (j in 1:length(mu)) {
     print(paste("current mu:", mu[j]))
     print(paste("current C:", C[i]))
     acc <- cv.svm.r(train, mu[j], C[i])
+    accuracies[i, j] <- acc
     if (acc > best.acc) {
       best.C <- C[i]
       best.mu <- mu[j]
       best.acc <- acc
     }
+    print(paste("acc:", acc))
     print("ITERATION COMPLETE")
   }
 }
@@ -426,17 +440,17 @@ test <- get.test.q7(-1, train)
 svm.q8.rbf <- svm(CAND_ID~., data = train, kernel = "radial", cost = best.C, gamma = best.mu)
 q8.rbf.train.accuracy <- mean((predict(svm.q8.rbf, newdata = train) > 0.5) == train$CAND_ID) 
 # 0.683125
-q8.rbf.test.accuracy <- mean((predict(svm.q8.rbf, newdata = test) > 0.5) == test$CAND_ID) 
+q8.rbf.test.accuracy <- mean((predict(svm.q8.rbf, newdata = test) > 0.5) == test$CAND_ID)
 # 0.580775
-best.mu # 32
-best.C # 1
+best.mu # 1
+best.C # 32
 
 
 ################
 ## question 9 ##
 ################
 
-# from http://download.geonames.org/export/zip/
-zips <- read.csv("US.txt", sep="\t", header = F)
-zips <- zips[,c("V2", "V10", "V11")]
-names(zips) <- c("ZIP", "LAT", "LON")
+# # from http://download.geonames.org/export/zip/
+# zips <- read.csv("US.txt", sep="\t", header = F)
+# zips <- zips[,c("V2", "V10", "V11")]
+# names(zips) <- c("ZIP", "LAT", "LON")
