@@ -78,6 +78,16 @@ single.svm <- svm(survived~., data = train, kernel = "radial")
 mean(predict(single.svm, train) == train$survived)
 mean(predict(single.svm, holdout) == holdout$survived)
 
+single.svm.full <- svm(survived~., data = train.full, kernel = "radial")
+svm.predictions <- predict(single.svm.full, test)
+
+# write out the predictions - make sure to change the filename
+#write.csv(data.frame(passenger_id = test$passenger_id, survived = svm.predictions), file = "submissions/test_predictions_3_9_0941_svm_only.csv", row.names = FALSE)
+
+##############
+## ENSEMBLE ##
+##############
+
 
 models <- data.frame(rf = predict(rf, train),
                                         #logit = ifelse(predict(logistic, train, type = "response") > 0.5, 1, 0),
@@ -89,3 +99,25 @@ ensemble.svm <- svm(survived~., data = models, kernel = "radial")
 
 mean(predict(ensemble.svm, models) == train$survived)
 mean(predict(ensemble.svm, models.holdout) == holdout$survived)
+
+
+##########################
+## SVM -> RANDOM FOREST ##
+##########################
+
+train.full$svm.pred <- predict(single.svm.full, train.full)
+train.and.holdout <- split.train(train.full)
+train <- train.and.holdout$train
+holdout <- train.and.holdout$holdout
+test$svm.pred <- predict(single.svm.full, test)
+
+rf.with.svm <- randomForest(survived~., data = train)
+
+mean(predict(rf, train) == train$survived)
+mean(predict(rf, holdout) == holdout$survived)
+
+rv.with.svm.full <- randomForest(survived~., data = train.full)
+rf.with.svm.predictions <- predict(rv.with.svm.full, test)
+
+# write out the predictions - make sure to change the filename
+#write.csv(data.frame(passenger_id = test$passenger_id, survived = rf.with.svm.predictions), file = "submissions/test_predictions_3_9_0951_svm_to_rf.csv", row.names = FALSE)
