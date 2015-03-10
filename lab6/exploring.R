@@ -125,6 +125,8 @@ for (i in 1:length(nus)) {
   accuracies[i] <- holdout.acc
 }
 
+ada.train.full <- ada(survived~., data = train.full, nu = 0.001)
+
 ##############
 ## ENSEMBLE ##
 ##############
