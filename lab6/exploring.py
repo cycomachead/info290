@@ -8,5 +8,3 @@ test = pd.read_csv("test.csv")
 rf = ensemble.RandomForestClassifier()
 rf.fit(train.drop("survived", axis = 1), train[["survived"]])
 
-
-
