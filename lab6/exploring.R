@@ -74,15 +74,45 @@ sum(logit.train.correct & !rf.train.correct) # conclusion: logistic sucks
 
 library("e1071")
 
-single.svm <- svm(survived~., data = train, kernel = "radial")
-mean(predict(single.svm, train) == train$survived)
-mean(predict(single.svm, holdout) == holdout$survived)
+costs <- 10^(-3:3)
+gammas <- 10^(-5:2)
+mat <- matrix(0, nrow = length(costs), ncol = length(gammas))
+rownames(mat) <- costs
+colnames(mat) <- gammas
+for (i in 1:length(costs)) {
+  for (j in 1:length(gammas)) {
+    single.svm <- svm(survived~., data = train, kernel = "radial", cost = costs[i], gamma = gammas[j])
+    print("###############################")
+    print(paste("Cost:", C))
+    print(paste("Gamma:", g))
+    train.acc <- mean(predict(single.svm, train) == train$survived)
+    holdout.acc <- mean(predict(single.svm, holdout) == holdout$survived)
+    print(train.acc)
+    print(holdout.acc)
+    mat[i, j] <- holdout.acc
+  }
+}
 
-single.svm.full <- svm(survived~., data = train.full, kernel = "radial")
+# Plot the heatmap of parameters
+heatmap(mat, ylab = "C", xlab = "gamma", Rowv = NA, Colv = NA)
+
+
+single.svm.full <- svm(survived~., data = train.full, kernel = "radial", cost = 10, gamma = 0.1)
 svm.predictions <- predict(single.svm.full, test)
 
 # write out the predictions - make sure to change the filename
-#write.csv(data.frame(passenger_id = test$passenger_id, survived = svm.predictions), file = "submissions/test_predictions_3_9_0941_svm_only.csv", row.names = FALSE)
+#write.csv(data.frame(passenger_id = test$passenger_id, survived = svm.predictions), file = "submissions/test_predictions_3_10_1506_svm_only.csv", row.names = FALSE)
+
+##############
+## ADABOOST ##
+##############
+
+library("ada")
+
+ada.train <- ada(survived~., data = train)
+mean(predict(ada.train, train) == train$survived)
+mean(predict(ada.train, train) == holdout$survived)
+
 
 ##############
 ## ENSEMBLE ##
