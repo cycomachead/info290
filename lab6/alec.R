@@ -20,8 +20,8 @@ cleanup <- function(D, labeled = TRUE) {
   if (labeled) {
     D$survived <- as.factor(D$survived)
   }
-  D$embarked[D$embarked == ""] <- most.common.factor(D$embarked)
-  D$embarked <- factor(D$embarked)
+  #D$embarked[D$embarked == ""] <- most.common.factor(D$embarked)
+  #D$embarked <- factor(D$embarked)
   return(D)
 }
 
