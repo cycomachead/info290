@@ -109,10 +109,21 @@ svm.predictions <- predict(single.svm.full, test)
 
 library("ada")
 
-ada.train <- ada(survived~., data = train)
-mean(predict(ada.train, train) == train$survived)
-mean(predict(ada.train, train) == holdout$survived)
-
+nus <- 10^(-3:1)
+accuracies <- rep(0, length(nus))
+names(accuracies) <- nus
+for (i in 1:length(nus)) {
+  ada.train <- ada(survived~., data = train, nu = nus[i])
+  mean(predict(ada.train, train) == train$survived)
+  mean(predict(ada.train, holdout) == holdout$survived)
+  print("###############################")
+  print(paste("nu:", nus[i]))
+  train.acc <- mean(predict(ada.train, train) == train$survived)
+  holdout.acc <- mean(predict(ada.train, holdout) == holdout$survived)
+  print(train.acc)
+  print(holdout.acc)
+  accuracies[i] <- holdout.acc
+}
 
 ##############
 ## ENSEMBLE ##
