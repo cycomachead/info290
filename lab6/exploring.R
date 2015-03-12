@@ -43,18 +43,28 @@ holdout <- train.and.holdout$holdout
 ## RANDOM FOREST ##
 ###################
 
-rf <- randomForest(survived~., data = train)
 
-mean(predict(rf, train) == train$survived)
-mean(predict(rf, holdout) == holdout$survived)
+ntrees <- seq(500, 2500, by = 500)
+rf.accuraces <- rep(0, length(ntrees))
+names(rf.accuraces) <- ntrees
 
+for (i in 1:length(ntrees)) {
+  rf <- randomForest(survived~., data = train, ntree = ntrees[i])
+  train.acc <- mean(predict(rf, train) == train$survived)
+  holdout.acc <- mean(predict(rf, holdout) == holdout$survived)
+  rf.accuraces[i] <- holdout.acc
+  print("####################")
+  print(paste("Num trees:", ntrees[i]))
+  print(train.acc)
+  print(holdout.acc)
+}
 
 train.full <- cleanup(read.csv("train.csv"))
-rf.full <- randomForest(survived~., data = train.full)
+rf.full <- randomForest(survived~., data = train.full, ntree = 2000)
 test.predictions <- predict(rf.full, test)
 
 # write out the predictions - make sure to change the filename
-#write.csv(data.frame(passenger_id = test$passenger_id, survived = test.predictions), file = "submissions/test_predictions_3_8_1309_rf_only.csv", row.names = FALSE)
+# write.csv(data.frame(passenger_id = test$passenger_id, survived = test.predictions), file = "submissions/test_predictions_3_11_2217_rf_better.csv", row.names = FALSE)
 
 #########################
 ## LOGISTIC REGRESSION ##
@@ -83,8 +93,8 @@ for (i in 1:length(costs)) {
   for (j in 1:length(gammas)) {
     single.svm <- svm(survived~., data = train, kernel = "radial", cost = costs[i], gamma = gammas[j])
     print("###############################")
-    print(paste("Cost:", C))
-    print(paste("Gamma:", g))
+    print(paste("Cost:", costs[i]))
+    print(paste("Gamma:", gammas[j]))
     train.acc <- mean(predict(single.svm, train) == train$survived)
     holdout.acc <- mean(predict(single.svm, holdout) == holdout$survived)
     print(train.acc)
@@ -109,7 +119,7 @@ svm.predictions <- predict(single.svm.full, test)
 
 library("ada")
 
-nus <- 10^(-3:1)
+nus <- 2^(-8:3)
 accuracies <- rep(0, length(nus))
 names(accuracies) <- nus
 for (i in 1:length(nus)) {
@@ -125,7 +135,34 @@ for (i in 1:length(nus)) {
   accuracies[i] <- holdout.acc
 }
 
-ada.train.full <- ada(survived~., data = train.full, nu = 0.001)
+ada.train.full <- ada(survived~., data = train.full, nu = 0.01)
+ada.predictions <- predict(ada.train.full, test)
+# write out the predictions - make sure to change the filename
+# write.csv(data.frame(passenger_id = test$passenger_id, survived = ada.predictions), file = "submissions/test_predictions_3_10_1603_adaboost_only.csv", row.names = FALSE)
+
+################
+## NEURAL NET ##
+################
+
+library("nnet")
+
+sizes = 5:15
+net.accuracies <- rep(0, length(sizes))
+names(net.accuracies) <- sizes
+for (i in 1:length(net.accuracies)) {
+  net = nnet(formula = survived~., data = train, size = sizes[i], maxit = 500)
+  
+  train.acc <- mean(as.integer(predict(net, train) > 0.5) == train$survived)
+  holdout.acc <- mean(as.integer(predict(net, holdout) > 0.5) == holdout$survived)
+  net.accuracies[i] <- holdout.acc
+}
+
+net.full = nnet(formula = survived~., data = train.full, size = 10, maxit = 500)
+
+net.predictions <- as.integer(predict(net.full, test) > 0.5)
+
+# write out the predictions - make sure to change the filename
+# write.csv(data.frame(passenger_id = test$passenger_id, survived = net.predictions), file = "submissions/test_predictions_3_11_2237_nnet_only.csv", row.names = FALSE)
 
 ##############
 ## ENSEMBLE ##
