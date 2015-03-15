@@ -110,10 +110,10 @@ for (i in 1:length(costs)) {
 # Plot the heatmap of parameters
 heatmap(mat, ylab = "C", xlab = "gamma", Rowv = NA, Colv = NA)
 
-single.svm <- svm(survived~., data = train, kernel = "radial", cost = 10, gamma = 0.1)
+single.svm <- svm(survived~., data = train, kernel = "radial", cost = 10, gamma = 0.1, probability = TRUE)
 
 
-single.svm.full <- svm(survived~., data = train.full, kernel = "radial", cost = 10, gamma = 0.1)
+single.svm.full <- svm(survived~., data = train.full, kernel = "radial", cost = 10, gamma = 0.1, probability = TRUE)
 svm.predictions <- predict(single.svm.full, test)
 
 # write out the predictions - make sure to change the filename
@@ -177,36 +177,84 @@ net.predictions <- as.integer(predict(net.full, test) > 0.5)
 ## ENSEMBLE SVM ##
 ##################
 
+use.probs = TRUE
 
-models <- data.frame(rf = predict(rf, train),
-                     logit = ifelse(predict(logistic, train, type = "response") > 0.5, 1, 0),
-                     svm = predict(single.svm, train),
-                     ada = predict(ada.train, train),
-                     net = as.integer(predict(net, holdout) > 0.5),
-                     survived = train$survived)
+normalize <- function(d, means, sds) {
+  scale(d, center = means, scale = sds)
+}
 
-models.holdout <- data.frame(rf = predict(rf, holdout),
-                             logit = ifelse(predict(logistic, holdout, type = "response") > 0.5, 1, 0),
-                             svm = predict(single.svm, holdout), ada = predict(ada.train, holdout),
-                             net = as.integer(predict(net, holdout) > 0.5),
-                             survived = holdout$survived)
+if (use.probs) {
+  models <- data.frame(rf = predict(rf, train, type = "prob")[,2],
+                       logit = predict(logistic, train, type = "response"),
+                       svm = attr(predict(single.svm, train, probability = TRUE), "probabilities")[,2],
+                       ada = predict(ada.train, train, type = "prob")[,2],
+                       net = predict(net, holdout),
+                       survived = train$survived)
 
-# models.holdout <- apply(X = models.holdout, FUN = as.integer, MARGIN = 2)
+  centers <- colMeans(models[,1:5])
+  scales <- sapply(models[,1:5], sd)
+  models[,1:5] <- normalize(models[,1:5], centers, scales)
+  
+  models.holdout <- data.frame(rf = predict(rf, holdout, type = "prob")[,2],
+                               logit = predict(logistic, holdout, type = "response"),
+                               svm = attr(predict(single.svm, holdout, probability = TRUE), "probabilities")[,2],
+                               ada = predict(ada.train, holdout, type = "prob")[,2],
+                               net = predict(net, holdout),
+                               survived = holdout$survived)
+  
+                                        # models.holdout <- apply(X = models.holdout, FUN = as.integer, MARGIN = 2)
 
-models.train.full <- data.frame(rf = predict(rf.full, train.full),
-                                #logit = ifelse(predict(logistic.full, train.full, type = "response") > 0.5, 1, 0),
-                                svm = predict(single.svm.full, train.full),
-                                ada = predict(ada.train.full, train.full),
-                                net = as.integer(predict(net.full, train.full) > 0.5),
-                                survived = train.full$survived)
+  models.holdout[,1:5] <- normalize(models.holdout[,1:5], centers, scales)
+  
+  models.train.full <- data.frame(rf = predict(rf.full, train.full, type = "prob")[,2],
+                                  logit = predict(logistic.full, train.full, type = "response"),
+                                  svm = attr(predict(single.svm.full, train.full, probability = TRUE), "probabilities")[,2],
+                                  ada = predict(ada.train.full, train.full, type = "prob")[,2],
+                                  net = predict(net.full, train.full),
+                                  survived = train.full$survived)
 
-models.test <- data.frame(rf = predict(rf.full, test),
-                          #logit = ifelse(predict(logistic.full, test, type = "response") > 0.5, 1, 0),
-                          svm = predict(single.svm.full, test),
-                          ada = predict(ada.train.full, test),
-                          net = as.integer(predict(net.full, test) > 0.5))
+  centers <- colMeans(models.train.full[,1:5])
+  scales <- sapply(models.train.full[,1:5], sd)
+  models.train.full[,1:5] <- normalize(models.train.full[,1:5], centers, scales)
+  
+  models.test <- data.frame(rf = predict(rf.full, test, type = "prob")[,2],
+                            logit = predict(logistic.full, test, type = "response"),
+                            svm = attr(predict(single.svm.full, test, probability = TRUE), "probabilities")[,2],
+                            ada = predict(ada.train.full, test, type = "prob")[,2],
+                            net = predict(net.full, test))
+  models.test[,1:5] <- normalize(models.test[,1:5], centers, scales)
+  
+} else {
+  models <- data.frame(rf = predict(rf, train),
+                       logit = ifelse(predict(logistic, train, type = "response") > 0.5, 1, 0),
+                       svm = predict(single.svm, train),
+                       ada = predict(ada.train, train),
+                       net = as.integer(predict(net, holdout) > 0.5),
+                       survived = train$survived)
+  
+  models.holdout <- data.frame(rf = predict(rf, holdout),
+                               logit = ifelse(predict(logistic, holdout, type = "response") > 0.5, 1, 0),
+                               svm = predict(single.svm, holdout), ada = predict(ada.train, holdout),
+                               net = as.integer(predict(net, holdout) > 0.5),
+                               survived = holdout$survived)
+  
+                                        # models.holdout <- apply(X = models.holdout, FUN = as.integer, MARGIN = 2)
+  
+  models.train.full <- data.frame(rf = predict(rf.full, train.full),
+                                        #logit = ifelse(predict(logistic.full, train.full, type = "response") > 0.5, 1, 0),
+                                  svm = predict(single.svm.full, train.full),
+                                  ada = predict(ada.train.full, train.full),
+                                  net = as.integer(predict(net.full, train.full) > 0.5),
+                                  survived = train.full$survived)
+  
+  models.test <- data.frame(rf = predict(rf.full, test),
+                                        #logit = ifelse(predict(logistic.full, test, type = "response") > 0.5, 1, 0),
+                            svm = predict(single.svm.full, test),
+                            ada = predict(ada.train.full, test),
+                            net = as.integer(predict(net.full, test) > 0.5))
 
-
+}
+  
 ensemble.svm <- svm(survived~., data = models, kernel = "radial")
 
 mean(predict(ensemble.svm, models) == train$survived)
@@ -216,7 +264,7 @@ ensemble.svm.full <- svm(survived~., data = models.train.full, kernel = "radial"
 test.predictions <- predict(ensemble.svm.full, models.test)
 
 # write out the predictions - make sure to change the filename
-# write.csv(data.frame(passenger_id = test$passenger_id, survived = test.predictions), file = "submissions/test_predictions_3_14_0005_ensemble.csv", row.names = FALSE)
+write.csv(data.frame(passenger_id = test$passenger_id, survived = test.predictions), file = "submissions/test_predictions_3_15_1626_ensemble.csv", row.names = FALSE)
 
 
 #######################
@@ -235,8 +283,19 @@ models.numeric <- as.data.frame(apply(FUN = as.integer, X = models, 2))
 models.holdout.numeric <- as.data.frame(apply(FUN = as.integer, X = models.holdout, 2))
 
 ensemble.glm <- glm(survived~., data = models.numeric, family = "binomial")
-mean(as.integer(predict(ensemble.glm, models.numeric) > 0.15) == train$survived)
+mean(as.integer(predict(ensemble.glm, models.numeric) > 0.5) == train$survived)
 mean(as.integer(predict(ensemble.glm, models.holdout.numeric) > 0.5) == holdout$survived)
+
+models.train.full.numeric <- as.data.frame(apply(FUN = as.integer, X = models.train.full, 2))
+models.test.numeric <- as.data.frame(apply(FUN = as.integer, X = models.test, 2))
+
+ensemble.glm.full <- glm(survived~., data = models.train.full.numeric, family = "binomial")
+mean(as.integer(predict(ensemble.glm.full, models.train.full.numeric) > 0.5) == train.full$survived)
+
+test.predictions <- as.integer(predict(ensemble.glm.full, models.test.numeric) > 0.5)
+
+# write out the predictions - make sure to change the filename
+# write.csv(data.frame(passenger_id = test$passenger_id, survived = test.predictions), file = "submissions/test_predictions_3_15_1644_ensemble.csv", row.names = FALSE)
 
 ##########################
 ## SVM -> RANDOM FOREST ##
