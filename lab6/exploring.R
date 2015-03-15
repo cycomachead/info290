@@ -59,6 +59,8 @@ for (i in 1:length(ntrees)) {
   print(holdout.acc)
 }
 
+rf <- randomForest(survived~., data = train, ntree = 2000)
+
 train.full <- cleanup(read.csv("train.csv"))
 rf.full <- randomForest(survived~., data = train.full, ntree = 2000)
 test.predictions <- predict(rf.full, test)
@@ -77,6 +79,8 @@ mean((predict(logistic, holdout, type = "response") > 0.5) == as.integer(holdout
 logit.train.correct <- (predict(logistic, train, type = "response") > 0.5) == as.integer(train$survived) - 1
 rf.train.correct <- predict(rf, train) == train$survived
 sum(logit.train.correct & !rf.train.correct) # conclusion: logistic sucks
+
+logistic.full <- glm(survived~., data = train.full, family = "binomial")
 
 ############################
 ## SUPPORT VECTOR MACHINE ##
@@ -105,6 +109,8 @@ for (i in 1:length(costs)) {
 
 # Plot the heatmap of parameters
 heatmap(mat, ylab = "C", xlab = "gamma", Rowv = NA, Colv = NA)
+
+single.svm <- svm(survived~., data = train, kernel = "radial", cost = 10, gamma = 0.1)
 
 
 single.svm.full <- svm(survived~., data = train.full, kernel = "radial", cost = 10, gamma = 0.1)
@@ -135,6 +141,8 @@ for (i in 1:length(nus)) {
   accuracies[i] <- holdout.acc
 }
 
+ada.train <- ada(survived~., data = train, nu = 0.01)
+
 ada.train.full <- ada(survived~., data = train.full, nu = 0.01)
 ada.predictions <- predict(ada.train.full, test)
 # write out the predictions - make sure to change the filename
@@ -151,11 +159,12 @@ net.accuracies <- rep(0, length(sizes))
 names(net.accuracies) <- sizes
 for (i in 1:length(net.accuracies)) {
   net = nnet(formula = survived~., data = train, size = sizes[i], maxit = 500)
-  
   train.acc <- mean(as.integer(predict(net, train) > 0.5) == train$survived)
   holdout.acc <- mean(as.integer(predict(net, holdout) > 0.5) == holdout$survived)
   net.accuracies[i] <- holdout.acc
 }
+
+net = nnet(formula = survived~., data = train, size = 10, maxit = 500)
 
 net.full = nnet(formula = survived~., data = train.full, size = 10, maxit = 500)
 
@@ -164,22 +173,70 @@ net.predictions <- as.integer(predict(net.full, test) > 0.5)
 # write out the predictions - make sure to change the filename
 # write.csv(data.frame(passenger_id = test$passenger_id, survived = net.predictions), file = "submissions/test_predictions_3_11_2237_nnet_only.csv", row.names = FALSE)
 
-##############
-## ENSEMBLE ##
-##############
+##################
+## ENSEMBLE SVM ##
+##################
 
 
 models <- data.frame(rf = predict(rf, train),
-                                        #logit = ifelse(predict(logistic, train, type = "response") > 0.5, 1, 0),
-                     svm = predict(single.svm, train), survived = train$survived)
+                     logit = ifelse(predict(logistic, train, type = "response") > 0.5, 1, 0),
+                     svm = predict(single.svm, train),
+                     ada = predict(ada.train, train),
+                     net = as.integer(predict(net, holdout) > 0.5),
+                     survived = train$survived)
 
-models.holdout <- data.frame(rf = predict(rf, holdout), logit = ifelse(predict(logistic, holdout, type = "response") > 0.5, 1, 0), svm = predict(single.svm, holdout), survived = holdout$survived)
+models.holdout <- data.frame(rf = predict(rf, holdout),
+                             logit = ifelse(predict(logistic, holdout, type = "response") > 0.5, 1, 0),
+                             svm = predict(single.svm, holdout), ada = predict(ada.train, holdout),
+                             net = as.integer(predict(net, holdout) > 0.5),
+                             survived = holdout$survived)
+
+# models.holdout <- apply(X = models.holdout, FUN = as.integer, MARGIN = 2)
+
+models.train.full <- data.frame(rf = predict(rf.full, train.full),
+                                #logit = ifelse(predict(logistic.full, train.full, type = "response") > 0.5, 1, 0),
+                                svm = predict(single.svm.full, train.full),
+                                ada = predict(ada.train.full, train.full),
+                                net = as.integer(predict(net.full, train.full) > 0.5),
+                                survived = train.full$survived)
+
+models.test <- data.frame(rf = predict(rf.full, test),
+                          #logit = ifelse(predict(logistic.full, test, type = "response") > 0.5, 1, 0),
+                          svm = predict(single.svm.full, test),
+                          ada = predict(ada.train.full, test),
+                          net = as.integer(predict(net.full, test) > 0.5))
+
 
 ensemble.svm <- svm(survived~., data = models, kernel = "radial")
 
 mean(predict(ensemble.svm, models) == train$survived)
 mean(predict(ensemble.svm, models.holdout) == holdout$survived)
 
+ensemble.svm.full <- svm(survived~., data = models.train.full, kernel = "radial")
+test.predictions <- predict(ensemble.svm.full, models.test)
+
+# write out the predictions - make sure to change the filename
+# write.csv(data.frame(passenger_id = test$passenger_id, survived = test.predictions), file = "submissions/test_predictions_3_14_0005_ensemble.csv", row.names = FALSE)
+
+
+#######################
+## ENSEMBLE ADABOOST ##
+#######################
+
+ensemble.ada <- ada(survived~., data = models)
+mean(predict(ensemble.ada, models) == train$survived)
+mean(predict(ensemble.ada, models.holdout) == holdout$survived)
+
+##################################
+## ENSEMBLE LOGISTIC REGRESSION ##
+##################################
+
+models.numeric <- as.data.frame(apply(FUN = as.integer, X = models, 2))
+models.holdout.numeric <- as.data.frame(apply(FUN = as.integer, X = models.holdout, 2))
+
+ensemble.glm <- glm(survived~., data = models.numeric, family = "binomial")
+mean(as.integer(predict(ensemble.glm, models.numeric) > 0.15) == train$survived)
+mean(as.integer(predict(ensemble.glm, models.holdout.numeric) > 0.5) == holdout$survived)
 
 ##########################
 ## SVM -> RANDOM FOREST ##
