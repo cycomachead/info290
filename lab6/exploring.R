@@ -26,7 +26,7 @@ cleanup <- function(D, labeled = TRUE) {
 }
 
 split.train <- function(D, split = 0.8) {
-  set.seed(1) # for the moment, force deterministic behavior
+  #set.seed(1) # for the moment, force deterministic behavior
   indices <- sample(1:nrow(train), size = floor(split * nrow(train)))
   return(list(train = D[indices,], holdout = D[-indices,]))
 }
@@ -88,32 +88,53 @@ logistic.full <- glm(survived~., data = train.full, family = "binomial")
 
 library("e1071")
 
+all.svm.preds.train <- NULL
+all.svm.preds.holdout <- NULL
 costs <- 10^(-3:3)
 gammas <- 10^(-5:2)
 mat <- matrix(0, nrow = length(costs), ncol = length(gammas))
 rownames(mat) <- costs
 colnames(mat) <- gammas
+cv.holdout.accuracies <- cv.train.accuracies <- cv.accuracies <- mat
+use.cv = TRUE
 for (i in 1:length(costs)) {
   for (j in 1:length(gammas)) {
-    single.svm <- svm(survived~., data = train, kernel = "radial", cost = costs[i], gamma = gammas[j])
     print("###############################")
     print(paste("Cost:", costs[i]))
     print(paste("Gamma:", gammas[j]))
-    train.acc <- mean(predict(single.svm, train) == train$survived)
-    holdout.acc <- mean(predict(single.svm, holdout) == holdout$survived)
-    print(train.acc)
-    print(holdout.acc)
-    mat[i, j] <- holdout.acc
+    if (use.cv) {
+      single.svm <- svm(survived~., data = train, kernel = "radial", cost = costs[i], gamma = gammas[j],
+                             cross=10)
+      cv.accuracies[i, j]  <- single.svm$tot.accuracy 
+      cv.train.accuracies[i, j] <- mean(single.svm$fitted == train$survived)
+      cv.holdout.accuracies[i, j]  <- mean(predict(single.svm, holdout) == holdout$survived)
+      print(cv.accuracies[i, j])
+      print(cv.holdout.accuracies[i, j])
+    } else {
+      single.svm <- svm(survived~., data = train, kernel = "radial", cost = costs[i], gamma = gammas[j])
+      train.acc <- mean(predict(single.svm, train) == train$survived)
+      holdout.acc <- mean(predict(single.svm, holdout) == holdout$survived)
+      if (holdout.acc > .80) {
+        all.svm.preds.train  <- cbind(all.svm.preds.train, predict(single.svm, train))
+        all.svm.preds.holdout  <- cbind(all.svm.preds.holdout, predict(single.svm, holdout))
+      }
+      print(train.acc)
+      print(holdout.acc)
+      mat[i, j] <- holdout.acc
+    }
   }
 }
+
+## SVM -> SVM
+# svm.svm  <- svm(train$survived~., data = all.svm.preds.train)
 
 # Plot the heatmap of parameters
 heatmap(mat, ylab = "C", xlab = "gamma", Rowv = NA, Colv = NA)
 
-single.svm <- svm(survived~., data = train, kernel = "radial", cost = 10, gamma = 0.1, probability = TRUE)
+single.svm <- svm(survived~., data = train, kernel = "radial", cost = 10, gamma = 0.1, probability = TRUE, cross = 10)
 
 
-single.svm.full <- svm(survived~., data = train.full, kernel = "radial", cost = 10, gamma = 0.1, probability = TRUE)
+single.svm.full <- svm(survived~., data = train.full, kernel = "radial", cost = 10, gamma = 0.1, probability = TRUE, cross=10)
 svm.predictions <- predict(single.svm.full, test)
 
 # write out the predictions - make sure to change the filename
@@ -183,12 +204,14 @@ normalize <- function(d, means, sds) {
   scale(d, center = means, scale = sds)
 }
 
+
 if (use.probs) {
   models <- data.frame(rf = predict(rf, train, type = "prob")[,2],
-                       logit = predict(logistic, train, type = "response"),
+                       #logit = predict(logistic, train, type = "response"),
                        svm = attr(predict(single.svm, train, probability = TRUE), "probabilities")[,2],
                        ada = predict(ada.train, train, type = "prob")[,2],
                        net = predict(net, holdout),
+                       log.fare = log(train$fare + 1),
                        survived = train$survived)
 
   centers <- colMeans(models[,1:5])
@@ -196,10 +219,11 @@ if (use.probs) {
   models[,1:5] <- normalize(models[,1:5], centers, scales)
   
   models.holdout <- data.frame(rf = predict(rf, holdout, type = "prob")[,2],
-                               logit = predict(logistic, holdout, type = "response"),
+                               #logit = predict(logistic, holdout, type = "response"),
                                svm = attr(predict(single.svm, holdout, probability = TRUE), "probabilities")[,2],
                                ada = predict(ada.train, holdout, type = "prob")[,2],
                                net = predict(net, holdout),
+                               log.fare = log(holdout$fare + 1),
                                survived = holdout$survived)
   
                                         # models.holdout <- apply(X = models.holdout, FUN = as.integer, MARGIN = 2)
@@ -207,10 +231,11 @@ if (use.probs) {
   models.holdout[,1:5] <- normalize(models.holdout[,1:5], centers, scales)
   
   models.train.full <- data.frame(rf = predict(rf.full, train.full, type = "prob")[,2],
-                                  logit = predict(logistic.full, train.full, type = "response"),
+                                  #logit = predict(logistic.full, train.full, type = "response"),
                                   svm = attr(predict(single.svm.full, train.full, probability = TRUE), "probabilities")[,2],
                                   ada = predict(ada.train.full, train.full, type = "prob")[,2],
                                   net = predict(net.full, train.full),
+                                  log.fare = log(train.full$fare + 1),
                                   survived = train.full$survived)
 
   centers <- colMeans(models.train.full[,1:5])
@@ -218,24 +243,27 @@ if (use.probs) {
   models.train.full[,1:5] <- normalize(models.train.full[,1:5], centers, scales)
   
   models.test <- data.frame(rf = predict(rf.full, test, type = "prob")[,2],
-                            logit = predict(logistic.full, test, type = "response"),
+                            #logit = predict(logistic.full, test, type = "response"),
                             svm = attr(predict(single.svm.full, test, probability = TRUE), "probabilities")[,2],
                             ada = predict(ada.train.full, test, type = "prob")[,2],
-                            net = predict(net.full, test))
+                            net = predict(net.full, test),
+                            log.fare = log(test$fare + 1))
   models.test[,1:5] <- normalize(models.test[,1:5], centers, scales)
   
 } else {
   models <- data.frame(rf = predict(rf, train),
-                       logit = ifelse(predict(logistic, train, type = "response") > 0.5, 1, 0),
+                       #logit = ifelse(predict(logistic, train, type = "response") > 0.5, 1, 0),
                        svm = predict(single.svm, train),
                        ada = predict(ada.train, train),
                        net = as.integer(predict(net, holdout) > 0.5),
+                       log.fare = log(train$fare + 1),
                        survived = train$survived)
   
   models.holdout <- data.frame(rf = predict(rf, holdout),
-                               logit = ifelse(predict(logistic, holdout, type = "response") > 0.5, 1, 0),
+                               #logit = ifelse(predict(logistic, holdout, type = "response") > 0.5, 1, 0),
                                svm = predict(single.svm, holdout), ada = predict(ada.train, holdout),
                                net = as.integer(predict(net, holdout) > 0.5),
+                               log.fare = log(holdout$fare + 1),
                                survived = holdout$survived)
   
                                         # models.holdout <- apply(X = models.holdout, FUN = as.integer, MARGIN = 2)
@@ -245,13 +273,15 @@ if (use.probs) {
                                   svm = predict(single.svm.full, train.full),
                                   ada = predict(ada.train.full, train.full),
                                   net = as.integer(predict(net.full, train.full) > 0.5),
+                                  log.fare = log(train.full$fare + 1),
                                   survived = train.full$survived)
   
   models.test <- data.frame(rf = predict(rf.full, test),
                                         #logit = ifelse(predict(logistic.full, test, type = "response") > 0.5, 1, 0),
                             svm = predict(single.svm.full, test),
                             ada = predict(ada.train.full, test),
-                            net = as.integer(predict(net.full, test) > 0.5))
+                            net = as.integer(predict(net.full, test) > 0.5),
+                            log.fare = log(test$fare + 1))
 
 }
   
@@ -260,11 +290,33 @@ ensemble.svm <- svm(survived~., data = models, kernel = "radial")
 mean(predict(ensemble.svm, models) == train$survived)
 mean(predict(ensemble.svm, models.holdout) == holdout$survived)
 
-ensemble.svm.full <- svm(survived~., data = models.train.full, kernel = "radial")
+ensemble.svm.full <- svm(survived~., data = models.train.full, kernel = "radial", C = 0.1, gamma = 1)
 test.predictions <- predict(ensemble.svm.full, models.test)
 
+costs <- 10^(-3:3)
+gammas <- 10^(-5:2)
+mat <- matrix(0, nrow = length(costs), ncol = length(gammas))
+rownames(mat) <- costs
+colnames(mat) <- gammas
+ensemble.cv.accuracies <- mat
+for (i in 1:length(costs)) {
+  for (j in 1:length(gammas)) {
+    print("###############################")
+    print(paste("Cost:", costs[i]))
+    print(paste("Gamma:", gammas[j]))
+    single.svm <- svm(survived~., data = models.train.full, kernel = "radial", cost = costs[i], gamma = gammas[j],
+                      cross=10)
+    ensemble.cv.accuracies[i, j]  <- single.svm$tot.accuracy 
+    print(cv.accuracies[i, j])
+  }
+}
+
+single.svm<- svm(survived~., data = models.train.full, kernel = "radial", cost = costs[i], gamma = gammas[j])
+      
+
 # write out the predictions - make sure to change the filename
-write.csv(data.frame(passenger_id = test$passenger_id, survived = test.predictions), file = "submissions/test_predictions_3_15_1626_ensemble.csv", row.names = FALSE)
+write.csv(data.frame(passenger_id = test$passenger_id, survived = test.predictions), file = "submissions/test_predictions_3_31_2308_ensemble_svm_cv.csv", row.names = FALSE)
+# submissions/test_predictions_3_31_2308_ensemble_svm_cv.csv had parameters C: 0.1, gamma: 1
 
 
 #######################
