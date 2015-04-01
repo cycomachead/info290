@@ -19,6 +19,8 @@ train = train[np.isfinite(train['pclass'])]
 train = train[np.isfinite(train['sex'])]
 train = train[np.isfinite(train['age'])]
 train = train[np.isfinite(train['sibsp'])]
+train = train[np.isfinite(train['parch'])]
+train = train[np.isfinite(train['fare'])]
 
 modified = train.drop("survived", axis = 1)
 modified = modified.drop("name", axis = 1)
@@ -26,8 +28,6 @@ modified = modified.drop("home.dest", axis = 1)
 modified = modified.drop("embarked", axis = 1)
 modified = modified.drop("cabin", axis = 1)
 modified = modified.drop("ticket", axis = 1)
-modified = modified.drop("parch", axis = 1)
-modified = modified.drop("fare", axis = 1)
 
 
 # # Drop NaNses
@@ -36,12 +36,12 @@ test = test[np.isfinite(test['pclass'])]
 test = test[np.isfinite(test['sex'])]
 test = test[np.isfinite(test['age'])]
 test = test[np.isfinite(test['sibsp'])]
+test = test[np.isfinite(test['parch'])]
+test = test[np.isfinite(test['fare'])]
 
 test = test.drop("name", axis = 1)
 test = test.drop("home.dest", axis = 1)
 test = test.drop("embarked", axis = 1)
-test = test.drop("parch", axis = 1)
-test = test.drop("fare", axis = 1)
 test = test.drop("cabin", axis = 1)
 test = test.drop("ticket", axis = 1)
 
@@ -50,7 +50,7 @@ thing = rf.fit(modified, train[["survived"]])
 
 tested = thing.predict(test[np.isfinite(test)])
 
-file = 'submissions/test_predict_michael_attempt_1_3_11_15.csv'
+file = 'submissions/test_predict_michael_dumb_3_10_15.csv'
 
 data = [test['passenger_id'], tested]
 rows = torig.shape[0]
