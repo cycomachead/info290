@@ -26,7 +26,6 @@ cleanup <- function(D, labeled = TRUE) {
 }
 
 split.train <- function(D, split = 0.8) {
-  set.seed(1) # for the moment, force deterministic behavior
   indices <- sample(1:nrow(train), size = floor(split * nrow(train)))
   return(list(train = D[indices,], holdout = D[-indices,]))
 }
