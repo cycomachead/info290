@@ -1,5 +1,5 @@
 from lxml import html
-import requests, re, sys
+import requests, re, sys, codecs
 
 ### Constants ###
 
@@ -16,15 +16,22 @@ xpath_select_href = "/@href"
 
 profile_regex     = '^/beer/profile/[0-9]+/[0-9]+/$'
 
+output = codecs.open("test.txt", "w", "utf-8")
+
 ### Functions ###
 
-def printn(string):
-    sys.stdout.write(string + ",")
+def printo(string):
+    output.write(string)
+
+def printc(string):
+    printo(string + ",")
 
 def printq(string):
-    printn("\"" + string + "\"")
+    printc("\"" + string + "\"")
 
-### Find all beer categories ###
+### Code ###
+
+# Find all beer categories #
 page = requests.get(baseurl + style_link)
 tree = html.fromstring(page.text)
 
@@ -34,7 +41,7 @@ style_links = tree.xpath(xpath_a_tag%(style_link, xpath_select_href))
 beer_styles = beer_styles[6:len(beer_styles)-2]
 style_links = style_links[2:len(style_links)-2]
 
-### Find all beers in each category ###
+# Find all beers in each category #
 profile_matcher = re.compile(profile_regex)
 
 link = style_links[0]
@@ -53,27 +60,27 @@ for link in profile_links:
     printq(brewery_name)
     printq(link)
     ba_score = profile_tree.xpath("//span[contains(concat('',@class,''),'ba-score')]/text()")[0]
-    printn(ba_score)
+    printc(ba_score)
     ba_score_text = profile_tree.xpath("//span[contains(concat('',@class,''),'ba-score_text')]/text()")[0]
     printq(ba_score_text)
     ba_ratings = profile_tree.xpath("//span[contains(concat('',@class,''),'ba-ratings')]/text()")[0]
-    printn(ba_ratings)
+    printc(ba_ratings)
     ba_bro_score = profile_tree.xpath("//span[contains(concat('',@class,''),'ba-bro_score')]/text()")[0]
-    printn(ba_bro_score)
+    printc(ba_bro_score)
     ba_bro_text = profile_tree.xpath("//b[contains(concat('',@class,''),'ba-bro_text')]/text()")[0]
     printq(ba_bro_text)
     ba_reviews = profile_tree.xpath("//span[contains(concat('',@class,''),'ba-reviews')]/text()")[0]
-    printn(ba_reviews)
+    printc(ba_reviews)
     ba_rating_avg = profile_tree.xpath("//span[contains(concat('',@class,''),'ba-ravg')]/text()")[0]
-    printn(ba_rating_avg)
+    printc(ba_rating_avg)
     ba_pdev = profile_tree.xpath("//span[contains(concat('',@class,''),'ba-pdev')]/text()")[0]
     printq(ba_pdev)
     wants = profile_tree.xpath("//a[contains(concat('',@href,''),'?view=W')]/text()")[0].split(" ")[1]
-    printn(wants)
+    printc(wants)
     gots = profile_tree.xpath("//a[contains(concat('',@href,''),'?view=G')]/text()")[0].split(" ")[1]
-    printn(gots)
+    printc(gots)
     ft = profile_tree.xpath("//a[contains(concat('',@href,''),'?view=FT')]/text()")[0].split(" ")[1]
-    printn(ft)
+    printc(ft)
     location = profile_tree.xpath("//a[contains(concat('',@href,''),'/place/directory/')]/text()")[:-1]
     location = ",".join(location)
     printq(location)
@@ -82,6 +89,10 @@ for link in profile_links:
         abv = str(abv[-7:])
     except:
         abv = str(abv[-6:])
+    abv = abv.strip()
     printq(abv)
     availability = profile_tree.xpath("//b[text()='Availability:']/following::text()[1]")[0].strip()
-    print("\"" + availability + "\"")
+    printo("\"" + availability + "\"")
+    printo("\n")
+
+output.close()
