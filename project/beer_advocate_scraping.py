@@ -120,51 +120,64 @@ for link in profile_links:
         os.makedirs(style_dir)
     reviews_output = codecs.open(style_dir + "/" + beer_id, "w", "utf-8")
 
-    user_scores = profile_tree.xpath("//span[@class='BAscore_norm']/text()")
-    user_score_pdevs = profile_tree.xpath("//span[@class='BAscore_norm']/following::span[2]/text()")
-    user_senses_scores = profile_tree.xpath("//span[@class='BAscore_norm']/following::span[3]/text()")
-    review_texts = profile_tree.xpath("//div[@id='rating_fullview_content_2']/text()")#"//span[@class='BAscore_norm']/following::span[3]/following::text()[1]")
-    x = 0
-    while x < len(review_texts):
-        if rdev_matcher.match(review_texts[x]):
-            review_texts[x] = ""
-            x += 1
-        else:
-            review_texts.pop(x-1)
-    #review_texts = map(lambda x: "" if rdev_matcher.match(x) else x, review_texts)
-    usernames = profile_tree.xpath("//a[@class='username']/text()")
-    timestamps = profile_tree.xpath("//a[contains(concat('',@href,''),'?ba=')]/text()")[5:]
-    for i in range(len(user_scores)):
-        printq_f(user_scores[i], reviews_output)
-        pdev = user_score_pdevs[i]
-        if "%" not in pdev:
-            user_pdev = "0%"
-            printq_f(user_pdev, reviews_output)
-            scores = pdev.split(" | ")
-            if len(scores) != 5:
-                for j in range(5):
-                    printq_f("", reviews_output)
+    # iterate over all reviews pages
+    num_reviews = int(ba_ratings.replace(",", ""))
+    start = 1
+    while start < num_reviews:
+        # get next reviews page
+        profile_page = session.get(baseurl+link+"?view=beer&sort=&start=%d"%(start))
+        no_username = "^<div\sid=\"rating_fullview_content_2\">\"You\srated\sthis\sbeer.\".{1,300}<div>.{1,300}</div></div>$"
+        profile_text = re.sub(no_username, "", profile_page.text)
+        profile_tree = html.fromstring(profile_text)
+
+        user_scores = profile_tree.xpath("//span[@class='BAscore_norm']/text()")
+        user_score_pdevs = profile_tree.xpath("//span[@class='BAscore_norm']/following::span[2]/text()")
+        user_senses_scores = profile_tree.xpath("//span[@class='BAscore_norm']/following::span[3]/text()")
+        review_texts = profile_tree.xpath("//div[@id='rating_fullview_content_2']/text()")#"//span[@class='BAscore_norm']/following::span[3]/following::text()[1]")
+        x = 0
+        while x < len(review_texts):
+            if rdev_matcher.match(review_texts[x]):
+                review_texts[x] = ""
+                x += 1
             else:
-                for score in scores:
-                    printq_f(score.strip().split(" ")[1], reviews_output)
-        else:
-            printq_f(user_score_pdevs[i], reviews_output)
-            scores = user_senses_scores[i].split(" | ")
-            if len(scores) != 5:
-                for j in range(5):
-                    printq_f("", reviews_output)
+                review_texts.pop(x-1)
+        #review_texts = map(lambda x: "" if rdev_matcher.match(x) else x, review_texts)
+        usernames = profile_tree.xpath("//span[@class='muted']/a[@class='username']")
+        usernames = map(lambda x: x.text if x.text else "", usernames)
+        timestamps = profile_tree.xpath("//a[contains(concat('',@href,''),'?ba=')]/text()")[5:]
+        for i in range(len(user_scores)):
+            printq_f(user_scores[i], reviews_output)
+            pdev = user_score_pdevs[i]
+            if "%" not in pdev:
+                user_pdev = "0%"
+                printq_f(user_pdev, reviews_output)
+                scores = pdev.split(" | ")
+                if len(scores) != 5:
+                    for j in range(5):
+                        printq_f("", reviews_output)
+                else:
+                    for score in scores:
+                        printq_f(score.strip().split(" ")[1], reviews_output)
             else:
-                for score in scores:
-                    printq_f(score.strip().split(" ")[1], reviews_output)
-        #printq_f(user_senses_scores[i], reviews_output)
-        review_text = review_texts[i]
-        username = usernames[i]
-        if review_text == username:
-            review_text = ""
-        printq_f(review_text, reviews_output)
-        printq_f(username, reviews_output)
-        printo_f("\"" + timestamps[i] + "\"", reviews_output)
-        printo_f("\n", reviews_output)
+                printq_f(user_score_pdevs[i], reviews_output)
+                scores = user_senses_scores[i].split(" | ")
+                if len(scores) != 5:
+                    for j in range(5):
+                        printq_f("", reviews_output)
+                else:
+                    for score in scores:
+                        printq_f(score.strip().split(" ")[1], reviews_output)
+            #printq_f(user_senses_scores[i], reviews_output)
+            review_text = review_texts[i]
+            username = usernames[i]
+            if review_text == username:
+                review_text = ""
+            printq_f(review_text, reviews_output)
+            printq_f(username, reviews_output)
+            printo_f("\"" + timestamps[i] + "\"", reviews_output)
+            printo_f("\n", reviews_output)
+        start += 25
+
     reviews_output.close()
 
 beer_output.close()
