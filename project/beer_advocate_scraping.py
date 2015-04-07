@@ -51,6 +51,7 @@ style_links = style_links2[4:len(style_links2)-2]
 
 # Find all beers in each category #
 profile_matcher = re.compile('^/beer/profile/[0-9]+/[0-9]+/$')
+rdev_matcher = re.compile('^.*rDev\s.*$')
 
 link = style_links[0]
 style = beer_styles[0]
@@ -122,9 +123,17 @@ for link in profile_links:
     user_scores = profile_tree.xpath("//span[@class='BAscore_norm']/text()")
     user_score_pdevs = profile_tree.xpath("//span[@class='BAscore_norm']/following::span[2]/text()")
     user_senses_scores = profile_tree.xpath("//span[@class='BAscore_norm']/following::span[3]/text()")
-    review_texts = profile_tree.xpath("//span[@class='BAscore_norm']/following::span[3]/following::text()[1]")
+    review_texts = profile_tree.xpath("//div[@id='rating_fullview_content_2']/text()")#"//span[@class='BAscore_norm']/following::span[3]/following::text()[1]")
+    x = 0
+    while x < len(review_texts):
+        if rdev_matcher.match(review_texts[x]):
+            review_texts[x] = ""
+            x += 1
+        else:
+            review_texts.pop(x-1)
+    #review_texts = map(lambda x: "" if rdev_matcher.match(x) else x, review_texts)
     usernames = profile_tree.xpath("//a[@class='username']/text()")
-    timestamps = profile_tree.xpath("//a[contains(concat('',@href,''),'?ba=')]/text()")
+    timestamps = profile_tree.xpath("//a[contains(concat('',@href,''),'?ba=')]/text()")[5:]
     for i in range(len(user_scores)):
         printq_f(user_scores[i], reviews_output)
         pdev = user_score_pdevs[i]
@@ -133,7 +142,7 @@ for link in profile_links:
             printq_f(user_pdev, reviews_output)
             scores = pdev.split(" | ")
             if len(scores) != 5:
-                for i in range(5):
+                for j in range(5):
                     printq_f("", reviews_output)
             else:
                 for score in scores:
@@ -142,7 +151,7 @@ for link in profile_links:
             printq_f(user_score_pdevs[i], reviews_output)
             scores = user_senses_scores[i].split(" | ")
             if len(scores) != 5:
-                for i in range(5):
+                for j in range(5):
                     printq_f("", reviews_output)
             else:
                 for score in scores:
@@ -154,7 +163,8 @@ for link in profile_links:
             review_text = ""
         printq_f(review_text, reviews_output)
         printq_f(username, reviews_output)
-        printq_f(timestamps[i], reviews_output)
+        printo_f("\"" + timestamps[i] + "\"", reviews_output)
         printo_f("\n", reviews_output)
+    reviews_output.close()
 
 beer_output.close()
