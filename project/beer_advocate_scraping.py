@@ -1,5 +1,5 @@
 from lxml import html
-import requests, re, sys, codecs
+import requests, re, sys, codecs, os
 
 ### Constants ###
 
@@ -7,18 +7,27 @@ baseurl           = "http://www.beeradvocate.com"
 style_link        = "/beer/style/"
 profile_link      = "/beer/profile/"
 
-output = codecs.open("test.txt", "w", "utf-8")
+beer_output = codecs.open("profiles.txt", "w", "utf-8")
 
 ### Functions ###
 
 def printo(string):
-    output.write(string)
+    beer_output.write(string)
 
 def printc(string):
     printo(string + ",")
 
 def printq(string):
     printc("\"" + string + "\"")
+
+def printo_f(string, f):
+    f.write(string)
+
+def printc_f(string, f):
+    printo_f(string + ",", f)
+
+def printq_f(string, f):
+    printc_f("\"" + string + "\"", f)
 
 ### Code ###
 
@@ -44,6 +53,7 @@ style_links = style_links2[4:len(style_links2)-2]
 profile_matcher = re.compile('^/beer/profile/[0-9]+/[0-9]+/$')
 
 link = style_links[0]
+style = beer_styles[0]
 #for link in stylelinks:
 style_page = session.get(baseurl + link)
 style_tree = html.fromstring(style_page.text)
@@ -51,8 +61,11 @@ profile_links = style_tree.xpath('//a[contains(concat("",@href,""),"%s")]/@href'
 profile_links = filter(profile_matcher.match, profile_links)
 
 for link in profile_links:
+    # get beer profile page
     profile_page = session.get(baseurl + link)
     profile_tree = html.fromstring(profile_page.text)
+
+    # scrape features
     beer_id = link.split("/")
     print(beer_id)
     beer_id = "%s_%s"%(beer_id[3], beer_id[4])
@@ -62,6 +75,7 @@ for link in profile_links:
     brewery_name = profile_tree.xpath(('//div[@class="%s"]'+'//span%s')%("titleBar", "/text()"))[0].split(" - ")[1]
     printq(brewery_name)
     printq(link)
+    printq(style)
     ba_score = profile_tree.xpath("//span[contains(concat('',@class,''),'ba-score')]/text()")[0]
     printc(ba_score)
     ba_score_text = profile_tree.xpath("//span[contains(concat('',@class,''),'ba-score_text')]/text()")[0]
@@ -98,4 +112,49 @@ for link in profile_links:
     printo("\"" + availability + "\"")
     printo("\n")
 
-output.close()
+    # Create reviews file
+    style_joined = "_".join(style.replace("/", "").split(" "))
+    style_dir = "./" + style_joined
+    if not os.path.exists(style_dir):
+        os.makedirs(style_dir)
+    reviews_output = codecs.open(style_dir + "/" + beer_id, "w", "utf-8")
+
+    user_scores = profile_tree.xpath("//span[@class='BAscore_norm']/text()")
+    user_score_pdevs = profile_tree.xpath("//span[@class='BAscore_norm']/following::span[2]/text()")
+    user_senses_scores = profile_tree.xpath("//span[@class='BAscore_norm']/following::span[3]/text()")
+    review_texts = profile_tree.xpath("//span[@class='BAscore_norm']/following::span[3]/following::text()[1]")
+    usernames = profile_tree.xpath("//a[@class='username']/text()")
+    timestamps = profile_tree.xpath("//a[contains(concat('',@href,''),'?ba=')]/text()")
+    for i in range(len(user_scores)):
+        printq_f(user_scores[i], reviews_output)
+        pdev = user_score_pdevs[i]
+        if "%" not in pdev:
+            user_pdev = "0%"
+            printq_f(user_pdev, reviews_output)
+            scores = pdev.split(" | ")
+            if len(scores) != 5:
+                for i in range(5):
+                    printq_f("", reviews_output)
+            else:
+                for score in scores:
+                    printq_f(score.strip().split(" ")[1], reviews_output)
+        else:
+            printq_f(user_score_pdevs[i], reviews_output)
+            scores = user_senses_scores[i].split(" | ")
+            if len(scores) != 5:
+                for i in range(5):
+                    printq_f("", reviews_output)
+            else:
+                for score in scores:
+                    printq_f(score.strip().split(" ")[1], reviews_output)
+        #printq_f(user_senses_scores[i], reviews_output)
+        review_text = review_texts[i]
+        username = usernames[i]
+        if review_text == username:
+            review_text = ""
+        printq_f(review_text, reviews_output)
+        printq_f(username, reviews_output)
+        printq_f(timestamps[i], reviews_output)
+        printo_f("\n", reviews_output)
+
+beer_output.close()
