@@ -8,7 +8,7 @@ style_link        = "/beer/style/"
 profile_link      = "/beer/profile/"
 
 log_file = codecs.open("error_log.txt", "w", "utf-8")
-beer_output = logfile
+beer_output = log_file
 
 ### Functions ###
 
