@@ -7,8 +7,8 @@ baseurl           = "http://www.beeradvocate.com"
 style_link        = "/beer/style/"
 profile_link      = "/beer/profile/"
 
-beer_output = codecs.open("profiles.txt", "w", "utf-8")
 log_file = codecs.open("error_log.txt", "w", "utf-8")
+beer_output = logfile
 
 ### Functions ###
 
