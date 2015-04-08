@@ -59,8 +59,7 @@ rdev_matcher = re.compile('^.*rDev\s.*$')
 
 #style_link = style_links[0]
 #style = beer_styles[0]
-for k in range(10,64): # len(style_links)
-    print('K: ' + str(k))
+for k in range(len(style_links))[:]:
     style = beer_styles[k]
     style_link = style_links[k]
 
