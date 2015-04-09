@@ -49,11 +49,14 @@ engine = jtree_dbn_inf_engine(bnet);
 %now we pose a query to our network
 %calculate the probability that the sprinkler was on given the grass is wet
 evidence = cell(bnet.nnodes_per_slice,2); %evidence is stored in a matlab cell. The 2nd dimension is the number of time slinces. Even though we are only working with 1 time splace, this code requires we specify at least 2 time slices (but we'll only populate the first one)
-evidence{2, 1} = 2; %node 2 at time slice 1 is equal to 2 (grass_wet = True). In the evidence array, value 1 = Fales, value 2 = True.
+%evidence{2, 1} = 2; %node 2 at time slice 1 is equal to 2 (grass_wet = True). In the evidence array, value 1 = Fales, value 2 = True.
+evidence{1, 1} = 2; % sprinkler = True at time slice 1
 
 [engine, ll] = enter_evidence(engine, evidence); %perform inference - get answer to our query
-P = marginal_nodes(engine,1,1); %get the probabilities for the sprinkler node (node 1) at first timeslice
-p_s = P.T(2); %probability that sprinkler = True
+%P = marginal_nodes(engine,1,1); %get the probabilities for the sprinkler node (node 1) at first timeslice
+P = marginal_nodes(engine, 2, 1); % get the probabilities for the grass_wet node
+%p_s = P.T(2); %probability that sprinkler = True
+p_s = P.T(1); % probability that grass_wet = False
 
 
 
