@@ -59,9 +59,13 @@ rdev_matcher = re.compile('^.*rDev\s.*$')
 
 #style_link = style_links[0]
 #style = beer_styles[0]
+
+#fill in the indices below to scrape a different range of beer styles
 for k in range(len(style_links))[:]:
     style = beer_styles[k]
     style_link = style_links[k]
+    print "style index: %d"% k
+    print "style: %s"% style
 
     # Create style directory #
     style_joined = "_".join(style.replace("/", "").split(" "))
@@ -78,8 +82,11 @@ for k in range(len(style_links))[:]:
         profile_links = style_tree.xpath('//a[contains(concat("",@href,""),"%s")]/@href'%(profile_link))
         profile_links = filter(profile_matcher.match, profile_links)
 
+        beer_index = 0
         for link in profile_links:
             # get beer profile page
+            print "beer index: %d"% beer_index
+            beer_index += 1
             profile_page = session.get(baseurl + link)
             profile_tree = html.fromstring(profile_page.text)
 
