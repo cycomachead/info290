@@ -9,9 +9,9 @@ profile_link      = "/beer/profile/"
 
 log_file = codecs.open("error_log.txt", "w", "utf-8")
 beer_output = log_file
-error_beers = open("error_beers.txt", "r")
-#error_links = error_beers.readlines()
-#error_links = map(lambda x: x[:-1], error_links)
+error_beers = open("redo_beers.txt", "r")
+error_links = error_beers.readlines()
+error_links = map(lambda x: x[:-1], error_links)
 
 ### Functions ###
 
@@ -62,17 +62,19 @@ rdev_matcher = re.compile('^.*\\xa0\\xa0.*$')
 
 #style_link = style_links[0]
 #style = beer_styles[0]
-for k in range(len(style_links))[84:]:
+for k in range(len(style_links))[:84]:
     style = beer_styles[k]
     style_link = style_links[k]
 
     # Create style directory #
     style_joined = "_".join(style.replace("/", "").split(" "))
     style_dir = "./" + style_joined
+    log_beers = False
     if not os.path.exists(style_dir):
         os.makedirs(style_dir)
-    beer_output = codecs.open(style_dir + "/" + style_joined + "_beers.txt", "w", "utf-8")
-    printo("beer_id,beer_name,brewery_name,link,style,ba_score,ba_score_text,ratings_count,bro_score,bro_score_text,reviews_count,rating_avg,pdev,wants,gots,ft,location,abv,availability\n")
+        log_beers = True
+        beer_output = codecs.open(style_dir + "/" + style_joined + "_beers.txt", "w", "utf-8")
+        printo("beer_id,beer_name,brewery_name,link,style,ba_score,ba_score_text,ratings_count,bro_score,bro_score_text,reviews_count,rating_avg,pdev,wants,gots,ft,location,abv,availability\n")
 
     try:
         #for link in stylelinks:
@@ -82,8 +84,7 @@ for k in range(len(style_links))[84:]:
         profile_links = filter(profile_matcher.match, profile_links)
 
         for link in profile_links:
-            #if link in error_links:
-
+            if link in error_links:
                 # get beer profile page
                 profile_page = session.get(baseurl + link)
                 profile_tree = html.fromstring(profile_page.text)
@@ -93,48 +94,49 @@ for k in range(len(style_links))[84:]:
                     beer_id = link.split("/")
                     print("/".join(beer_id[3:5]))
                     beer_id = "%s_%s"%(beer_id[3], beer_id[4])
-                    printc(beer_id)
-                    beer_name = profile_tree.xpath(('//div[@class="%s"]'+'//h1%s')%("titleBar", "/text()"))[0]
-                    printq(beer_name)
-                    brewery_name = profile_tree.xpath(('//div[@class="%s"]'+'//span%s')%("titleBar", "/text()"))[0].split(" - ")[1]
-                    printq(brewery_name)
-                    printq(link)
-                    printq(style)
-                    ba_score = profile_tree.xpath("//span[contains(concat('',@class,''),'ba-score')]/text()")[0]
-                    printc(ba_score)
-                    ba_score_text = profile_tree.xpath("//span[contains(concat('',@class,''),'ba-score_text')]/text()")[0]
-                    printq(ba_score_text)
-                    ba_ratings = profile_tree.xpath("//span[contains(concat('',@class,''),'ba-ratings')]/text()")[0]
-                    printc(ba_ratings)
-                    ba_bro_score = profile_tree.xpath("//span[contains(concat('',@class,''),'ba-bro_score')]/text()")[0]
-                    printc(ba_bro_score)
-                    ba_bro_text = profile_tree.xpath("//b[contains(concat('',@class,''),'ba-bro_text')]/text()")[0]
-                    printq(ba_bro_text)
-                    ba_reviews = profile_tree.xpath("//span[contains(concat('',@class,''),'ba-reviews')]/text()")[0]
-                    printc(ba_reviews)
-                    ba_rating_avg = profile_tree.xpath("//span[contains(concat('',@class,''),'ba-ravg')]/text()")[0]
-                    printc(ba_rating_avg)
-                    ba_pdev = profile_tree.xpath("//span[contains(concat('',@class,''),'ba-pdev')]/text()")[0][:-1]
-                    printc(ba_pdev)
-                    wants = profile_tree.xpath("//a[contains(concat('',@href,''),'?view=W')]/text()")[0].split(" ")[1]
-                    printc(wants)
-                    gots = profile_tree.xpath("//a[contains(concat('',@href,''),'?view=G')]/text()")[0].split(" ")[1]
-                    printc(gots)
-                    ft = profile_tree.xpath("//a[contains(concat('',@href,''),'?view=FT')]/text()")[0].split(" ")[1]
-                    printc(ft)
-                    location = profile_tree.xpath("//a[contains(concat('',@href,''),'/place/directory/')]/text()")[:-1]
-                    location = ",".join(location)
-                    printq(location)
-                    abv = profile_tree.xpath("//b[text()='Style | ABV']//following::a[1]/following-sibling::text()[1]")[0]
-                    try:
-                        abv = str(abv[-7:])
-                    except:
-                        abv = str(abv[-6:])
-                    abv = abv.strip()[:-1]
-                    printc(abv)
-                    availability = profile_tree.xpath("//b[text()='Availability:']/following::text()[1]")[0].strip()
-                    printo("\"" + availability + "\"")
-                    printo("\n")
+                    if log_beers:
+                        printc(beer_id)
+                        beer_name = profile_tree.xpath(('//div[@class="%s"]'+'//h1%s')%("titleBar", "/text()"))[0]
+                        printq(beer_name)
+                        brewery_name = profile_tree.xpath(('//div[@class="%s"]'+'//span%s')%("titleBar", "/text()"))[0].split(" - ")[1]
+                        printq(brewery_name)
+                        printq(link)
+                        printq(style)
+                        ba_score = profile_tree.xpath("//span[contains(concat('',@class,''),'ba-score')]/text()")[0]
+                        printc(ba_score)
+                        ba_score_text = profile_tree.xpath("//span[contains(concat('',@class,''),'ba-score_text')]/text()")[0]
+                        printq(ba_score_text)
+                        ba_ratings = profile_tree.xpath("//span[contains(concat('',@class,''),'ba-ratings')]/text()")[0]
+                        printc(ba_ratings)
+                        ba_bro_score = profile_tree.xpath("//span[contains(concat('',@class,''),'ba-bro_score')]/text()")[0]
+                        printc(ba_bro_score)
+                        ba_bro_text = profile_tree.xpath("//b[contains(concat('',@class,''),'ba-bro_text')]/text()")[0]
+                        printq(ba_bro_text)
+                        ba_reviews = profile_tree.xpath("//span[contains(concat('',@class,''),'ba-reviews')]/text()")[0]
+                        printc(ba_reviews)
+                        ba_rating_avg = profile_tree.xpath("//span[contains(concat('',@class,''),'ba-ravg')]/text()")[0]
+                        printc(ba_rating_avg)
+                        ba_pdev = profile_tree.xpath("//span[contains(concat('',@class,''),'ba-pdev')]/text()")[0][:-1]
+                        printc(ba_pdev)
+                        wants = profile_tree.xpath("//a[contains(concat('',@href,''),'?view=W')]/text()")[0].split(" ")[1]
+                        printc(wants)
+                        gots = profile_tree.xpath("//a[contains(concat('',@href,''),'?view=G')]/text()")[0].split(" ")[1]
+                        printc(gots)
+                        ft = profile_tree.xpath("//a[contains(concat('',@href,''),'?view=FT')]/text()")[0].split(" ")[1]
+                        printc(ft)
+                        location = profile_tree.xpath("//a[contains(concat('',@href,''),'/place/directory/')]/text()")[:-1]
+                        location = ",".join(location)
+                        printq(location)
+                        abv = profile_tree.xpath("//b[text()='Style | ABV']//following::a[1]/following-sibling::text()[1]")[0]
+                        try:
+                            abv = str(abv[-7:])
+                        except:
+                            abv = str(abv[-6:])
+                        abv = abv.strip()[:-1]
+                        printc(abv)
+                        availability = profile_tree.xpath("//b[text()='Availability:']/following::text()[1]")[0].strip()
+                        printo("\"" + availability + "\"")
+                        printo("\n")
 
                     # Create reviews file
                     reviews_output = codecs.open(style_dir + "/" + beer_id, "w", "utf-8")
