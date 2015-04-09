@@ -73,7 +73,9 @@ for k in range(len(style_links))[:84]:
     if not os.path.exists(style_dir):
         os.makedirs(style_dir)
         log_beers = True
-        beer_output = codecs.open(style_dir + "/" + style_joined + "_beers.txt", "w", "utf-8")
+    beer_output = codecs.open(style_dir + "/" + style_joined + "_beers.txt", "rw", "utf-8")
+    current_beers = beer_output.read()
+    if log_beers:
         printo("beer_id,beer_name,brewery_name,link,style,ba_score,ba_score_text,ratings_count,bro_score,bro_score_text,reviews_count,rating_avg,pdev,wants,gots,ft,location,abv,availability\n")
 
     try:
@@ -94,7 +96,7 @@ for k in range(len(style_links))[:84]:
                     beer_id = link.split("/")
                     print("/".join(beer_id[3:5]))
                     beer_id = "%s_%s"%(beer_id[3], beer_id[4])
-                    if log_beers:
+                    if log_beers or beer_id not in current_beers:
                         printc(beer_id)
                         beer_name = profile_tree.xpath(('//div[@class="%s"]'+'//h1%s')%("titleBar", "/text()"))[0]
                         printq(beer_name)
