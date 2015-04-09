@@ -1,0 +1,1 @@
+beer_id,beer_name,brewery_name,link,style,ba_score,ba_score_text,ratings_count,bro_score,bro_score_text,reviews_count,rating_avg,pdev,wants,gots,ft,location,abv,availability

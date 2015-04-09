@@ -73,8 +73,15 @@ for k in range(len(style_links))[:84]:
     if not os.path.exists(style_dir):
         os.makedirs(style_dir)
         log_beers = True
-    beer_output = codecs.open(style_dir + "/" + style_joined + "_beers.txt", "rw", "utf-8")
-    current_beers = beer_output.read()
+    file_path = style_dir + "/" + style_joined + "_beers.txt"
+    if os.path.isfile(file_path):
+        permissions = "rw"
+        beer_output = codecs.open(file_path, permissions, "utf-8")
+        current_beers = beer_output.read()
+    else:
+        permissions = "w"
+        beer_output = codecs.open(file_path, permissions, "utf-8")
+        current_beers = ""
     if log_beers:
         printo("beer_id,beer_name,brewery_name,link,style,ba_score,ba_score_text,ratings_count,bro_score,bro_score_text,reviews_count,rating_avg,pdev,wants,gots,ft,location,abv,availability\n")
 
@@ -145,6 +152,7 @@ for k in range(len(style_links))[:84]:
                     printo_f("user_score,rdev,look_score,smell_score,taste_score,feel_score,overall_score,review_text,username,timestamp\n", reviews_output)
 
                     # iterate over all reviews pages
+                    ba_ratings = profile_tree.xpath("//span[contains(concat('',@class,''),'ba-ratings')]/text()")[0]
                     num_reviews = int(ba_ratings.replace(",", ""))
                     start = 1
                     while start < num_reviews:
