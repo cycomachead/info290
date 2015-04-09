@@ -77,5 +77,8 @@ scatter(x, y);
 
 %% question 7 data5 clustering
 k_heuristic = ceil(log(size(X4, 1)));
-runexpl2(X5, 3, k_heuristic + 5, 0);
+c5 = runexpl2(X5, 3, k_heuristic + 5, 0);
+
+%% question 7 accuracy
+accuracy([ones(5000, 1); 2 * ones(4000, 1); 3 * ones(3000, 1)], c5)
 
