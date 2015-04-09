@@ -59,11 +59,12 @@ rdev_matcher = re.compile('^.*rDev\s.*$')
 
 #style_link = style_links[0]
 #style = beer_styles[0]
+
 #fill in the indices below to scrape a different range of beer styles
-for k in range(len(style_links))[64:84]:
-    print "style index: %d"% k
+for k in range(len(style_links))[:]:
     style = beer_styles[k]
     style_link = style_links[k]
+    print "style index: %d"% k
     print "style: %s"% style
 
     # Create style directory #
