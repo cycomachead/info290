@@ -1,0 +1,2 @@
+beer_id,beer_name,brewery_name,link,style,ba_score,ba_score_text,ratings_count,bro_score,bro_score_text,reviews_count,rating_avg,pdev,wants,gots,ft,location,abv,availability
+651_18721,"CascaZilla","Ithaca Beer Company","/beer/profile/651/18721/","American Amber / Red Ale",86,"very good",1,149,-,"no score",578,3.83,10.97,44,78,1,"New York,United States",7.00,"Rotating"
