@@ -9,9 +9,10 @@ profile_link      = "/beer/profile/"
 
 log_file = codecs.open("error_log.txt", "w", "utf-8")
 beer_output = log_file
-error_beers = open("redo_beers.txt", "r")
-error_links = error_beers.readlines()
+error_links = open("stillugh.txt", "r")
+error_links = error_links.readlines()
 error_links = map(lambda x: x[:-1], error_links)
+print(len(error_links))
 
 ### Functions ###
 
@@ -69,13 +70,14 @@ for k in range(len(style_links))[:84]:
     # Create style directory #
     style_joined = "_".join(style.replace("/", "").split(" "))
     style_dir = "./" + style_joined
+    #if style_dir in redo_dirs:
     log_beers = False
     if not os.path.exists(style_dir):
         os.makedirs(style_dir)
         log_beers = True
     file_path = style_dir + "/" + style_joined + "_beers.txt"
     if os.path.isfile(file_path):
-        permissions = "rw"
+        permissions = "a+"
         beer_output = codecs.open(file_path, permissions, "utf-8")
         current_beers = beer_output.read()
     else:
@@ -86,7 +88,7 @@ for k in range(len(style_links))[:84]:
         printo("beer_id,beer_name,brewery_name,link,style,ba_score,ba_score_text,ratings_count,bro_score,bro_score_text,reviews_count,rating_avg,pdev,wants,gots,ft,location,abv,availability\n")
 
     try:
-        #for link in stylelinks:
+            #for link in stylelinks:
         style_page = session.get(baseurl + style_link)
         style_tree = html.fromstring(style_page.text)
         profile_links = style_tree.xpath('//a[contains(concat("",@href,""),"%s")]/@href'%(profile_link))
@@ -141,17 +143,17 @@ for k in range(len(style_links))[:84]:
                             abv = str(abv[-7:])
                         except:
                             abv = str(abv[-6:])
-                        abv = abv.strip()[:-1]
-                        printc(abv)
-                        availability = profile_tree.xpath("//b[text()='Availability:']/following::text()[1]")[0].strip()
-                        printo("\"" + availability + "\"")
-                        printo("\n")
+                            abv = abv.strip()[:-1]
+                            printc(abv)
+                            availability = profile_tree.xpath("//b[text()='Availability:']/following::text()[1]")[0].strip()
+                            printo("\"" + availability + "\"")
+                            printo("\n")
 
                     # Create reviews file
                     reviews_output = codecs.open(style_dir + "/" + beer_id, "w", "utf-8")
                     printo_f("user_score,rdev,look_score,smell_score,taste_score,feel_score,overall_score,review_text,username,timestamp\n", reviews_output)
-
-                    # iterate over all reviews pages
+                    
+                        # iterate over all reviews pages
                     ba_ratings = profile_tree.xpath("//span[contains(concat('',@class,''),'ba-ratings')]/text()")[0]
                     num_reviews = int(ba_ratings.replace(",", ""))
                     start = 1
@@ -161,7 +163,7 @@ for k in range(len(style_links))[:84]:
                         no_username = "^<div\sid=\"rating_fullview_content_2\">\"You\srated\sthis\sbeer.\".{1,300}<div>.{1,300}</div></div>$"
                         profile_text = re.sub(no_username, "", profile_page.text)
                         profile_tree = html.fromstring(profile_text)
-
+                        
                         user_scores = profile_tree.xpath("//span[@class='BAscore_norm']/text()")
                         user_score_pdevs = profile_tree.xpath("//span[@class='BAscore_norm']/following::span[2]/text()")
                         user_senses_scores = profile_tree.xpath("//span[@class='BAscore_norm']/following::span[3]/text()")
@@ -173,7 +175,7 @@ for k in range(len(style_links))[:84]:
                                 x += 1
                             else:
                                 review_texts.pop(x-1)
-                        #review_texts = map(lambda x: "" if rdev_matcher.match(x) else x, review_texts)
+                            #review_texts = map(lambda x: "" if rdev_matcher.match(x) else x, review_texts)
                         usernames = profile_tree.xpath("//span[@class='muted']/a[@class='username']")
                         usernames = map(lambda x: x.text if x.text else "", usernames)
                         timestamps = profile_tree.xpath("//a[contains(concat('',@href,''),'?ba=')]/text()")[5:]
@@ -199,7 +201,7 @@ for k in range(len(style_links))[:84]:
                                 else:
                                     for score in scores:
                                         printc_f(score.strip().split(" ")[1], reviews_output)
-                            #printq_f(user_senses_scores[i], reviews_output)
+                                #printq_f(user_senses_scores[i], reviews_output)
                             review_text = review_texts[i]
                             username = usernames[i]
                             if review_text == username:

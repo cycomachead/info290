@@ -1,1 +1,4 @@
 beer_id,beer_name,brewery_name,link,style,ba_score,ba_score_text,ratings_count,bro_score,bro_score_text,reviews_count,rating_avg,pdev,wants,gots,ft,location,abv,availability
+287_1093,"Two Hearted Ale","Bell's Brewery, Inc.","/beer/profile/287/1093/","American IPA",95,"world-class",12,310,90,"outstanding",3,305,4.27,10.77,736,2,549,46,"Michigan,United States",7.00,"Year-round"
+199_29619,"Sculpin IPA","Ballast Point Brewing Company","/beer/profile/199/29619/","American IPA",98,"world-class",11,295,100,"world-class",2,323,4.41,9.75,1,204,3,139,51,"California,United States",7.00,"Year-round"
+64_6108,"60 Minute IPA","Dogfish Head Brewery","/beer/profile/64/6108/","American IPA",91,"outstanding",10,134,92,"outstanding",2,701,4.09,11.49,289,1,964,8,"Delaware,United States",6.00,"Year-round"

@@ -1,7 +1,7 @@
 user_score,rdev,look_score,smell_score,taste_score,feel_score,overall_score,review_text,username,timestamp
 4.34,2.4,4,4.25,4.5,4.25,4.25,"","swanfungus","Sunday at 12:58 PM"
 4.09,-3.5,4.5,4.25,4,4,4,"","BillCheck","Saturday at 03:59 PM"
-4.39,3.5,4.5,4.75,4.25,4.25,4.25,"","Lochnessmonster","Thursday at 12:23 PM"
+4.39,3.5,4.5,4.75,4.25,4.25,4.25,"","Lochnessmonster","Apr 02, 2015"
 3.94,-7.1,4,4.25,3.75,3.75,4,"","changdulla","Mar 31, 2015"
 4.39,3.5,4.25,4.5,4.5,4,4.25,"","iJyuken","Mar 31, 2015"
 4.1,-3.3,4,4,4.25,4,4,"","Bferber","Mar 30, 2015"
@@ -1323,7 +1323,7 @@ user_score,rdev,look_score,smell_score,taste_score,feel_score,overall_score,revi
 4.75,12,,,,,,"","TheRealPour","Oct 23, 2013"
 4.25,0.2,,,,,,"","johnyb","Oct 22, 2013"
 4,-5.7,,,,,,"","BumpkinBrewer","Oct 22, 2013"
-4.75,12,,,,,,"","LightnerLiquorKS","Oct 21, 2013"
+4.35,2.6,4.25,4.25,4.5,4.25,4.25,"","LightnerLiquorKS","Oct 21, 2013"
 3.5,-17.5,,,,,,"","ZethOfTheNorth","Oct 20, 2013"
 4.25,0.2,,,,,,"","Bwagner1122","Oct 19, 2013"
 4.25,0.2,,,,,,"","PaulyB83","Oct 19, 2013"
