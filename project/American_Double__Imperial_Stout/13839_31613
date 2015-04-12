@@ -1,8 +1,9 @@
 user_score,rdev,look_score,smell_score,taste_score,feel_score,overall_score,review_text,username,timestamp
+4,-3.6,4,4,4,4,4,"","the_encinitan","Thursday at 12:48 PM"
 4,-3.6,4,4,4,4,4,"","wiescins","Wednesday at 05:50 PM"
-4.6,10.8,4.5,4.5,4.5,4.5,5,"","waddellc2","Sunday at 06:36 AM"
-4.56,9.9,4.5,4.75,4.5,4.5,4.5,"","Lochnessmonster","Saturday at 10:01 PM"
-4.28,3.1,4,4,4.5,4.25,4.25,"","mattsmith413","Saturday at 07:12 AM"
+4.6,10.8,4.5,4.5,4.5,4.5,5,"","waddellc2","Apr 05, 2015"
+4.56,9.9,4.5,4.75,4.5,4.5,4.5,"","Lochnessmonster","Apr 04, 2015"
+4.28,3.1,4,4,4.5,4.25,4.25,"","mattsmith413","Apr 04, 2015"
 4,-3.6,4,4,4,4,4,"","ralerwen","Apr 01, 2015"
 4.58,10.4,4.5,4.5,4.75,4.25,4.5,"","sgulner","Apr 01, 2015"
 4.27,2.9,4.5,4.25,4.25,3.75,4.5,"","NateSharpless","Mar 31, 2015"
