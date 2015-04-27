@@ -3,7 +3,7 @@
 #D <- read.csv("../../data/American_Pale_Ale_(APA)/140_276", as.is = TRUE)
 common.words <- strsplit(readLines("common-english-words.txt"), ",")[[1]]
 
-files <- list.files("../../data/American_Pale_Ale_(APA)/")
+files <- list.files("../../data/American_Pale_Ale_(APA)/", full.names = TRUE)
 
 t <- proc.time()
 
@@ -29,4 +29,4 @@ counts <- counts[sorted.indices,] # put in decreasing order
 counts$percent <- counts$count / sum(counts$count)
 #head(counts, 50)
 
-proc.time() - t
+print(proc.time() - t)
