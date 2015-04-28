@@ -1,0 +1,7 @@
+.
+./American_Pale_Ale_(APA)
+./American_Double__Imperial_Stout
+./American_Amber__Red_Ale
+./American_IPA
+./Black_&_Tan
+./American_Double__Imperial_IPA
