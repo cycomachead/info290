@@ -3,14 +3,22 @@
 #D <- read.csv("../../data/American_Pale_Ale_(APA)/140_276", as.is = TRUE)
 common.words <- strsplit(readLines("common-english-words.txt"), ",")[[1]]
 
-files <- list.files("../../data/American_Pale_Ale_(APA)/", full.names = TRUE)
+#files <- list.files("../../data/American_Pale_Ale_(APA)/", full.names = TRUE)
+files <- list.files("../../data/American_IPA/", full.names = TRUE)
 
 t <- proc.time()
 
-n.files <- 5
+n.files <- length(files) - 1
 word.freqs <- vector("list", n.files)
 for (i in 1:n.files) {
-  D <- read.csv(files[i], as.is = TRUE, row.names = NULL)
+  D <- tryCatch(
+                {
+                  read.csv(files[i], as.is = TRUE, row.names = NULL)
+                }, error = function(e) {
+                  print(paste("error with file:", files[i]))
+                  next
+                })
+  
 
   text <- D$review_text
   
