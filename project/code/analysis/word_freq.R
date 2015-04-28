@@ -24,9 +24,12 @@ for (j in 1:n.beers) {
                     read.csv(files[i], as.is = TRUE, row.names = NULL)
                   }, error = function(e) {
                     print(paste("error with file:", files[i]))
-                    next
+                    return(NULL)
                   })
-    
+
+    if (is.null(D)) {
+      next
+    }
 
     text <- D$review_text
     
