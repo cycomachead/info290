@@ -7,26 +7,31 @@ files <- list.files("../../data/American_Pale_Ale_(APA)/", full.names = TRUE)
 
 t <- proc.time()
 
-D <- read.csv(files[1], as.is = TRUE)
+n.files <- 5
+word.freqs <- vector("list", n.files)
+for (i in 1:n.files) {
+  D <- read.csv(files[i], as.is = TRUE, row.names = NULL)
 
-text <- D$review_text
+  text <- D$review_text
+  
+  text <- gsub("[[:punct:]]", "", text)
+  
+  text <- tolower(text)
+  
+  text <- strsplit(text, split = "\\s+")
+  
+  text <- Reduce(c, text, c())
+  text <- text[text != ""]
+  
+  counts <- rle(sort(text)) # generates word counts
+  counts <- data.frame(word = counts$value, count = counts$lengths)
+  counts <- counts[!is.element(counts$word, common.words),] # filters out common words
 
-text <- gsub("[[:punct:]]", "", text)
-
-text <- tolower(text)
-
-text <- strsplit(text, split = "\\s+")
-
-text <- Reduce(c, text, c())
-text <- text[text != ""]
-
-counts <- rle(sort(text)) # generates word counts
-counts <- data.frame(word = counts$value, count = counts$lengths)
-counts <- counts[!is.element(counts$word, common.words),] # filters out common words
-
-sorted.indices <- order(counts$count, decreasing = TRUE)
-counts <- counts[sorted.indices,] # put in decreasing order
-counts$percent <- counts$count / sum(counts$count)
+  sorted.indices <- order(counts$count, decreasing = TRUE)
+  counts <- counts[sorted.indices,] # put in decreasing order
+  counts$percent <- counts$count / sum(counts$count)
 #head(counts, 50)
+  word.freqs[[i]] <- counts
+}
 
 print(proc.time() - t)
