@@ -10,7 +10,7 @@ all.beers <- all.beers[2:length(all.beers)]
 all.beers.names.only <- sapply(strsplit(all.beers, "//"), function(x) x[2])
 n.beers <- length(all.beers)
 
-for (j in 1:1) {
+for (j in 1:n.beers) {
 
   files <- list.files(all.beers[j], full.names = TRUE)
   
@@ -24,9 +24,12 @@ for (j in 1:1) {
                     read.csv(files[i], as.is = TRUE, row.names = NULL)
                   }, error = function(e) {
                     print(paste("error with file:", files[i]))
-                    next
+                    return(NULL)
                   })
-    
+
+    if (is.null(D)) {
+      next
+    }
 
     text <- D$review_text
     
