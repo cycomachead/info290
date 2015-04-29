@@ -10,14 +10,23 @@ all.beers <- all.beers[2:length(all.beers)]
 all.beers.names.only <- sapply(strsplit(all.beers, "//"), function(x) x[2])
 n.beers <- length(all.beers)
 
-for (j in 1:n.beers) {
+style.start <- beer.start <- 1
+args <- commandArgs(trailingOnly = TRUE)
+if (length(args) > 0) {
+  style.start <- args[1]
+}
+if (length(args) > 1) {
+  beer.start <- args[2]
+}
+
+for (j in style.start:n.beers) {
   files <- list.files(all.beers[j], full.names = TRUE)
   
   t <- proc.time()
   
   n.files <- length(files) - 1
   word.freqs <- vector("list", n.files)
-  for (i in 1:n.files) {
+  for (i in beer.start:n.files) {
     D <- tryCatch(
                   {
                     read.csv(files[i], as.is = TRUE, row.names = NULL)
@@ -43,6 +52,7 @@ for (j in 1:n.beers) {
 
     if (is.null(text)) {
       print(paste("error with file:", files[i]))
+      print(paste("style:", j, ", beer:", i))
       next
     }
 
