@@ -11,7 +11,6 @@ all.beers.names.only <- sapply(strsplit(all.beers, "//"), function(x) x[2])
 n.beers <- length(all.beers)
 
 for (j in 1:n.beers) {
-
   files <- list.files(all.beers[j], full.names = TRUE)
   
   t <- proc.time()
@@ -41,7 +40,12 @@ for (j in 1:n.beers) {
     
     text <- Reduce(c, text, c())
     text <- text[text != ""]
-    
+
+    if (is.null(text)) {
+      print(paste("error with file:", files[i]))
+      next
+    }
+
     counts <- rle(sort(text)) # generates word counts
     counts <- data.frame(word = counts$value, count = counts$lengths)
     counts <- counts[!is.element(counts$word, common.words),] # filters out common words
