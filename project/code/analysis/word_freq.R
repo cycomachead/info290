@@ -32,6 +32,7 @@ for (j in style.start:n.beers) {
                     read.csv(files[i], as.is = TRUE, row.names = NULL)
                   }, error = function(e) {
                     print(paste("error with file:", files[i]))
+                    print(e)
                     return(NULL)
                   })
 
@@ -60,7 +61,7 @@ for (j in style.start:n.beers) {
       counts$percent <- counts$count / sum(counts$count)
                                         #head(counts, 50)
     } else {
-      counts <- date.frame(word = character(0), count = numeric(0),
+      counts <- data.frame(word = character(0), count = numeric(0),
                            percent = numeric(0))
     }
     
