@@ -56,6 +56,7 @@ In readLines("common-english-words.txt") :
 +                     read.csv(files[i], as.is = TRUE, row.names = NULL)
 +                   }, error = function(e) {
 +                     print(paste("error with file:", files[i]))
++                     print(e)
 +                     return(NULL)
 +                   })
 + 
@@ -63,322 +64,59 @@ In readLines("common-english-words.txt") :
 +       next
 +     }
 + 
-+     text <- D$review_text
-+     
-+     text <- gsub("[[:punct:]]", "", text)
-+     
-+     text <- tolower(text)
-+     
-+     text <- strsplit(text, split = "\\s+")
-+     
-+     text <- Reduce(c, text, c())
-+     text <- text[text != ""]
++     if (nrow(D) > 0) {
++       text <- D$review_text
++       
++       text <- gsub("[[:punct:]]", "", text)
++       
++       text <- tolower(text)
++       
++       text <- strsplit(text, split = "\\s+")
++       
++       text <- Reduce(c, text, c())
++       text <- text[text != ""]
++       
++       counts <- rle(sort(text)) # generates word counts
++       counts <- data.frame(word = counts$value, count = counts$lengths)
++       counts <- counts[!is.element(counts$word, common.words),] # filters out common words
 + 
-+     if (is.null(text)) {
-+       print(paste("error with file:", files[i]))
-+       print(paste("style:", j, ", beer:", i))
-+       next
-+     }
-+ 
-+     counts <- rle(sort(text)) # generates word counts
-+     counts <- data.frame(word = counts$value, count = counts$lengths)
-+     counts <- counts[!is.element(counts$word, common.words),] # filters out common words
-+ 
-+     sorted.indices <- order(counts$count, decreasing = TRUE)
-+     counts <- counts[sorted.indices,] # put in decreasing order
-+     counts$percent <- counts$count / sum(counts$count)
++       sorted.indices <- order(counts$count, decreasing = TRUE)
++       counts <- counts[sorted.indices,] # put in decreasing order
++       counts$percent <- counts$count / sum(counts$count)
 +                                         #head(counts, 50)
++     } else {
++       counts <- data.frame(word = character(0), count = numeric(0),
++                            percent = numeric(0))
++     }
++     
 +     word.freqs[[i]] <- counts
 +   }
 + 
 +   save(word.freqs, file = paste("word_frequencies_by_beer", all.beers.names.only[j], sep = "/"))
 +   
 + }
-[1] "error with file: ../../data//American_Double__Imperial_Stout/394_20539"
-[1] "error with file: ../../data//Bière_de_Champagne__Bière_Brut/18182_81647"
-[1] "style: 29 , beer: 5"
-[1] "error with file: ../../data//Bière_de_Champagne__Bière_Brut/23420_148145"
-[1] "style: 29 , beer: 8"
-[1] "error with file: ../../data//Bière_de_Champagne__Bière_Brut/28306_109389"
-[1] "style: 29 , beer: 15"
-[1] "error with file: ../../data//Bière_de_Champagne__Bière_Brut/29346_156623"
-[1] "style: 29 , beer: 17"
-[1] "error with file: ../../data//Bière_de_Champagne__Bière_Brut/3521_130364"
-[1] "style: 29 , beer: 22"
-[1] "error with file: ../../data//Bière_de_Champagne__Bière_Brut/4114_126369"
-[1] "style: 29 , beer: 25"
-[1] "error with file: ../../data//Bière_de_Champagne__Bière_Brut/9813_44643"
-[1] "style: 29 , beer: 33"
-[1] "error with file: ../../data//Bière_de_Garde/22150_70001"
-[1] "error with file: ../../data//Black_&_Tan/11890_148584"
-[1] "style: 31 , beer: 4"
-[1] "error with file: ../../data//Black_&_Tan/13278_45638"
-[1] "style: 31 , beer: 6"
-[1] "error with file: ../../data//Black_&_Tan/13989_122704"
-[1] "style: 31 , beer: 7"
-[1] "error with file: ../../data//Black_&_Tan/14127_75668"
-[1] "style: 31 , beer: 8"
-[1] "error with file: ../../data//Black_&_Tan/14413_63313"
-[1] "style: 31 , beer: 9"
-[1] "error with file: ../../data//Black_&_Tan/21280_90167"
-[1] "style: 31 , beer: 21"
-[1] "error with file: ../../data//Black_&_Tan/23635_128906"
-[1] "style: 31 , beer: 26"
-[1] "error with file: ../../data//Black_&_Tan/33739_126599"
-[1] "style: 31 , beer: 33"
-[1] "error with file: ../../data//Black_&_Tan/3409_66986"
-[1] "style: 31 , beer: 35"
-[1] "error with file: ../../data//Black_&_Tan/34273_152206"
-[1] "style: 31 , beer: 36"
-[1] "error with file: ../../data//Black_&_Tan/9962_19060"
-[1] "style: 31 , beer: 49"
-[1] "error with file: ../../data//Bock/410_144046"
-[1] "error with file: ../../data//Cream_Ale/193_23506"
-[1] "error with file: ../../data//Eisbock/11031_132890"
-[1] "style: 42 , beer: 1"
-[1] "error with file: ../../data//Eisbock/11056_136067"
-[1] "style: 42 , beer: 2"
-[1] "error with file: ../../data//Eisbock/16750_79853"
-[1] "style: 42 , beer: 8"
-[1] "error with file: ../../data//Eisbock/17033_167090"
-[1] "style: 42 , beer: 10"
-[1] "error with file: ../../data//Eisbock/23993_147520"
-[1] "style: 42 , beer: 17"
-[1] "error with file: ../../data//Eisbock/27329_128467"
-[1] "style: 42 , beer: 18"
-[1] "error with file: ../../data//Eisbock/28127_111897"
-[1] "style: 42 , beer: 19"
-[1] "error with file: ../../data//Eisbock/28522_114026"
-[1] "style: 42 , beer: 21"
-[1] "error with file: ../../data//Eisbock/30055_104064"
-[1] "style: 42 , beer: 23"
-[1] "error with file: ../../data//Eisbock/31695_147476"
-[1] "style: 42 , beer: 26"
-[1] "error with file: ../../data//Eisbock/31695_147483"
-[1] "style: 42 , beer: 27"
-[1] "error with file: ../../data//Eisbock/31920_110584"
-[1] "style: 42 , beer: 28"
-[1] "error with file: ../../data//Eisbock/377_155676"
-[1] "style: 42 , beer: 33"
-[1] "error with file: ../../data//Eisbock/605_164025"
-[1] "style: 42 , beer: 39"
-[1] "error with file: ../../data//Eisbock/607_119194"
-[1] "style: 42 , beer: 40"
-[1] "error with file: ../../data//English_Bitter/298_828"
-[1] "error with file: ../../data//English_Pale_Ale/491_2128"
-[1] "error with file: ../../data//Euro_Strong_Lager/2656_24179"
-[1] "error with file: ../../data//Faro/38694_166780"
-[1] "style: 57 , beer: 13"
-[1] "error with file: ../../data//Happoshu/284_136746"
-[1] "style: 65 , beer: 9"
-[1] "error with file: ../../data//Happoshu/284_138802"
-[1] "style: 65 , beer: 10"
-[1] "error with file: ../../data//Happoshu/28993_95749"
-[1] "style: 65 , beer: 14"
-[1] "error with file: ../../data//Happoshu/292_131764"
-[1] "style: 65 , beer: 17"
-[1] "error with file: ../../data//Happoshu/292_143390"
-[1] "style: 65 , beer: 19"
-[1] "error with file: ../../data//Happoshu/292_149587"
-[1] "style: 65 , beer: 20"
-[1] "error with file: ../../data//Happoshu/292_45103"
-[1] "style: 65 , beer: 27"
-[1] "error with file: ../../data//Happoshu/716_116569"
-[1] "style: 65 , beer: 31"
-[1] "error with file: ../../data//Happoshu/716_136050"
-[1] "style: 65 , beer: 33"
-[1] "error with file: ../../data//Happoshu/716_136564"
-[1] "style: 65 , beer: 34"
-[1] "error with file: ../../data//Happoshu/716_138919"
-[1] "style: 65 , beer: 35"
-[1] "error with file: ../../data//Happoshu/716_47392"
-[1] "style: 65 , beer: 39"
-[1] "error with file: ../../data//Happoshu/865_121243"
-[1] "style: 65 , beer: 42"
-[1] "error with file: ../../data//Happoshu/865_143448"
-[1] "style: 65 , beer: 45"
-[1] "error with file: ../../data//Happoshu/874_116340"
-[1] "style: 65 , beer: 50"
-[1] "error with file: ../../data//Hefeweizen/10707_21619"
-[1] "style: 66 , beer: 1"
-[1] "error with file: ../../data//Hefeweizen/124_1256"
-[1] "style: 66 , beer: 2"
-[1] "error with file: ../../data//Hefeweizen/125_382"
-[1] "style: 66 , beer: 3"
-[1] "error with file: ../../data//Hefeweizen/129_371"
-[1] "style: 66 , beer: 4"
-[1] "error with file: ../../data//Hefeweizen/13302_28750"
-[1] "style: 66 , beer: 5"
-[1] "error with file: ../../data//Hefeweizen/13667_40524"
-[1] "style: 66 , beer: 6"
-[1] "error with file: ../../data//Hefeweizen/140_48434"
-[1] "style: 66 , beer: 7"
-[1] "error with file: ../../data//Hefeweizen/142_1946"
-[1] "style: 66 , beer: 8"
-[1] "error with file: ../../data//Hefeweizen/142_80167"
-[1] "style: 66 , beer: 9"
-[1] "error with file: ../../data//Hefeweizen/143_1552"
-[1] "style: 66 , beer: 10"
-[1] "error with file: ../../data//Hefeweizen/1551_23371"
-[1] "style: 66 , beer: 11"
-[1] "error with file: ../../data//Hefeweizen/176_613"
-[1] "style: 66 , beer: 12"
-[1] "error with file: ../../data//Hefeweizen/182_117171"
-[1] "style: 66 , beer: 13"
-[1] "error with file: ../../data//Hefeweizen/19126_47302"
-[1] "style: 66 , beer: 14"
-[1] "error with file: ../../data//Hefeweizen/2179_25441"
-[1] "style: 66 , beer: 15"
-[1] "error with file: ../../data//Hefeweizen/26_27625"
-[1] "style: 66 , beer: 17"
-[1] "error with file: ../../data//Hefeweizen/26762_72834"
-[1] "style: 66 , beer: 18"
-[1] "error with file: ../../data//Hefeweizen/273_69369"
-[1] "style: 66 , beer: 19"
-[1] "error with file: ../../data//Hefeweizen/290_3425"
-[1] "style: 66 , beer: 20"
-[1] "error with file: ../../data//Hefeweizen/290_41091"
-[1] "style: 66 , beer: 21"
-[1] "error with file: ../../data//Hefeweizen/31_82"
-[1] "style: 66 , beer: 22"
-[1] "error with file: ../../data//Hefeweizen/337_61109"
-[1] "style: 66 , beer: 23"
-[1] "error with file: ../../data//Hefeweizen/345_1006"
-[1] "style: 66 , beer: 24"
-[1] "error with file: ../../data//Hefeweizen/345_1014"
-[1] "style: 66 , beer: 25"
-[1] "error with file: ../../data//Hefeweizen/345_101585"
-[1] "style: 66 , beer: 26"
-[1] "error with file: ../../data//Hefeweizen/383_1062"
-[1] "style: 66 , beer: 27"
-[1] "error with file: ../../data//Hefeweizen/3900_4847"
-[1] "style: 66 , beer: 28"
-[1] "error with file: ../../data//Hefeweizen/39_132"
-[1] "style: 66 , beer: 29"
-[1] "error with file: ../../data//Hefeweizen/401_4700"
-[1] "style: 66 , beer: 30"
-[1] "error with file: ../../data//Hefeweizen/403_1237"
-[1] "style: 66 , beer: 31"
-[1] "error with file: ../../data//Hefeweizen/412_1229"
-[1] "style: 66 , beer: 32"
-[1] "error with file: ../../data//Hefeweizen/45_1137"
-[1] "style: 66 , beer: 33"
-[1] "error with file: ../../data//Hefeweizen/4686_3836"
-[1] "style: 66 , beer: 34"
-[1] "error with file: ../../data//Hefeweizen/4686_60965"
-[1] "style: 66 , beer: 35"
-[1] "error with file: ../../data//Hefeweizen/583_6745"
-[1] "style: 66 , beer: 36"
-[1] "error with file: ../../data//Hefeweizen/585_2637"
-[1] "style: 66 , beer: 37"
-[1] "error with file: ../../data//Hefeweizen/590_37586"
-[1] "style: 66 , beer: 38"
-[1] "error with file: ../../data//Hefeweizen/68_2249"
-[1] "style: 66 , beer: 39"
-[1] "error with file: ../../data//Hefeweizen/689_13804"
-[1] "style: 66 , beer: 40"
-[1] "error with file: ../../data//Hefeweizen/694_18305"
-[1] "style: 66 , beer: 41"
-[1] "error with file: ../../data//Hefeweizen/703_11485"
-[1] "style: 66 , beer: 42"
-[1] "error with file: ../../data//Hefeweizen/703_2434"
-[1] "style: 66 , beer: 43"
-[1] "error with file: ../../data//Hefeweizen/72_3280"
-[1] "style: 66 , beer: 44"
-[1] "error with file: ../../data//Hefeweizen/72_759"
-[1] "style: 66 , beer: 45"
-[1] "error with file: ../../data//Hefeweizen/72_763"
-[1] "style: 66 , beer: 46"
-[1] "error with file: ../../data//Hefeweizen/76_772"
-[1] "style: 66 , beer: 47"
-[1] "error with file: ../../data//Hefeweizen/8_17"
-[1] "style: 66 , beer: 48"
-[1] "error with file: ../../data//Hefeweizen/9020_20575"
-[1] "style: 66 , beer: 49"
-[1] "error with file: ../../data//Hefeweizen/99_6799"
-[1] "style: 66 , beer: 50"
-[1] "error with file: ../../data//Japanese_Rice_Lager/1033_72237"
-[1] "style: 70 , beer: 1"
-[1] "error with file: ../../data//Japanese_Rice_Lager/10889_75177"
-[1] "style: 70 , beer: 2"
-[1] "error with file: ../../data//Japanese_Rice_Lager/14102_134589"
-[1] "style: 70 , beer: 4"
-[1] "error with file: ../../data//Japanese_Rice_Lager/17886_48455"
-[1] "style: 70 , beer: 8"
-[1] "error with file: ../../data//Japanese_Rice_Lager/19555_127781"
-[1] "style: 70 , beer: 10"
-[1] "error with file: ../../data//Japanese_Rice_Lager/21680_55483"
-[1] "style: 70 , beer: 11"
-[1] "error with file: ../../data//Japanese_Rice_Lager/22249_87782"
-[1] "style: 70 , beer: 12"
-[1] "error with file: ../../data//Japanese_Rice_Lager/24453_136123"
-[1] "style: 70 , beer: 13"
-[1] "error with file: ../../data//Japanese_Rice_Lager/2550_138150"
-[1] "style: 70 , beer: 14"
-[1] "error with file: ../../data//Japanese_Rice_Lager/2550_138151"
-[1] "style: 70 , beer: 15"
-[1] "error with file: ../../data//Japanese_Rice_Lager/2577_131521"
-[1] "style: 70 , beer: 18"
-[1] "error with file: ../../data//Japanese_Rice_Lager/284_146447"
-[1] "style: 70 , beer: 21"
-[1] "error with file: ../../data//Japanese_Rice_Lager/29811_107880"
-[1] "style: 70 , beer: 32"
-[1] "error with file: ../../data//Japanese_Rice_Lager/401_143137"
-[1] "style: 70 , beer: 36"
-[1] "error with file: ../../data//Japanese_Rice_Lager/4949_59276"
-[1] "style: 70 , beer: 40"
-[1] "error with file: ../../data//Japanese_Rice_Lager/713_54326"
-[1] "style: 70 , beer: 44"
-[1] "error with file: ../../data//Japanese_Rice_Lager/716_154244"
-[1] "style: 70 , beer: 46"
-[1] "error with file: ../../data//Japanese_Rice_Lager/716_154245"
-[1] "style: 70 , beer: 47"
-[1] "error with file: ../../data//Kvass/11551_67599"
-[1] "style: 74 , beer: 4"
-[1] "error with file: ../../data//Kvass/31829_145415"
-[1] "style: 74 , beer: 32"
-[1] "error with file: ../../data//Kvass/8468_91909"
-[1] "style: 74 , beer: 44"
-[1] "error with file: ../../data//Lambic_-_Unblended/16433_61194"
-[1] "style: 76 , beer: 6"
-[1] "error with file: ../../data//Lambic_-_Unblended/19348_146210"
-[1] "style: 76 , beer: 11"
-[1] "error with file: ../../data//Märzen__Oktoberfest/140_13509"
-[1] "error with file: ../../data//Milk__Sweet_Stout/2372_62984"
-[1] "style: 81 , beer: 18"
-[1] "error with file: ../../data//Russian_Imperial_Stout/45_680"
-[1] "error with file: ../../data//Sahti/11882_151639"
-[1] "style: 92 , beer: 4"
-[1] "error with file: ../../data//Sahti/1550_70119"
-[1] "style: 92 , beer: 7"
-[1] "error with file: ../../data//Sahti/179_134075"
-[1] "style: 92 , beer: 9"
-[1] "error with file: ../../data//Sahti/18189_46925"
-[1] "style: 92 , beer: 10"
-[1] "error with file: ../../data//Sahti/18739_47341"
-[1] "style: 92 , beer: 11"
-[1] "error with file: ../../data//Sahti/22459_144068"
-[1] "style: 92 , beer: 14"
-[1] "error with file: ../../data//Sahti/23108_94422"
-[1] "style: 92 , beer: 15"
-[1] "error with file: ../../data//Sahti/24953_68076"
-[1] "style: 92 , beer: 16"
-[1] "error with file: ../../data//Sahti/34640_156433"
-[1] "style: 92 , beer: 28"
-[1] "error with file: ../../data//Sahti/39126_159961"
-[1] "style: 92 , beer: 30"
-[1] "error with file: ../../data//Sahti/700_147193"
-[1] "style: 92 , beer: 33"
-[1] "error with file: ../../data//Sahti/9761_24613"
-[1] "style: 92 , beer: 37"
-[1] "error with file: ../../data//Schwarzbier/132_54929"
-[1] "error with file: ../../data//Vienna_Lager/140_50671"
+[1] "error with file: ../../data//American_IPA/651_6076"
+<simpleError in read.table(file = file, header = header, sep = sep, quote = quote,     dec = dec, fill = fill, comment.char = comment.char, ...): more columns than column names>
+[1] "error with file: ../../data//American_Stout/140_283"
+<simpleError in read.table(file = file, header = header, sep = sep, quote = quote,     dec = dec, fill = fill, comment.char = comment.char, ...): more columns than column names>
+[1] "error with file: ../../data//Berliner_Weissbier/24300_118551"
+<simpleError in read.table(file = file, header = header, sep = sep, quote = quote,     dec = dec, fill = fill, comment.char = comment.char, ...): more columns than column names>
+[1] "error with file: ../../data//Bière_de_Champagne__Bière_Brut/27934_130298"
+<simpleError in read.table(file = file, header = header, sep = sep, quote = quote,     dec = dec, fill = fill, comment.char = comment.char, ...): more columns than column names>
+[1] "error with file: ../../data//Bière_de_Garde/380_2429"
+<simpleError in read.table(file = file, header = header, sep = sep, quote = quote,     dec = dec, fill = fill, comment.char = comment.char, ...): more columns than column names>
+[1] "error with file: ../../data//Black_&_Tan/4096_33887"
+<simpleError in read.table(file = file, header = header, sep = sep, quote = quote,     dec = dec, fill = fill, comment.char = comment.char, ...): more columns than column names>
+[1] "error with file: ../../data//Cream_Ale/2454_17268"
+<simpleError in read.table(file = file, header = header, sep = sep, quote = quote,     dec = dec, fill = fill, comment.char = comment.char, ...): more columns than column names>
+[1] "error with file: ../../data//Weizenbock/81_14497"
+<simpleError in read.table(file = file, header = header, sep = sep, quote = quote,     dec = dec, fill = fill, comment.char = comment.char, ...): more columns than column names>
 There were 50 or more warnings (use warnings() to see the first 50)
 > 
 > print(proc.time() - t)
    user  system elapsed 
-  5.416   0.016   5.581 
+  4.516   0.004   4.528 
 > 
 > proc.time()
    user  system elapsed 
-329.372   1.041 336.964 
+313.461   1.045 314.956 
