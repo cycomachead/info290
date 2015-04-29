@@ -44,7 +44,7 @@ beer_id,beer_name,brewery_name,link,style,ba_score,ba_score_text,ratings_count,b
 16068_42965,"Overcast Espresso Stout","Oakshire Brewing","/beer/profile/16068/42965/","American Stout",86,"very good",298,84,"good",104,3.82,11.26,23,29,0,"Oregon,United States",5.80,"Rotating"
 19544_90450,"Oompa Loompa Chocolate Cream Stout","Fat Head's Brewery & Saloon","/beer/profile/19544/90450/","American Stout",84,"good",296,-,"no score",55,3.73,10.46,31,31,1,"Ohio,United States",6.50,"Rotating"
 28743_113784,"Double Shot","Tree House Brewing Company","/beer/profile/28743/113784/","American Stout",99,"world-class",294,-,"no score",16,4.5,6.89,186,24,1,"Massachusetts,United States",7.60,"Rotating"
-16353_43087,"Survival "7-Grain" Stout","Hopworks Urban Brewery","/beer/profile/16353/43087/","American Stout",90,"outstanding",287,93,"outstanding",120,4.03,9.18,32,15,0,"Oregon,United States",5.30,"Year-round"
+16353_43087,"Survival ""7-Grain"" Stout","Hopworks Urban Brewery","/beer/profile/16353/43087/","American Stout",90,"outstanding",287,93,"outstanding",120,4.03,9.18,32,15,0,"Oregon,United States",5.30,"Year-round"
 17271_49098,"Black Phoenix (Chipotle Coffee Ale)","Bootlegger's Brewery","/beer/profile/17271/49098/","American Stout",85,"very good",283,-,"no score",116,3.76,11.97,21,33,0,"California,United States",6.70,"Rotating"
 2097_18973,"Kuhnhenn Crème Brûlée Java Stout","Kuhnhenn Brewing Company","/beer/profile/2097/18973/","American Stout",91,"outstanding",281,-,"no score",107,4.1,13.66,177,6,2,"Michigan,United States",5.80,"Rotating"
 18006_48583,"Baumé","Half Acre Beer Company","/beer/profile/18006/48583/","American Stout",88,"very good",281,-,"no score",99,3.95,9.37,47,45,1,"Illinois,United States",7.00,"Rotating"

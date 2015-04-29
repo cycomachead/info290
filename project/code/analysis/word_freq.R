@@ -39,31 +39,31 @@ for (j in style.start:n.beers) {
       next
     }
 
-    text <- D$review_text
-    
-    text <- gsub("[[:punct:]]", "", text)
-    
-    text <- tolower(text)
-    
-    text <- strsplit(text, split = "\\s+")
-    
-    text <- Reduce(c, text, c())
-    text <- text[text != ""]
+    if (nrow(D) > 0) {
+      text <- D$review_text
+      
+      text <- gsub("[[:punct:]]", "", text)
+      
+      text <- tolower(text)
+      
+      text <- strsplit(text, split = "\\s+")
+      
+      text <- Reduce(c, text, c())
+      text <- text[text != ""]
+      
+      counts <- rle(sort(text)) # generates word counts
+      counts <- data.frame(word = counts$value, count = counts$lengths)
+      counts <- counts[!is.element(counts$word, common.words),] # filters out common words
 
-    if (is.null(text)) {
-      print(paste("error with file:", files[i]))
-      print(paste("style:", j, ", beer:", i))
-      next
-    }
-
-    counts <- rle(sort(text)) # generates word counts
-    counts <- data.frame(word = counts$value, count = counts$lengths)
-    counts <- counts[!is.element(counts$word, common.words),] # filters out common words
-
-    sorted.indices <- order(counts$count, decreasing = TRUE)
-    counts <- counts[sorted.indices,] # put in decreasing order
-    counts$percent <- counts$count / sum(counts$count)
+      sorted.indices <- order(counts$count, decreasing = TRUE)
+      counts <- counts[sorted.indices,] # put in decreasing order
+      counts$percent <- counts$count / sum(counts$count)
                                         #head(counts, 50)
+    } else {
+      counts <- date.frame(word = character(0), count = numeric(0),
+                           percent = numeric(0))
+    }
+    
     word.freqs[[i]] <- counts
   }
 
