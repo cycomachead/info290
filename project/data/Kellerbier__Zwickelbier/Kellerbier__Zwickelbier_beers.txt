@@ -30,7 +30,7 @@ beer_id,beer_name,brewery_name,link,style,ba_score,ba_score_text,ratings_count,b
 23201_77952,"Kellerbier Kölsch","Mad Fox Brewing Company","/beer/profile/23201/77952/","Kellerbier / Zwickelbier",84,"good",35,-,"no score",10,3.7,11.08,0,2,0,"Virginia,United States",4.40,"Rotating"
 472_41310,"Brauhaus Altenkunstadt Leikeim Steinbier Original","Brauerei Leikeim","/beer/profile/472/41310/","Kellerbier / Zwickelbier",82,"good",34,-,"no score",22,3.57,12.04,3,2,0,"Germany",5.80,"Year-round"
 33058_116601,"Spica  Hefepils","Ecliptic Brewing","/beer/profile/33058/116601/","Kellerbier / Zwickelbier",81,"good",31,-,"no score",6,3.55,11.55,1,3,1,"Oregon,United States",5.50,"Year-round"
-15435_136989,"Dial "Z" For Zwickel","Beau's All Natural Brewing Company","/beer/profile/15435/136989/","Kellerbier / Zwickelbier",81,"good",29,-,"no score",6,3.53,14.16,1,3,0,"Ontario,Canada",5.70,"Limited (brewed once)"
+15435_136989,"Dial ""Z" For Zwickel","Beau's All Natural Brewing Company","/beer/profile/15435/136989/","Kellerbier / Zwickelbier",81,"good",29,-,"no score",6,3.53,14.16,1,3,0,"Ontario,Canada",5.70,"Limited (brewed once)"
 16773_130146,"Die Königin","Local Option","/beer/profile/16773/130146/","Kellerbier / Zwickelbier",84,"good",27,-,"no score",2,3.72,10.48,1,3,0,"Illinois,United States",6.50,"Rotating"
 472_42339,"Leikeim Kellerbier Naturtrüb","Brauerei Leikeim","/beer/profile/472/42339/","Kellerbier / Zwickelbier",83,"good",27,-,"no score",12,3.67,8.72,1,1,0,"Germany",4.90,"Year-round"
 24802_119784,"Adelais","Idle Hands Craft Ales","/beer/profile/24802/119784/","Kellerbier / Zwickelbier",86,"very good",27,90,"outstanding",4,3.85,11.17,2,2,0,"Massachusetts,United States",5.20,"Rotating"

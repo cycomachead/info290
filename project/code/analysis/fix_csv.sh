@@ -8,5 +8,6 @@
 
 for FILE in `find ../../data/ -type f`;
 do
+    echo $FILE
     sed -e 's/\([^,\]\)\("\)\([^,]\)/\1""\3/g' $FILE -i
 done
