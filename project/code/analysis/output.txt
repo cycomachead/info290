@@ -95,28 +95,12 @@ In readLines("common-english-words.txt") :
 +   save(word.freqs, file = paste("word_frequencies_by_beer", all.beers.names.only[j], sep = "/"))
 +   
 + }
-[1] "error with file: ../../data//American_IPA/651_6076"
-<simpleError in read.table(file = file, header = header, sep = sep, quote = quote,     dec = dec, fill = fill, comment.char = comment.char, ...): more columns than column names>
-[1] "error with file: ../../data//American_Stout/140_283"
-<simpleError in read.table(file = file, header = header, sep = sep, quote = quote,     dec = dec, fill = fill, comment.char = comment.char, ...): more columns than column names>
-[1] "error with file: ../../data//Berliner_Weissbier/24300_118551"
-<simpleError in read.table(file = file, header = header, sep = sep, quote = quote,     dec = dec, fill = fill, comment.char = comment.char, ...): more columns than column names>
-[1] "error with file: ../../data//Bière_de_Champagne__Bière_Brut/27934_130298"
-<simpleError in read.table(file = file, header = header, sep = sep, quote = quote,     dec = dec, fill = fill, comment.char = comment.char, ...): more columns than column names>
-[1] "error with file: ../../data//Bière_de_Garde/380_2429"
-<simpleError in read.table(file = file, header = header, sep = sep, quote = quote,     dec = dec, fill = fill, comment.char = comment.char, ...): more columns than column names>
-[1] "error with file: ../../data//Black_&_Tan/4096_33887"
-<simpleError in read.table(file = file, header = header, sep = sep, quote = quote,     dec = dec, fill = fill, comment.char = comment.char, ...): more columns than column names>
-[1] "error with file: ../../data//Cream_Ale/2454_17268"
-<simpleError in read.table(file = file, header = header, sep = sep, quote = quote,     dec = dec, fill = fill, comment.char = comment.char, ...): more columns than column names>
-[1] "error with file: ../../data//Weizenbock/81_14497"
-<simpleError in read.table(file = file, header = header, sep = sep, quote = quote,     dec = dec, fill = fill, comment.char = comment.char, ...): more columns than column names>
 There were 50 or more warnings (use warnings() to see the first 50)
 > 
 > print(proc.time() - t)
    user  system elapsed 
-  4.516   0.004   4.528 
+  4.369   0.016   4.490 
 > 
 > proc.time()
    user  system elapsed 
-313.461   1.045 314.956 
+317.079   1.127 322.762 
