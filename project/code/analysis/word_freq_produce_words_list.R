@@ -19,10 +19,12 @@ words <- all.words(all.files)
 #counts.by.beer <- as.data.frame(setNames(replicate(length(words),numeric(0), simplify = F), words))
 
 counts.by.beer <- matrix(0, nrow = 104 * 50, ncol = length(words))
+beer.names <- NULL
 
 for (i in 1:length(all.files)) {
   file <- all.files[i]
   beers <- list.files(paste("../../data", all.beers.names.only[i], sep = "/"))
+  beer.names <- c(beer.names, beers)
   print(file)
   load(file)
   for (j in 1:length(word.freqs)) {
@@ -34,5 +36,10 @@ for (i in 1:length(all.files)) {
     columns <- which(is.element(words, shared.words))
     shared.counts <- current[is.element(current$word, shared.words),"count"]
     counts.by.beer[50 * (i - 1) + j, shared.words] <- shared.counts
-  }  
+    
+  }
 }
+
+counts.by.beer <- as.data.frame(counts.by.beer)
+names(counts.by.beer) <- words
+
