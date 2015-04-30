@@ -3,7 +3,6 @@
 """
 To be run from code/analysis
 
-
 """
 
 import sys
@@ -61,9 +60,60 @@ def parseCSV(fileName):
             reviews.append(data)
     return reviews
 
+def nullColumns(fileHeaders, allKeys):
+    """
+    Return a set of column names that don't exist in the file.
+    """
+    pass
+
+def walkDir(base):
+    """
+    Generate a single list of all the files in a directory
+    DFS, and include the full path relative to base.
+
+    """
+    files = list(os.walk(base))
+    files = files[1:]
+    files = reduce(lambda x,y: x + y)
+    files = filter(lambda x: x.find('.txt') != -1, file)
+    return files
+
+def makeNormalizedCSV(data, mewCol):
+    pass
+
+def keysUnion(data):
+    """
+    Data is a list of dictionary. Return the union of all keys.
+    """
+    return set(reduce(lambda x, y: x + y,
+                  map(lambda d: d.keys, data) ) )
+
+
+def writeCSV(name, data):
+    pass
+    
+def doWordCount(files):
+    """
+    
+    """
+    for file in files:
+        data = parseCSV(file)
+        cols = keysUnion(data)
+        data = makeNormalizedCSV(data, cols)
+        out = file.replace('data', 'processed')
+        writeCSV(out, data)
+
+def normalizeFiles(files):
+    """
+    
+    """
+    pass
+
 if __name__ == '__main__':
-    # Iterate over data directory
-        # parse review in each beer
-        # write new CSV
+    files = walkDir(INPUT)
+    doWordCount(files)
+    out = walkDir(OUTPUT)
+    normalizeFiles(out)
+
     # For each new CSV
-        # append columns to normalize
+    # append columns to normalize
