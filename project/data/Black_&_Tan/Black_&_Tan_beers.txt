@@ -3,7 +3,7 @@ beer_id,beer_name,brewery_name,link,style,ba_score,ba_score_text,ratings_count,b
 638_1741,"Mississippi Mud Black & Tan","Mississippi Brewing Co.","/beer/profile/638/1741/","Black & Tan",72,"okay",982,-,"no score",421,3.13,20.13,25,132,0,"New York,United States",5.00,"Year-round"
 99_906,"Saranac Black & Tan","Matt Brewing Company","/beer/profile/99/906/","Black & Tan",79,"okay",739,80,"good",500,3.46,13.01,9,30,0,"New York,United States",5.40,"Year-round"
 24300_83390,"Evil Twin Yin & Yang","Evil Twin Brewing","/beer/profile/24300/83390/","Black & Tan",90,"outstanding",302,-,"no score",49,4.01,9.48,41,42,2,"New York,United States",10.00,"Rotating"
-33_2369,""Shabadoo" Black & Tan Ale","Berkshire Brewing Company Inc.","/beer/profile/33/2369/","Black & Tan",86,"very good",253,85,"very good",126,3.81,10.24,14,31,1,"Massachusetts,United States",6.30,"Year-round"
+33_2369,"""Shabadoo"" Black & Tan Ale","Berkshire Brewing Company Inc.","/beer/profile/33/2369/","Black & Tan",86,"very good",253,85,"very good",126,3.81,10.24,14,31,1,"Massachusetts,United States",6.30,"Year-round"
 200_2397,"Black Eye Ale","Mendocino Brewing Company","/beer/profile/200/2397/","Black & Tan",82,"good",198,-,"no score",155,3.64,11.54,8,5,0,"United States",6.50,"Rotating"
 14879_33662,"Bodacious Black & Tan","Hoppin' Frog Brewery","/beer/profile/14879/33662/","Black & Tan",86,"very good",169,78,"okay",121,3.84,10.68,21,8,0,"Ohio,United States",7.60,"Year-round"
 823_16838,"Dirty Penny Ale","The Olde Burnside Brewing Company","/beer/profile/823/16838/","Black & Tan",81,"good",132,-,"no score",56,3.57,15.97,5,10,0,"Connecticut,United States",5.20,"Year-round"

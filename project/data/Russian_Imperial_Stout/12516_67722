@@ -1,7 +1,7 @@
 user_score,rdev,look_score,smell_score,taste_score,feel_score,overall_score,review_text,username,timestamp
 4.13,-2.8,4.5,4,4.25,4,4,"","Eziel","Yesterday at 10:16 AM"
 4.24,-0.2,4.25,4,4.5,3.75,4.25,"","luisfrancisco","Yesterday at 07:19 AM"
-4.26,0.2,4.25,4.5,4,4.25,4.5,"very nice. this is a drink one bottle and "your good" kinda beer. very dark, strong thick malt taste with backing of bourbon flavor.  I am going buy some more to age.  cant wait to taste it when aged","stickydankhop","Tuesday at 01:35 PM"
+4.26,0.2,4.25,4.5,4,4.25,4.5,"very nice. this is a drink one bottle and ""your good"" kinda beer. very dark, strong thick malt taste with backing of bourbon flavor.  I am going buy some more to age.  cant wait to taste it when aged","stickydankhop","Tuesday at 01:35 PM"
 4.31,1.4,4.25,4.5,4.25,4.25,4.25,"","brewskis","Monday at 08:41 PM"
 4.86,14.4,4.5,4.75,5,5,4.75,"","georgeaaron","Saturday at 09:31 AM"
 4.28,0.7,4,4,4.5,4.25,4.25,"","mattsmith413","Saturday at 08:32 AM"
@@ -500,7 +500,7 @@ user_score,rdev,look_score,smell_score,taste_score,feel_score,overall_score,revi
 4.3,1.2,3.75,3.75,4.5,4.75,4.5,"Taste-Vanilla, oak, dark malt, dose of earthy hops, warming bourbon in the finish. Very smooth with chocolate notes emerging as it warms. A satisfying, slow-sipper.","hosehead83","Jan 08, 2014"
 4.5,5.9,,,,,,"","Jordy777","Jan 08, 2014"
 4,-5.9,,,,,,"","robgage","Jan 07, 2014"
-4,-5.9,4,4,4,4,4,"Growler fill. Great barrel character, with strong whisky and oak, some vanilla, and a little toasted coconut. Plenty of roast and chocolate to carry it, no soy sauce or "meatiness." This is BA Siberian Night like I remember; there may have been something different about the one batch from my earlier review.","Craigory","Jan 07, 2014"
+4,-5.9,4,4,4,4,4,"Growler fill. Great barrel character, with strong whisky and oak, some vanilla, and a little toasted coconut. Plenty of roast and chocolate to carry it, no soy sauce or ""meatiness."" This is BA Siberian Night like I remember; there may have been something different about the one batch from my earlier review.","Craigory","Jan 07, 2014"
 4,-5.9,,,,,,"","zekeman17","Jan 06, 2014"
 4.25,0,,,,,,"","maximus_rebel","Jan 06, 2014"
 3.75,-11.8,,,,,,"","Houser","Jan 05, 2014"
