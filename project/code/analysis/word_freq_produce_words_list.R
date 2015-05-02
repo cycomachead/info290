@@ -49,8 +49,10 @@ save(counts.by.beer, file = "counts_matrix")
 style.labels <- name.labels <- NULL
 for (i in 1:length(all.files)) {
   beers <- list.files(paste("../../data", all.beers.names.only[i], sep = "/"))
-  style.labels <- c(style.labels, rep(all.beers.names.only[i], length(beers)))
-  name.labels <- c(name.labels, beers[1:length(beers)-1])
+  missing <- rep(0, 51 - length(beers))
+  style.labels <- c(style.labels, rep(all.beers.names.only[i], length(beers)-1), missing)
+  name.labels <- c(name.labels, beers[1:length(beers)-1], missing)
 }
-  
+
+save(style.labels, name.labels, file = "labels")
   
