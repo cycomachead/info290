@@ -1,0 +1,281 @@
+
+R version 3.0.2 (2013-09-25) -- "Frisbee Sailing"
+Copyright (C) 2013 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+[Previously saved workspace restored]
+
+> 
+> all.files <- list.files("word_frequencies_by_beer", full.names = TRUE)
+> all.beers.names.only <- sapply(strsplit(all.files, "//"), function(x) x[2])
+> 
+> all.words <- function(files) {
++   words <- NULL
++ 
++   for (file in all.files) {
++     print(file)
++     load(file)
++     current.words <- Reduce(function(agg, df) union(agg, df$word[df$count > 1]), word.freqs, NULL) # count > 1 is a simple (though probably overly aggressive) way to remove weird words
++     words <- union(words, current.words)
++   }
++   return(words)
++ }
+> 
+> words <- all.words(all.files)
+[1] "word_frequencies_by_beer/Altbier"
+[1] "word_frequencies_by_beer/American_Adjunct_Lager"
+[1] "word_frequencies_by_beer/American_Amber__Red_Ale"
+[1] "word_frequencies_by_beer/American_Amber__Red_Lager"
+[1] "word_frequencies_by_beer/American_Barleywine"
+[1] "word_frequencies_by_beer/American_Black_Ale"
+[1] "word_frequencies_by_beer/American_Blonde_Ale"
+[1] "word_frequencies_by_beer/American_Brown_Ale"
+[1] "word_frequencies_by_beer/American_Dark_Wheat_Ale"
+[1] "word_frequencies_by_beer/American_Double__Imperial_IPA"
+[1] "word_frequencies_by_beer/American_Double__Imperial_Pilsner"
+[1] "word_frequencies_by_beer/American_Double__Imperial_Stout"
+[1] "word_frequencies_by_beer/American_IPA"
+[1] "word_frequencies_by_beer/American_Malt_Liquor"
+[1] "word_frequencies_by_beer/American_Pale_Ale_(APA)"
+[1] "word_frequencies_by_beer/American_Pale_Lager"
+[1] "word_frequencies_by_beer/American_Pale_Wheat_Ale"
+[1] "word_frequencies_by_beer/American_Porter"
+[1] "word_frequencies_by_beer/American_Stout"
+[1] "word_frequencies_by_beer/American_Strong_Ale"
+[1] "word_frequencies_by_beer/American_Wild_Ale"
+[1] "word_frequencies_by_beer/Baltic_Porter"
+[1] "word_frequencies_by_beer/Belgian_Dark_Ale"
+[1] "word_frequencies_by_beer/Belgian_IPA"
+[1] "word_frequencies_by_beer/Belgian_Pale_Ale"
+[1] "word_frequencies_by_beer/Belgian_Strong_Dark_Ale"
+[1] "word_frequencies_by_beer/Belgian_Strong_Pale_Ale"
+[1] "word_frequencies_by_beer/Berliner_Weissbier"
+[1] "word_frequencies_by_beer/Bière_de_Champagne__Bière_Brut"
+[1] "word_frequencies_by_beer/Bière_de_Garde"
+[1] "word_frequencies_by_beer/Black_&_Tan"
+[1] "word_frequencies_by_beer/Bock"
+[1] "word_frequencies_by_beer/Braggot"
+[1] "word_frequencies_by_beer/California_Common__Steam_Beer"
+[1] "word_frequencies_by_beer/Chile_Beer"
+[1] "word_frequencies_by_beer/Cream_Ale"
+[1] "word_frequencies_by_beer/Czech_Pilsener"
+[1] "word_frequencies_by_beer/Doppelbock"
+[1] "word_frequencies_by_beer/Dortmunder__Export_Lager"
+[1] "word_frequencies_by_beer/Dubbel"
+[1] "word_frequencies_by_beer/Dunkelweizen"
+[1] "word_frequencies_by_beer/Eisbock"
+[1] "word_frequencies_by_beer/English_Barleywine"
+[1] "word_frequencies_by_beer/English_Bitter"
+[1] "word_frequencies_by_beer/English_Brown_Ale"
+[1] "word_frequencies_by_beer/English_Dark_Mild_Ale"
+[1] "word_frequencies_by_beer/English_India_Pale_Ale_(IPA)"
+[1] "word_frequencies_by_beer/English_Pale_Ale"
+[1] "word_frequencies_by_beer/English_Pale_Mild_Ale"
+[1] "word_frequencies_by_beer/English_Porter"
+[1] "word_frequencies_by_beer/English_Stout"
+[1] "word_frequencies_by_beer/English_Strong_Ale"
+[1] "word_frequencies_by_beer/Euro_Dark_Lager"
+[1] "word_frequencies_by_beer/Euro_Pale_Lager"
+[1] "word_frequencies_by_beer/Euro_Strong_Lager"
+[1] "word_frequencies_by_beer/Extra_Special__Strong_Bitter_(ESB)"
+[1] "word_frequencies_by_beer/Faro"
+[1] "word_frequencies_by_beer/Flanders_Oud_Bruin"
+[1] "word_frequencies_by_beer/Flanders_Red_Ale"
+[1] "word_frequencies_by_beer/Foreign__Export_Stout"
+[1] "word_frequencies_by_beer/Fruit__Vegetable_Beer"
+[1] "word_frequencies_by_beer/German_Pilsener"
+[1] "word_frequencies_by_beer/Gose"
+[1] "word_frequencies_by_beer/Gueuze"
+[1] "word_frequencies_by_beer/Happoshu"
+[1] "word_frequencies_by_beer/Hefeweizen"
+[1] "word_frequencies_by_beer/Herbed__Spiced_Beer"
+[1] "word_frequencies_by_beer/Irish_Dry_Stout"
+[1] "word_frequencies_by_beer/Irish_Red_Ale"
+[1] "word_frequencies_by_beer/Japanese_Rice_Lager"
+[1] "word_frequencies_by_beer/Kellerbier__Zwickelbier"
+[1] "word_frequencies_by_beer/Kölsch"
+[1] "word_frequencies_by_beer/Kristalweizen"
+[1] "word_frequencies_by_beer/Kvass"
+[1] "word_frequencies_by_beer/Lambic_-_Fruit"
+[1] "word_frequencies_by_beer/Lambic_-_Unblended"
+[1] "word_frequencies_by_beer/Light_Lager"
+[1] "word_frequencies_by_beer/Low_Alcohol_Beer"
+[1] "word_frequencies_by_beer/Maibock__Helles_Bock"
+[1] "word_frequencies_by_beer/Märzen__Oktoberfest"
+[1] "word_frequencies_by_beer/Milk__Sweet_Stout"
+[1] "word_frequencies_by_beer/Munich_Dunkel_Lager"
+[1] "word_frequencies_by_beer/Munich_Helles_Lager"
+[1] "word_frequencies_by_beer/Oatmeal_Stout"
+[1] "word_frequencies_by_beer/Old_Ale"
+[1] "word_frequencies_by_beer/Pumpkin_Ale"
+[1] "word_frequencies_by_beer/Quadrupel_(Quad)"
+[1] "word_frequencies_by_beer/Rauchbier"
+[1] "word_frequencies_by_beer/Roggenbier"
+[1] "word_frequencies_by_beer/Russian_Imperial_Stout"
+[1] "word_frequencies_by_beer/Rye_Beer"
+[1] "word_frequencies_by_beer/Sahti"
+[1] "word_frequencies_by_beer/Saison__Farmhouse_Ale"
+[1] "word_frequencies_by_beer/Schwarzbier"
+[1] "word_frequencies_by_beer/Scotch_Ale__Wee_Heavy"
+[1] "word_frequencies_by_beer/Scottish_Ale"
+[1] "word_frequencies_by_beer/Scottish_Gruit__Ancient_Herbed_Ale"
+[1] "word_frequencies_by_beer/Smoked_Beer"
+[1] "word_frequencies_by_beer/Tripel"
+[1] "word_frequencies_by_beer/Vienna_Lager"
+[1] "word_frequencies_by_beer/Weizenbock"
+[1] "word_frequencies_by_beer/Wheatwine"
+[1] "word_frequencies_by_beer/Winter_Warmer"
+[1] "word_frequencies_by_beer/Witbier"
+> save(words, file = "all_words")
+> #counts.by.beer <- as.data.frame(setNames(replicate(length(words),numeric(0), simplify = F), words))
+> 
+> library("Matrix")
+> 
+> counts.by.beer <- Matrix(0, nrow = 104 * 50, ncol = length(words))
+> beer.names <- NULL
+> 
+> for (i in 1:length(all.files)) {
++   file <- all.files[i]
++   beers <- list.files(paste("../../data", all.beers.names.only[i], sep = "/"))
++   beer.names <- c(beer.names, beers)
++   print(file)
++   load(file)
++   for (j in 1:length(word.freqs)) {
++     current <- word.freqs[[j]]
++     current.beer <- beers[j]
++     shared.words <- intersect(words, current$word)
++     columns <- which(is.element(words, shared.words))
++     shared.counts <- current[is.element(current$word, shared.words),"count"]
++     counts.by.beer[50 * (i - 1) + j, columns] <- shared.counts
++     
++   }
++ }
+[1] "word_frequencies_by_beer/Altbier"
+[1] "word_frequencies_by_beer/American_Adjunct_Lager"
+[1] "word_frequencies_by_beer/American_Amber__Red_Ale"
+[1] "word_frequencies_by_beer/American_Amber__Red_Lager"
+[1] "word_frequencies_by_beer/American_Barleywine"
+[1] "word_frequencies_by_beer/American_Black_Ale"
+[1] "word_frequencies_by_beer/American_Blonde_Ale"
+[1] "word_frequencies_by_beer/American_Brown_Ale"
+[1] "word_frequencies_by_beer/American_Dark_Wheat_Ale"
+[1] "word_frequencies_by_beer/American_Double__Imperial_IPA"
+[1] "word_frequencies_by_beer/American_Double__Imperial_Pilsner"
+[1] "word_frequencies_by_beer/American_Double__Imperial_Stout"
+[1] "word_frequencies_by_beer/American_IPA"
+[1] "word_frequencies_by_beer/American_Malt_Liquor"
+[1] "word_frequencies_by_beer/American_Pale_Ale_(APA)"
+[1] "word_frequencies_by_beer/American_Pale_Lager"
+[1] "word_frequencies_by_beer/American_Pale_Wheat_Ale"
+[1] "word_frequencies_by_beer/American_Porter"
+[1] "word_frequencies_by_beer/American_Stout"
+[1] "word_frequencies_by_beer/American_Strong_Ale"
+[1] "word_frequencies_by_beer/American_Wild_Ale"
+[1] "word_frequencies_by_beer/Baltic_Porter"
+[1] "word_frequencies_by_beer/Belgian_Dark_Ale"
+[1] "word_frequencies_by_beer/Belgian_IPA"
+[1] "word_frequencies_by_beer/Belgian_Pale_Ale"
+[1] "word_frequencies_by_beer/Belgian_Strong_Dark_Ale"
+[1] "word_frequencies_by_beer/Belgian_Strong_Pale_Ale"
+[1] "word_frequencies_by_beer/Berliner_Weissbier"
+[1] "word_frequencies_by_beer/Bière_de_Champagne__Bière_Brut"
+[1] "word_frequencies_by_beer/Bière_de_Garde"
+[1] "word_frequencies_by_beer/Black_&_Tan"
+[1] "word_frequencies_by_beer/Bock"
+[1] "word_frequencies_by_beer/Braggot"
+[1] "word_frequencies_by_beer/California_Common__Steam_Beer"
+[1] "word_frequencies_by_beer/Chile_Beer"
+[1] "word_frequencies_by_beer/Cream_Ale"
+[1] "word_frequencies_by_beer/Czech_Pilsener"
+[1] "word_frequencies_by_beer/Doppelbock"
+[1] "word_frequencies_by_beer/Dortmunder__Export_Lager"
+[1] "word_frequencies_by_beer/Dubbel"
+[1] "word_frequencies_by_beer/Dunkelweizen"
+[1] "word_frequencies_by_beer/Eisbock"
+[1] "word_frequencies_by_beer/English_Barleywine"
+[1] "word_frequencies_by_beer/English_Bitter"
+[1] "word_frequencies_by_beer/English_Brown_Ale"
+[1] "word_frequencies_by_beer/English_Dark_Mild_Ale"
+[1] "word_frequencies_by_beer/English_India_Pale_Ale_(IPA)"
+[1] "word_frequencies_by_beer/English_Pale_Ale"
+[1] "word_frequencies_by_beer/English_Pale_Mild_Ale"
+[1] "word_frequencies_by_beer/English_Porter"
+[1] "word_frequencies_by_beer/English_Stout"
+[1] "word_frequencies_by_beer/English_Strong_Ale"
+[1] "word_frequencies_by_beer/Euro_Dark_Lager"
+[1] "word_frequencies_by_beer/Euro_Pale_Lager"
+[1] "word_frequencies_by_beer/Euro_Strong_Lager"
+[1] "word_frequencies_by_beer/Extra_Special__Strong_Bitter_(ESB)"
+[1] "word_frequencies_by_beer/Faro"
+[1] "word_frequencies_by_beer/Flanders_Oud_Bruin"
+[1] "word_frequencies_by_beer/Flanders_Red_Ale"
+[1] "word_frequencies_by_beer/Foreign__Export_Stout"
+[1] "word_frequencies_by_beer/Fruit__Vegetable_Beer"
+[1] "word_frequencies_by_beer/German_Pilsener"
+[1] "word_frequencies_by_beer/Gose"
+[1] "word_frequencies_by_beer/Gueuze"
+[1] "word_frequencies_by_beer/Happoshu"
+[1] "word_frequencies_by_beer/Hefeweizen"
+[1] "word_frequencies_by_beer/Herbed__Spiced_Beer"
+[1] "word_frequencies_by_beer/Irish_Dry_Stout"
+[1] "word_frequencies_by_beer/Irish_Red_Ale"
+[1] "word_frequencies_by_beer/Japanese_Rice_Lager"
+[1] "word_frequencies_by_beer/Kellerbier__Zwickelbier"
+[1] "word_frequencies_by_beer/Kölsch"
+[1] "word_frequencies_by_beer/Kristalweizen"
+[1] "word_frequencies_by_beer/Kvass"
+[1] "word_frequencies_by_beer/Lambic_-_Fruit"
+[1] "word_frequencies_by_beer/Lambic_-_Unblended"
+[1] "word_frequencies_by_beer/Light_Lager"
+[1] "word_frequencies_by_beer/Low_Alcohol_Beer"
+[1] "word_frequencies_by_beer/Maibock__Helles_Bock"
+[1] "word_frequencies_by_beer/Märzen__Oktoberfest"
+[1] "word_frequencies_by_beer/Milk__Sweet_Stout"
+[1] "word_frequencies_by_beer/Munich_Dunkel_Lager"
+[1] "word_frequencies_by_beer/Munich_Helles_Lager"
+[1] "word_frequencies_by_beer/Oatmeal_Stout"
+[1] "word_frequencies_by_beer/Old_Ale"
+[1] "word_frequencies_by_beer/Pumpkin_Ale"
+[1] "word_frequencies_by_beer/Quadrupel_(Quad)"
+[1] "word_frequencies_by_beer/Rauchbier"
+[1] "word_frequencies_by_beer/Roggenbier"
+[1] "word_frequencies_by_beer/Russian_Imperial_Stout"
+[1] "word_frequencies_by_beer/Rye_Beer"
+[1] "word_frequencies_by_beer/Sahti"
+[1] "word_frequencies_by_beer/Saison__Farmhouse_Ale"
+[1] "word_frequencies_by_beer/Schwarzbier"
+[1] "word_frequencies_by_beer/Scotch_Ale__Wee_Heavy"
+[1] "word_frequencies_by_beer/Scottish_Ale"
+[1] "word_frequencies_by_beer/Scottish_Gruit__Ancient_Herbed_Ale"
+[1] "word_frequencies_by_beer/Smoked_Beer"
+[1] "word_frequencies_by_beer/Tripel"
+[1] "word_frequencies_by_beer/Vienna_Lager"
+[1] "word_frequencies_by_beer/Weizenbock"
+[1] "word_frequencies_by_beer/Wheatwine"
+[1] "word_frequencies_by_beer/Winter_Warmer"
+[1] "word_frequencies_by_beer/Witbier"
+> 
+> save(counts.by.beer, file = "counts_matrix")
+> #counts.by.beer <- as.data.frame(counts.by.beer)
+> #names(counts.by.beer) <- words
+> #save(counts.by.beer, file = "counts_data_frame")
+> 
+> 
+> 
+> proc.time()
+     user    system   elapsed 
+74502.972   510.026 75300.159 

@@ -1,7 +1,7 @@
 user_score,rdev,look_score,smell_score,taste_score,feel_score,overall_score,review_text,username,timestamp
 4.25,27.2,4,4,4.5,4.5,4,"GReat Taste, really nice bottle","NiallB_Madrid1982","Mar 23, 2015"
 3.39,1.5,3.5,3.25,3.5,3.5,3.25,"Serving type: bottle","metter98","Mar 16, 2015"
-2.81,-15.9,4,3,2,4.5,3,"What she said: "It's very... something."","CraigS119","Mar 10, 2015"
+2.81,-15.9,4,3,2,4.5,3,"What she said: ""It's very... something.""","CraigS119","Mar 10, 2015"
 3.16,-5.4,3,3.25,3.25,3,3,"","Washuffizi98","Mar 08, 2015"
 3.43,2.7,3.25,3.25,3.5,3.5,3.5,"","6thstreetbrewpub","Feb 27, 2015"
 3.25,-2.7,3.25,3.25,3.25,3.25,3.25,"","waiting4lunch","Feb 26, 2015"
@@ -100,7 +100,7 @@ user_score,rdev,look_score,smell_score,taste_score,feel_score,overall_score,revi
 3.2,-4.2,3.5,3.5,3,3.5,3,"Has some good stuff here, but not the right stuff.","laituegonflable","Beers"
 3.21,-3.9,4,3,3,3.5,3.5,"Cool bottle aside, this prime candidate for being light-struck seems to have had its ticket punched, as such. Too bad, since I remember liking this a lot more in the past, but perhaps it was really the heat of the summer day, and the long-awaited paella.","biboergosum","0"
 2.56,-23.4,4,3,2.5,2,2,"The bottle is intriguing - raised text for the ingredients and logos - but is unfortunately green, which can cause problems (though this bottle does not seem to have been lightstruck).","nighthawk","Feb 24, 2008"
-3.4,1.8,3.5,3.5,3.5,3.5,3,"This is probably one of the better Spanish beers available, and as the most expensive 6-pack for sale in my local supermarket (costing twice as much as a 6-pack of Heineken), it damn well better be a good beer. I will probably "splurge" on an other 6 pack of this, but I'm in no hurry to do so.","AWolfAtTheDoor","Oct 23, 2007"
+3.4,1.8,3.5,3.5,3.5,3.5,3,"This is probably one of the better Spanish beers available, and as the most expensive 6-pack for sale in my local supermarket (costing twice as much as a 6-pack of Heineken), it damn well better be a good beer. I will probably ""splurge"" on an other 6 pack of this, but I'm in no hurry to do so.","AWolfAtTheDoor","Oct 23, 2007"
 3.31,-0.9,3.5,2.5,3.5,3,4,"Alibi Room special import. Perfumy hops, then something off, or rotten later on in. Creamy head, creamy and also grainy mouthfeel. Above average carbonation. Drinkable and my rating is good for this one. Tigglmtl insists it is skunked and so could be.","Sammy","Jul 15, 2007"
 3.11,-6.9,4,3,3,3.5,3,"The three strikes I give it from totally destroying most American Macros are...almost overwelming corn sweetness as it warms, Alcoholic harshness when above occurs, and price...@ $13.49/six it's a bit on the pricey side, let's see what a $1.03 Cdn $$ vs the greenback does....if anything","Shadman","Oct 10, 2006"
 3.23,-3.3,3.5,3,3.5,3,3,"Overall: balanced and interesting beer. Best Spanish pale lager Ive ever tasted.","AlexLMS","Dec 05, 2005"
