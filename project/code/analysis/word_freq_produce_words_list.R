@@ -56,3 +56,9 @@ for (i in 1:length(all.files)) {
 
 save(style.labels, name.labels, file = "labels")
   
+library('topicmodels')
+current.words1 <- Reduce(function(agg, df) union(agg, df$word[df$count > 1]), word.freqs, NULL) # count > 1 is a simple (though probably overly aggressive) way to remove weird words
+
+CTM(word.freqs, 104)
+
+library('tm')
