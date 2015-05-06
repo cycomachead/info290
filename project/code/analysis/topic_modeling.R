@@ -80,7 +80,7 @@ num.top.words<-100
 topic.top.words <- mallet.top.words(topic.model, topic.words.m[1,], 100)
 wordcloud(topic.top.words$words, topic.top.words$weights, c(4,.8), rot.per=0, random.order=F)
 
-pdf(file="wordclouds1.pdf")
+pdf(file="new_wordclouds.pdf")
 num.topics<-104
 num.top.words<-25
 for(i in 1:num.topics){
