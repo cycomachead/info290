@@ -18,7 +18,9 @@ def text_to_beer():
 @app.route('/beer_to_text', methods=["POST", "GET"])
 def beer_to_text():
     if request.method == "POST":
-        return render_template("beer_to_text_results.html", search=request.form["beer-text"], results="Hoppy, fruity, strong")
+        return render_template("beer_to_text_results.html",
+                                search=request.form["beer-text"],
+                                results="Hoppy, fruity, strong")
     else:
         return render_template("beer_to_text_form.html", beers=beers_list)
 

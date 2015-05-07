@@ -58,11 +58,11 @@ bnet.CPD{2} = tabular_CPD(bnet, bnet.rep_of_eclass(2), 'CPT', [1-rain_prior rain
 %bnet.CPD{2} = tabular_CPD(bnet, bnet.rep_of_eclass(2), 'CPT', [1-grass_wet_no_sprinkler 1-grass_wet_sprinkler grass_wet_no_sprinkler grass_wet_sprinkler]);
 bnet.CPD{3} = tabular_CPD(bnet, bnet.rep_of_eclass(3), 'CPT', cond_table);
 
-%create the inference engine
+% create the inference engine
 engine = jtree_dbn_inf_engine(bnet);
 
-%now we pose a query to our network
-%calculate the probability that the sprinkler was on given the grass is wet
+% now we pose a query to our network
+% calculate the probability that the sprinkler was on given the grass is wet
 evidence = cell(bnet.nnodes_per_slice,2); %evidence is stored in a matlab cell. The 2nd dimension is the number of time slinces. Even though we are only working with 1 time splace, this code requires we specify at least 2 time slices (but we'll only populate the first one)
 %evidence{3, 1} = 2; %node 3 at time slice 1 is equal to 2 (grass_wet = True). In the evidence array, value 1 = Fales, value 2 = True.
 %evidence{1, 1} = 2; % sprinkler = True at time slice 1
