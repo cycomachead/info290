@@ -62,7 +62,9 @@
           text-align: center;
           margin: 100px auto;
           color: white;
-          margin-bottom: 40px;
+          margin-bottom: 0;
+          margin-top: 0;
+          padding-top: 100px;
       }
       h2 {
           font-size: 25px;
@@ -88,6 +90,22 @@
         color: white;
         text-decoration: none;
       }
+      textarea {
+        width: 100%;
+        resize: none;
+        border-radius: 8px;
+      }
+      legend {
+        text-align: center;
+        color: white;
+      }
+      form {
+        padding-top: 0;
+        margin-top: 0;
+      }
+      .btn {
+        border-radius: 5px;
+      }
     </style>
 
     <link href='https://fonts.googleapis.com/css?family=Bowlby+One' rel='stylesheet' type='text/css'>
@@ -107,20 +125,17 @@
     <div class="container">
       <div class="row">
 	<div class="span1"></div>
-	<a href="{{ url_for('text_to_beer') }}">
-	  <div class="span5 float-link">
-	    <div class="float-link-inner">
-	      <h2>Find a Beer</h2>
-	    </div>
-	  </div>
-	</a>
-	<a href="{{ url_for('beer_to_text') }}">
-	  <div class="span5 float-link">
-	    <div class="float-link-inner">
-	      <h2>Get a Review</h2>
-	    </div>
-	  </div>
-	</a>
+	<div class="span10">
+	  <form method="POST" action="/text-to-beer">
+	    <fieldset>
+	      <legend>
+		Find a Beer
+	      </legend>
+	      <textarea placeholder="Enter words describing a beer" name="beer-text"></textarea>
+	      <button type="submit" class="btn btn-primary">Submit</button>
+	    </fieldset>
+	  </form>
+	</div>
 	<div class="span1"></div>
       </div>
     </div>
