@@ -3,6 +3,12 @@ library('topicmodels')
 library('tm')
 library('SnowballC')
 
+load("topics_df")
+
+topics.df.full <- topics.df
+
+topics.df <- topics.df[sample(1:nrow(topics.df))[1:5000],]
+
 corpus.l <- Corpus(VectorSource(topics.df$text))
 
 dtm.l <- DocumentTermMatrix(corpus.l,control = list(stemming = TRUE, 
@@ -15,7 +21,7 @@ highestfreq
 #[9] "live"    "notic"   "offer"   "pack"    "rate"    "refresh" "review"  "surpris"
 #[17] "tast"  
 # which words are associated with "hop"?
-findAssocs(dtm.l, 'hop', 0.9)
+findAssocs(dtm.l, 'hop', 0.1)
 #         hop
 #balanc  0.99
 #bottl   0.98
