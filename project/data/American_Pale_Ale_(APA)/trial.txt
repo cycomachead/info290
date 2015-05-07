@@ -1,0 +1,3 @@
+beer_id,beer_name,brewery_name,link,style,ba_score,ba_score_text,ratings_count,bro_score,bro_score_text,reviews_count,rating_avg,pdev,wants,gots,ft,location,abv,availability
+140_276,"Sierra Nevada Pale Ale","Sierra Nevada Brewing Co.","/beer/profile/140/276/","American Pale Ale (APA)",90,"outstanding",9936,91,"outstanding",2870,4.03,11.91,210,1749,4,"California,United States",5.60,"Year-round"
+26_64228,"Zombie Dust","3 Floyds Brewing Co.","/beer/profile/26/64228/","American Pale Ale (APA)",100,"world-class",8083,90,"outstanding",1344,4.61,8.24,4027,2,017,67,"Indiana,United States",6.20,"Year-round"
