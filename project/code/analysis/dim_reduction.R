@@ -81,11 +81,19 @@ pcs <- counts.by.beer %*% decomp$v
 
 pcs.df <- as.data.frame(as.matrix(pcs))
 
-#svm.50 <- svm(pcs.df, style.labels, scale = F)
+train.indices <- sample(1:nrow(pcs.df), 2000)
 
-## rf <- randomForest(pcs.df, as.factor(style.labels), scale = F)
+#svm.50 <- svm(pcs.df, as.numeric(as.factor(style.labels)), scale = F)
 
-## mean(predict(rf, pcs.df) == as.factor(style.labels))
+rf <- randomForest(pcs.df, as.factor(style.labels), scale = F, subset = train.indices)
+
+mean(predict(rf, pcs.df[train.indices,]) == as.factor(style.labels)[train.indices])
+
+mean(predict(rf, pcs.df[-train.indices,]) == as.factor(style.labels)[-train.indices])
+
+rf2 <- randomForest(pcs.df, as.factor(name.labels), scale = F, subset = train.indices)
+mean(predict(rf2, pcs.df[train.indices,]) == as.factor(name.labels)[train.indices])
+mean(predict(rf2, pcs.df[-train.indices,]) == as.factor(name.labels)[-train.indices])
 
 ## # clustering
 
