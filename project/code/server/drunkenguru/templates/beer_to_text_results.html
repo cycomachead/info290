@@ -12,11 +12,11 @@
         padding: 19px 29px 29px;
         margin: 15px auto 20px;
         -webkit-border-radius: 5px;
-           -moz-border-radius: 5px;
-                border-radius: 5px;
+        -moz-border-radius: 5px;
+        border-radius: 5px;
         -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.05);
-           -moz-box-shadow: 0 1px 2px rgba(0,0,0,.05);
-                box-shadow: 0 1px 2px rgba(0,0,0,.05);
+        -moz-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+        box-shadow: 0 1px 2px rgba(0,0,0,.05);
       }
       form label {
         margin: 0;
@@ -43,10 +43,10 @@
           background-repeat: no-repeat;
           background-attachment: fixed;
           background: -webkit-linear-gradient(0deg, #85D8CE 10%, #085078 90%); /* Chrome 10+, Saf5.1+ */
-          background:    -moz-linear-gradient(0deg, #85D8CE 10%, #085078 90%); /* FF3.6+ */
-          background:     -ms-linear-gradient(0deg, #85D8CE 10%, #085078 90%); /* IE10 */
-          background:      -o-linear-gradient(0deg, #85D8CE 10%, #085078 90%); /* Opera 11.10+ */
-          background:         linear-gradient(0deg, #85D8CE 10%, #085078 90%); /* W3C */
+          background: -moz-linear-gradient(0deg, #85D8CE 10%, #085078 90%); /* FF3.6+ */
+          background: -ms-linear-gradient(0deg, #85D8CE 10%, #085078 90%); /* IE10 */
+          background: -o-linear-gradient(0deg, #85D8CE 10%, #085078 90%); /* Opera 11.10+ */
+          background: linear-gradient(0deg, #85D8CE 10%, #085078 90%); /* W3C */
       }
       .title {
           margin: 10px;
@@ -61,8 +61,10 @@
           width: 700px;
           text-align: center;
           margin: 100px auto;
+          margin-top: 0;
+          margin-bottom: 0;
+          padding-top: 100px;
           color: white;
-          margin-bottom: 40px;
       }
       h2 {
           font-size: 25px;
@@ -88,6 +90,32 @@
         color: white;
         text-decoration: none;
       }
+      textarea {
+        width: 100%;
+        resize: none;
+        border-radius: 8px;
+      }
+      legend {
+        text-align: center;
+        color: white;
+      }
+      form {
+        padding-top: 0;
+        margin-top: 0;
+      }
+      .btn {
+        border-radius: 5px;
+      }
+      .result-box {
+        background: rgba(255,255,255,0.7);
+        color: rgba(10,10,50,0.8);
+      }
+      .back-btn {
+        margin-top: 30px;
+      }
+      b {
+        font-weight: 10000;
+      }
     </style>
 
     <link href='https://fonts.googleapis.com/css?family=Bowlby+One' rel='stylesheet' type='text/css'>
@@ -106,22 +134,21 @@
 
     <div class="container">
       <div class="row">
-	<div class="span1"></div>
-	<a href="{{ url_for('text_to_beer') }}">
-	  <div class="span5 float-link">
+	<div class="span2"></div>
+	<div class="span8">
+	  <div class="float-link result-box">
 	    <div class="float-link-inner">
-	      <h2>Find a Beer</h2>
+	      <h4>
+		Your search: <i>{{search}}</i> returned results
+	      </h4>
+	      <h3>
+		<b><i>{{results}}</i></b>
+	      </h3>
 	    </div>
 	  </div>
-	</a>
-	<a href="{{ url_for('beer_to_text') }}">
-	  <div class="span5 float-link">
-	    <div class="float-link-inner">
-	      <h2>Get a Review</h2>
-	    </div>
-	  </div>
-	</a>
-	<div class="span1"></div>
+	  <a class="btn btn-primary back-btn" href="{{ url_for('text_to_beer') }}">New Search</a>
+	</div>
+	<div class="span2"></div>
       </div>
     </div>
 
