@@ -81,22 +81,37 @@ pcs <- counts.by.beer %*% decomp$v
 
 pcs.df <- as.data.frame(as.matrix(pcs))
 
-train.indices <- sample(1:nrow(pcs.df), 2000)
+train.indices <- sample(1:nrow(pcs.df), 4000)
 
-#svm.50 <- svm(pcs.df, as.numeric(as.factor(style.labels)), scale = F)
+style.labels <- as.factor(style.labels)
 
-rf <- randomForest(pcs.df, as.factor(style.labels), scale = F, subset = train.indices)
+#svm.50 <- svm(pcs.df, as.numeric(style.labels), scale = F)
 
-mean(predict(rf, pcs.df[train.indices,]) == as.factor(style.labels)[train.indices])
+rf <- randomForest(pcs.df[train.indices,], style.labels[train.indices], scale = F) # subset = train.indices)
 
-mean(predict(rf, pcs.df[-train.indices,]) == as.factor(style.labels)[-train.indices])
+mean(predict(rf, pcs.df[train.indices,]) == style.labels[train.indices])
 
-rf2 <- randomForest(pcs.df, as.factor(name.labels), scale = F, subset = train.indices)
-mean(predict(rf2, pcs.df[train.indices,]) == as.factor(name.labels)[train.indices])
-mean(predict(rf2, pcs.df[-train.indices,]) == as.factor(name.labels)[-train.indices])
+mean(predict(rf, pcs.df[-train.indices,]) == style.labels[-train.indices])
 
-## # clustering
+blah <- data.frame(style.labels[-train.indices][p != style.labels[-train.indices]], p[p!= style.labels[-train.indices]])
 
-clust <- kmeans(pcs.df, centers = 104, iter.max = 30)
+names(blah) <- c("true", "predicted")
 
-clust.stats <- cluster.stats(clustering = clust$cluster, alt.clustering = as.integer(as.factor(style.labels)), compareonly = TRUE)
+p.prob <- predict(rf, pcs.df[-train.indices,], type = "prob")
+preds <- t(apply(X = p.prob, MARGIN = 1, FUN = function(x) names(sort(x))[95:104]))
+
+mean(sapply(1:length(p), function(i) is.element(as.character(style.labels[-train.indices][i]), as.character(preds[i,]))))
+
+save(rf, file = "style_random_forest")
+save(decomp, file = "principle_components")
+
+
+## rf2 <- randomForest(pcs.df[train.indices,], as.factor(name.labels)[train.indices], scale = F)
+## mean(predict(rf2, pcs.df[train.indices,]) == as.factor(name.labels)[train.indices])
+## mean(predict(rf2, pcs.df[-train.indices,]) == as.factor(name.labels)[-train.indices])
+
+## ## # clustering
+
+## clust <- kmeans(pcs.df, centers = 104, iter.max = 30)
+
+## clust.stats <- cluster.stats(clustering = clust$cluster, alt.clustering = as.integer(style.labels), compareonly = TRUE)
