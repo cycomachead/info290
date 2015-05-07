@@ -3,6 +3,10 @@
   <head>
     <title>TheDrunkenGuru</title>
     <link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css" rel="stylesheet">
+    <link href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/css/select2.min.css" rel="stylesheet" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/select2.min.js"></script>
     <style>
       body {
         font-family: 'Gabriela', serif;
@@ -129,9 +133,14 @@
 	  <form method="POST" action="/text-to-beer">
 	    <fieldset>
 	      <legend>
-		Find a Beer
+		Get a Result
 	      </legend>
-	      <textarea placeholder="Enter words describing a beer" name="beer-text"></textarea>
+	      <select id="beer-select" name="beer-select">
+		<option value="None">Choose a beer</option>
+		{% for beer in beers %}
+		<option value="{{beer}}">{{beer}}</option>
+		{% endfor %}
+	      </select>
 	      <button type="submit" class="btn btn-primary">Submit</button>
 	    </fieldset>
 	  </form>
@@ -141,5 +150,10 @@
     </div>
 
     <script src="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/js/bootstrap.min.js"></script>
+    <script>
+      $(document).ready(function() {
+        $('#beer-select').select2();
+      });
+    </script>
   </body>
 </html>

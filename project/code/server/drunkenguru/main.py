@@ -1,6 +1,9 @@
 from flask import Flask, render_template, request
 app = Flask(__name__)
 
+beers_file = open("all_beers.txt", "r")
+beers_list = beers_file.readlines()
+
 @app.route('/')
 def index():
     return render_template("index.html")
@@ -17,7 +20,7 @@ def beer_to_text():
     if request.method == "POST":
         return render_template("beer_to_text_results.html", search=request.form["beer-text"], results="Hoppy, fruity, strong")
     else:
-        return render_template("beer_to_text_form.html")
+        return render_template("beer_to_text_form.html", beers=beers_list)
 
 if __name__ == '__main__':
     app.run(debug=True)
