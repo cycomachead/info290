@@ -1,6 +1,8 @@
 from flask import Flask, render_template, request
 import codecs, unicodedata
 import subprocess
+import logging
+from logging.handlers import RotatingFileHandler
 app = Flask(__name__)
 
 beers_file = open("beer_ids_names.txt", "r")#, encoding="utf-8")
@@ -13,7 +15,7 @@ def get_result(text):
     p = subprocess.Popen('./predict_style.R' + " '" + text + "'", shell = True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, cwd = "../../analysis")
     top_beers = []
     for line in p.stdout.readlines()[3:]:
-        print(line)
+        app.logger.debug(line)
         top_beers.append(line.split()[1].replace("_", " "))
     return top_beers
 
@@ -49,4 +51,7 @@ def beer_to_text():
         return render_template("beer_to_text_form.html", beers=beers_list)
 
 if __name__ == '__main__':
+    handler = RotatingFileHandler('foo.log', maxBytes=10000, backupCount=1)
+    handler.setLevel(logging.DEBUG)
+    app.logger.addHandler(handler) 
     app.run(debug=True)
