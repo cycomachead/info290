@@ -1,0 +1,48 @@
+
+R version 3.1.2 (2014-10-31) -- "Pumpkin Helmet"
+Copyright (C) 2014 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+[Previously saved workspace restored]
+
+> 
+> library(irlba)
+> library(e1071)
+> library(randomForest)
+randomForest 4.6-10
+Type rfNews() to see new features/changes/bug fixes.
+> library(parallel)
+> load("counts_matrix")
+> load("labels")
+> 
+> # clean up rows I accidentally added
+> counts.by.beer <- counts.by.beer[name.labels != 0,]
+> name.labels <- name.labels[name.labels != 0]
+> style.labels <- style.labels[style.labels != 0]
+> 
+> C <- makeCluster(detectCores()-1)
+> for (i in seq(1, nrow(counts.by.beer), by = 3)) {
++     if (i %% 10 == 0) {
++         print(i)
++     }
++     ## if (any(counts.by.beer[i,] != 0)) {
++     ##     counts.by.beer[i,] <- counts.by.beer[i,] / sum(counts.by.beer[i,])
++     ## }
++     counts.by.beer[i:(i+2),] <- parRapply(C, as.matrix(counts.by.beer[i:(i+2),]), function(x) ifelse(sum(x) > 0, x / sum(x), x))
++ }
+
+Execution halted

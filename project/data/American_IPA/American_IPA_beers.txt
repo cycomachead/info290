@@ -18,7 +18,7 @@ beer_id,beer_name,brewery_name,link,style,ba_score,ba_score_text,ratings_count,b
 651_6076,"Flower Power India Pale Ale","Ithaca Beer Company","/beer/profile/651/6076/","American IPA",94,"outstanding",4,750,95,"world-class",1,236,4.24,10.14,473,791,25,"New York,United States",7.50,"Year-round"
 13014_28203,"Furious","Surly Brewing Company","/beer/profile/13014/28203/","American IPA",96,"world-class",4,677,-,"no score",1,431,4.31,9.51,1,466,658,25,"Minnesota,United States",6.20,"Year-round"
 64_3951,"ApriHop","Dogfish Head Brewery","/beer/profile/64/3951/","American IPA",86,"very good",4,662,90,"outstanding",1,706,3.83,12.53,134,522,5,"Delaware,United States",7.00,"Spring"
-141_16403,"Smuttynose IPA "Finest Kind"","Smuttynose Brewing Company","/beer/profile/141/16403/","American IPA",92,"outstanding",4,552,100,"world-class",1,730,4.1,11.95,266,645,5,"New Hampshire,United States",6.90,"Year-round"
+141_16403,"Smuttynose IPA ""Finest Kind""","Smuttynose Brewing Company","/beer/profile/141/16403/","American IPA",92,"outstanding",4,552,100,"world-class",1,730,4.1,11.95,266,645,5,"New Hampshire,United States",6.90,"Year-round"
 610_3158,"Hop Rod Rye","Bear Republic Brewing Co.","/beer/profile/610/3158/","American IPA",94,"outstanding",4,475,100,"world-class",2,054,4.23,9.69,244,273,3,"California,United States",8.00,"Year-round"
 1199_20478,"Founders Harvest Ale","Founders Brewing Company","/beer/profile/1199/20478/","American IPA",95,"world-class",3,857,97,"world-class",978,4.27,9.13,354,332,6,"Michigan,United States",7.60,"Fall"
 20681_68916,"Lunch","Maine Beer Company","/beer/profile/20681/68916/","American IPA",98,"world-class",3,827,94,"outstanding",605,4.4,8.18,958,709,23,"Maine,United States",7.00,"Rotating"
