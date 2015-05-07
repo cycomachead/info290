@@ -90,7 +90,15 @@ def keysUnion(data):
 
 
 def writeCSV(name, data):
-    pass
+    header = data[0].keys()
+    with open(name, 'w') as file:
+        file.write(','.join(header))
+        file.write('\n')
+        for item in data:
+            file.write(','.join(item.values()))
+            file.write('\n')
+    return True
+        
 
 def doWordCount(files):
     """
@@ -112,8 +120,5 @@ def normalizeFiles(files):
 if __name__ == '__main__':
     files = walkDir(INPUT)
     doWordCount(files)
-    out = walkDir(OUTPUT)
-    normalizeFiles(out)
-
-    # For each new CSV
-    # append columns to normalize
+    # out = walkDir(OUTPUT)
+    # normalizeFiles(out)
