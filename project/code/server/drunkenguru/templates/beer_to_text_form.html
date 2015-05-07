@@ -130,7 +130,7 @@
       <div class="row">
 	<div class="span1"></div>
 	<div class="span10">
-	  <form method="POST" action="/text-to-beer">
+	  <form method="POST" action="{{ url_for('beer_to_text') }}">
 	    <fieldset>
 	      <legend>
 		Get a Result
@@ -138,7 +138,7 @@
 	      <select id="beer-select" name="beer-select">
 		<option value="None">Choose a beer</option>
 		{% for beer in beers %}
-		<option value="{{beer}}">{{beer}}</option>
+		<option value="{{beer[0]}}">{{beer[1]}}</option>
 		{% endfor %}
 	      </select>
 	      <button type="submit" class="btn btn-primary">Submit</button>
