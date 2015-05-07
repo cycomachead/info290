@@ -91,10 +91,10 @@ def keysUnion(data):
 
 def writeCSV(name, data):
     pass
-    
+
 def doWordCount(files):
     """
-    
+
     """
     for file in files:
         data = parseCSV(file)
@@ -105,7 +105,7 @@ def doWordCount(files):
 
 def normalizeFiles(files):
     """
-    
+
     """
     pass
 
