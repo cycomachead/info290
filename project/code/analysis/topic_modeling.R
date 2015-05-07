@@ -62,11 +62,11 @@ load("topics_df")
 library('rJava')
 .jinit(parameters = "-Xmx4g")
 library('mallet')
-mallet.instances <- mallet.import(topics.df$id, topics.df$text, file.path("common-english-words.txt"), FALSE, token.regexp="[\\p{L}']+")
+mallet.instances <- mallet.import(topics.df$id[1:1000], topics.df$text[1:1000], file.path("common-words-one-per-line.txt"), FALSE, token.regexp="[\\p{L}']+")
 #mallet.instances <- mallet.import(c("_1"), topics1[1:1], file.path("common-english-words.txt"), FALSE, token.regexp="[\\p{L}']+")
 
 ##topic modeling
-topic.model <- MalletLDA(num.topics=104)
+topic.model <- MalletLDA(num.topics=2)
 topic.model$loadDocuments(mallet.instances)
 vocabulary <- topic.model$getVocabulary()
 
@@ -94,7 +94,7 @@ mallet.top.words(topic.model, topic.words.m[topic.num,], num.top.words)
 
 ## Visualize topics as word clouds
 library(wordcloud)
-topic.num <- 1
+topic.num <- 2
 num.top.words<-100
 topic.top.words <- mallet.top.words(topic.model, topic.words.m[1,], 100)
 wordcloud(topic.top.words$words, topic.top.words$weights, c(4,.8), rot.per=0, random.order=F)
