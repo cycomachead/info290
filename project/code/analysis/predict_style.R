@@ -7,17 +7,7 @@ library(randomForest)
 
 load("all_words")
 
-text <- "This is a standard go-to beer for Sierra Nevada. I really like this brewery, but this variety isn't their best. I'll discuss each aspect of the beer below.
-
-A: It pours a pretty clear deep golden yellow whose shade depends on the ambient lighting. I was in a relatively dim room so it might be a lighter shade than I perceived. Nice foamy head that results from a good pour, but make it a vigorous pour so that you can get the little head that it has to offer.
-
-S: The smell is nice with a toasty cracker base and hints of piney hops and mango citrus.
-
-T: The taste starts with the malty toasty flavor and then a mild hop character that gives way into the citrus mango. It leaves a coating on the tongue that begs for another sip. It is quite delicious when chilled down real good.
-
-F: The mouthfeel is pretty standard. Smooth crisp with carbonation that is a mild level of effervescence. Fine lacing on the glass and the head lasts until the last sip.
-
-O: Overall, I think this is a nice beer for any day of the year, but if you want a strong hoppy beer, then move on to their Torpedo Extra IPA. The Pale Ales are good, but should be reserved for those days when you want to switch it up."
+text <- commandArgs()[6]
 
 text <- gsub("\\.", " ", text)
 text <- gsub("[[:punct:]]", "", text)
