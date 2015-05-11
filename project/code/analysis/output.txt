@@ -19,30 +19,160 @@ Type 'q()' to quit R.
 
 [Previously saved workspace restored]
 
-> 
-> library(irlba)
-> library(e1071)
+> load("style_random_forest")
+> load("principle_components")
+> load("labels")
 > library(randomForest)
 randomForest 4.6-10
 Type rfNews() to see new features/changes/bug fixes.
-> library(parallel)
-> load("counts_matrix")
-> load("labels")
 > 
-> # clean up rows I accidentally added
-> counts.by.beer <- counts.by.beer[name.labels != 0,]
-> name.labels <- name.labels[name.labels != 0]
-> style.labels <- style.labels[style.labels != 0]
+> load("all_words")
 > 
-> C <- makeCluster(detectCores()-1)
-> for (i in seq(1, nrow(counts.by.beer), by = 3)) {
-+     if (i %% 10 == 0) {
-+         print(i)
-+     }
-+     ## if (any(counts.by.beer[i,] != 0)) {
-+     ##     counts.by.beer[i,] <- counts.by.beer[i,] / sum(counts.by.beer[i,])
-+     ## }
-+     counts.by.beer[i:(i+2),] <- parRapply(C, as.matrix(counts.by.beer[i:(i+2),]), function(x) ifelse(sum(x) > 0, x / sum(x), x))
-+ }
-
-Execution halted
+> text <- "This is a standard go-to beer for Sierra Nevada. I really like this brewery, but this variety isn't their best. I'll discuss each aspect of the beer below.
++ 
++ A: It pours a pretty clear deep golden yellow whose shade depends on the ambient lighting. I was in a relatively dim room so it might be a lighter shade than I perceived. Nice foamy head that results from a good pour, but make it a vigorous pour so that you can get the little head that it has to offer.
++ 
++ S: The smell is nice with a toasty cracker base and hints of piney hops and mango citrus.
++ 
++ T: The taste starts with the malty toasty flavor and then a mild hop character that gives way into the citrus mango. It leaves a coating on the tongue that begs for another sip. It is quite delicious when chilled down real good.
++ 
++ F: The mouthfeel is pretty standard. Smooth crisp with carbonation that is a mild level of effervescence. Fine lacing on the glass and the head lasts until the last sip.
++ 
++ O: Overall, I think this is a nice beer for any day of the year, but if you want a strong hoppy beer, then move on to their Torpedo Extra IPA. The Pale Ales are good, but should be reserved for those days when you want to switch it up."
+> 
+> text <- gsub("\\.", " ", text)
+> text <- gsub("[[:punct:]]", "", text)
+> text <- tolower(text)
+> text <- strsplit(text, split = "\\s+")
+> text <- Reduce(c, text, c())
+> text <- text[text != ""]
+> 
+> counts <- rle(sort(text)) # generates word counts
+> counts <- data.frame(word = counts$value, count = counts$lengths)
+> #counts <- counts[!is.element(counts$word, common.words),] # filters out common words
+> 
+> sorted.indices <- order(counts$count, decreasing = TRUE)
+> counts <- counts[sorted.indices,] # put in decreasing order
+> #counts$percent <- counts$count / sum(counts$count)
+> 
+> 
+> shared.words <- intersect(words, counts$word)
+> columns <- which(is.element(words, shared.words))
+> shared.counts <- counts[is.element(counts$word, shared.words),"count"]
+> 
+> counts.matrix <- matrix(0, nrow = 1, ncol = length(words))
+> counts.matrix[1, columns] <- shared.counts
+> counts.matrix[1,] <- counts.matrix[1,] / sum(counts.matrix[1,])
+> 
+> pcs.df <- as.data.frame(counts.matrix %*% decomp$v)
+> pred <- predict(rf, pcs.df, type = "prob")
+> pred[,order(pred)]
+                           Altbier             American_Adjunct_Lager 
+                             0.000                              0.000 
+           American_Amber__Red_Ale          American_Amber__Red_Lager 
+                             0.000                              0.000 
+               American_Barleywine                 American_Black_Ale 
+                             0.000                              0.000 
+               American_Blonde_Ale                 American_Brown_Ale 
+                             0.000                              0.000 
+     American_Double__Imperial_IPA  American_Double__Imperial_Pilsner 
+                             0.000                              0.000 
+   American_Double__Imperial_Stout                       American_IPA 
+                             0.000                              0.000 
+              American_Malt_Liquor            American_Pale_Ale_(APA) 
+                             0.000                              0.000 
+               American_Pale_Lager            American_Pale_Wheat_Ale 
+                             0.000                              0.000 
+                   American_Porter                     American_Stout 
+                             0.000                              0.000 
+               American_Strong_Ale                  American_Wild_Ale 
+                             0.000                              0.000 
+                     Baltic_Porter                        Belgian_IPA 
+                             0.000                              0.000 
+                  Belgian_Pale_Ale            Belgian_Strong_Dark_Ale 
+                             0.000                              0.000 
+           Belgian_Strong_Pale_Ale                 Berliner_Weissbier 
+                             0.000                              0.000 
+                    Bière_de_Garde                               Bock 
+                             0.000                              0.000 
+                        Chile_Beer                          Cream_Ale 
+                             0.000                              0.000 
+                    Czech_Pilsener                         Doppelbock 
+                             0.000                              0.000 
+                            Dubbel                       Dunkelweizen 
+                             0.000                              0.000 
+                English_Barleywine                     English_Bitter 
+                             0.000                              0.000 
+                 English_Brown_Ale       English_India_Pale_Ale_(IPA) 
+                             0.000                              0.000 
+                  English_Pale_Ale                     English_Porter 
+                             0.000                              0.000 
+                     English_Stout                 English_Strong_Ale 
+                             0.000                              0.000 
+                   Euro_Dark_Lager                    Euro_Pale_Lager 
+                             0.000                              0.000 
+Extra_Special__Strong_Bitter_(ESB)                 Flanders_Oud_Bruin 
+                             0.000                              0.000 
+                  Flanders_Red_Ale              Foreign__Export_Stout 
+                             0.000                              0.000 
+             Fruit__Vegetable_Beer                    German_Pilsener 
+                             0.000                              0.000 
+                              Gose                             Gueuze 
+                             0.000                              0.000 
+               Herbed__Spiced_Beer                    Irish_Dry_Stout 
+                             0.000                              0.000 
+                     Irish_Red_Ale                      Kristalweizen 
+                             0.000                              0.000 
+                             Kvass                     Lambic_-_Fruit 
+                             0.000                              0.000 
+                       Light_Lager               Maibock__Helles_Bock 
+                             0.000                              0.000 
+               Märzen__Oktoberfest                  Milk__Sweet_Stout 
+                             0.000                              0.000 
+               Munich_Dunkel_Lager                Munich_Helles_Lager 
+                             0.000                              0.000 
+                     Oatmeal_Stout                            Old_Ale 
+                             0.000                              0.000 
+                       Pumpkin_Ale                   Quadrupel_(Quad) 
+                             0.000                              0.000 
+            Russian_Imperial_Stout                           Rye_Beer 
+                             0.000                              0.000 
+             Saison__Farmhouse_Ale                        Schwarzbier 
+                             0.000                              0.000 
+             Scotch_Ale__Wee_Heavy                       Scottish_Ale 
+                             0.000                              0.000 
+Scottish_Gruit__Ancient_Herbed_Ale                             Tripel 
+                             0.000                              0.000 
+                      Vienna_Lager                         Weizenbock 
+                             0.000                              0.000 
+                     Winter_Warmer                            Witbier 
+                             0.000                              0.000 
+                  Belgian_Dark_Ale      California_Common__Steam_Beer 
+                             0.002                              0.002 
+             English_Pale_Mild_Ale                  Euro_Strong_Lager 
+                             0.002                              0.002 
+                              Faro            American_Dark_Wheat_Ale 
+                             0.002                              0.004 
+          Dortmunder__Export_Lager              English_Dark_Mild_Ale 
+                             0.004                              0.004 
+                         Rauchbier                          Wheatwine 
+                             0.004                              0.004 
+    Bière_de_Champagne__Bière_Brut                        Smoked_Beer 
+                             0.008                              0.012 
+                           Eisbock                   Low_Alcohol_Beer 
+                             0.014                              0.014 
+                          Happoshu            Kellerbier__Zwickelbier 
+                             0.030                              0.036 
+                       Black_&_Tan                         Roggenbier 
+                             0.048                              0.050 
+               Japanese_Rice_Lager                             Kölsch 
+                             0.056                              0.064 
+                Lambic_-_Unblended                            Braggot 
+                             0.068                              0.078 
+                             Sahti                         Hefeweizen 
+                             0.114                              0.378 
+> 
+> 
+> proc.time()
+   user  system elapsed 
+  1.564   0.056   1.616 

@@ -50,6 +50,9 @@ for(i in 1:length(all.beers.names.only)){
 save(topics, file = "topics")
 load("topics")
 
+topic.lengths <- sapply(topics, length)
+save(topic.lengths, file = "topics_lengths")
+
 topics1 <- do.call(rbind, topics)
 
 topics.df <- as.data.frame(topics1, stringsAsFactors=F)

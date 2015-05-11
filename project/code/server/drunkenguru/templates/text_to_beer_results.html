@@ -142,7 +142,9 @@
 		Your search: <i>{{search}}</i> returned results
 	      </h4>
 	      <h3>
-		<b><i>{{results}}</i></b>
+		  {% for result in results %}
+		<b><i>{{result.decode('utf-8')}}</i></b></br>
+		{% endfor %}
 	      </h3>
 	    </div>
 	  </div>
