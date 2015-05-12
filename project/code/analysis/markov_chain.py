@@ -5,20 +5,27 @@ from functools import reduce
 from operator import add
 import os
 
-folder = "../../data/American_Adjunct_Lager/"
+def get_text(f, folder):
+    with open(folder + f) as data_file:
+        lines = data_file.readlines()
+    return filter(lambda x: x != "", [line.strip().strip('"') for line in lines])
+
+def get_reviews(f, folder):
+    review_text_current = get_text(f, folder)
+    review_text_current = filter(lambda x: x.strip() != "", reduce(add, map(lambda x: x.split("."), review_text_current)))
+    review_text_current = ["BEGIN NOW " + t + " END" for t in review_text_current]
+    return review_text_current
+
+
+folder = "../../data/American_IPA/"
 files = os.listdir(folder)
 review_text = []
 for f in files:
     print f
-    if f.endswith(".txt"):
+    if f.endswith(".txt") or not f.endswith("reviews"):
         print "skipping..."
         continue
-    reviews_current = pd.read_csv(folder + f, quotechar = '"')
-    review_text_current = reviews_current["review_text"]
-    review_text_current = review_text_current[pd.notnull(review_text_current)]
-    #review_text_current = filter(lambda x: x.strip() != "", reduce(add, map(lambda x: x.split("."), review_text_current)))
-    review_text_current = ["BEGIN NOW " + t + " END" for t in review_text_current]
-    review_text += review_text_current
+    review_text += get_reviews(f, folder)
 
 
 
@@ -41,14 +48,12 @@ for rev in review_text:
         chain[start][end] += 1
 
 
-def get_sentence(chain):
-    word1 = "BEGIN"
-    word2 = "NOW"
+def get_sentence(chain, word1 = "BEGIN", word2 = "NOW"):
     sent = []
-
     while (word2 != "END"):
         current = chain[(word1, word2)]
-        word1, word2 = word2, np.random.choice(current.keys(), p = np.array(current.values()) / sum(current.values()))
+        probs = np.array(current.values())
+        word1, word2 = word2, np.random.choice(current.keys(), p = probs / probs.sum())
         sent.append(word1)
 
     return ' '.join(sent[1:])
