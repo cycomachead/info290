@@ -15,8 +15,8 @@ from functools import reduce
 
 INPUT = '../../data/'
 # Assume the damn directory exists.
-OUTPUT = '../../processed/'
-RESULTS = 'word-freq-review/'
+# The "data" is replaced with this:
+OUTPUT = 'processed/word-freq-by-review'
 
 # review column in CSV
 REVIEW_HEADER = 'review_text'
@@ -37,6 +37,7 @@ def getCommonWords():
         words = f.read()
     words = words.split(',')
     COMMON += words
+    COMMON += ["im"]
     return True
 
 
@@ -73,12 +74,10 @@ def parseCSV(fileName):
         col = header.index(REVIEW_HEADER)
         for row in beer_data:
             text = row[col]
-            print(text)
-            data = wordCount(text)
-            print(data)
-            addWords(data.keys())
-            reviews.append(data)
-            print(reviews)
+            if len(text) > 0:
+                data = wordCount(text)
+                addWords(data.keys())
+                reviews.append(data)
     return reviews
 
 def nullColumns(fileHeaders, allKeys):
@@ -116,7 +115,7 @@ def makeNormalizedData(data, newCol, defaultVal = 0):
 
 def keysUnion(data):
     """
-    Data is a list of dictionary. Return the union of all keys.
+    Data is a list of dictionaries. Return the union of all keys.
     """
     items = []
     allKeys = map(lambda d: d.keys(), data)
@@ -125,15 +124,20 @@ def keysUnion(data):
     return set(items)
 
 
-def writeCSV(name, data):
-    header = data[0].keys()
+def writeCSV(name, header, data):
+    # If header is a set() convert to a list for stability.
+    header = list(header)
+    print("Columns:\t", len(header))
     with open(name, 'w') as file:
         # Trim the first ,
         file.write(','.join(header)[1:])
         file.write('\n')
         for item in data:
-            item = map(str, item)
-            file.write(','.join(item)[1:])
+            row = []
+            for key in header:
+                row.append(str(item[key]))
+            text = ','.join(row)
+            file.write(text[1:])
             file.write('\n')
     return True
 
@@ -146,9 +150,10 @@ def doWordCount(files):
         data = parseCSV(file)
         cols = keysUnion(data)
         data = makeNormalizedData(data, cols)
-        out = file.replace('data', 'processed')
-        writeCSV(out, data)
-        print('Wrote: %s', file)
+        header = keysUnion(data)
+        out = file.replace('data', OUTPUT)
+        writeCSV(out, header, data)
+        print('Wrote: {}'.format(file))
 
 def normalizeFiles(files):
     """
@@ -159,6 +164,7 @@ def normalizeFiles(files):
 if __name__ == '__main__':
     getCommonWords()
     files = walkDir(INPUT)
+    print(files)
     doWordCount(files)
     # out = walkDir(OUTPUT)
     # normalizeFiles(out)
