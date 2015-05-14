@@ -2,10 +2,7 @@ from pandas import *
 import os
 import sys
 
-STYLE = sys.argv[1] or "American_Pale_Ale_(APA)"
-STYLE = STYLE.split('/')[3] # Just the ending
-if STYLE == 'all_beers.txt' or STYLE == 'American_IPA':
-    exit(0)
+STYLE = "American_Brown_Ale"
 BEER_DIR = "../../processed/word-freq-by-review/%s/"%(STYLE)
 BEER_COL = "beer_id"
 
@@ -64,4 +61,4 @@ print("DONE: combining DataFrame objects.")
 # Fill in with 0's
 combined_df = combined_df.fillna(0)
 
-combined_df.to_pickle("../../processed/pandas/%s.pkl"%(STYLE))
+combined_df.to_pickle("./%s.pkl"%(STYLE))
