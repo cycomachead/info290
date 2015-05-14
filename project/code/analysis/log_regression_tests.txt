@@ -1,0 +1,247 @@
+Michael at Yosemite-Retina in ~/Desktop/info290/project on master*
+$
+Michael at Yosemite-Retina in ~/Desktop/info290/project on master*
+$ python3 -i code/analysis/log_reg.py
+Basic Logistic Regression
+0.61760888961
+===== Cross Validation ====
+Training Score: 0.704356
+Cross Validation Score: 0.406522
+>>> clf
+GridSearchCV(cv=None,
+       estimator=LogisticRegression(C=1.0, class_weight=None, dual=False, fit_intercept=True,
+          intercept_scaling=1, penalty='l2', random_state=None, tol=0.0001),
+       fit_params={}, iid=True, loss_func=None, n_jobs=1,
+       param_grid={'C': [0.001, 0.01, 0.1, 1, 10, 100, 1000]},
+       pre_dispatch='2*n_jobs', refit=True, score_func=None, scoring=None,
+       verbose=0)
+>>> clf.c_
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+AttributeError: 'GridSearchCV' object has no attribute 'c_'
+>>> dir(clf)
+['__abstractmethods__', '__class__', '__delattr__', '__dict__', '__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__', '__gt__', '__hash__', '__init__', '__le__', '__lt__', '__module__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__str__', '__subclasshook__', '__weakref__', '_abc_cache', '_abc_negative_cache', '_abc_negative_cache_version', '_abc_registry', '_fit', '_get_param_names', 'best_estimator_', 'best_params_', 'best_score_', 'cv', 'decision_function', 'estimator', 'fit', 'fit_params', 'get_params', 'grid_scores_', 'iid', 'loss_func', 'n_jobs', 'param_grid', 'pre_dispatch', 'predict', 'predict_proba', 'refit', 'score', 'score_func', 'scorer_', 'scoring', 'set_params', 'transform', 'verbose']
+>>> clf.best_params_
+{'C': 10}
+>>> lr
+LogisticRegression(C=1.0, class_weight=None, dual=False, fit_intercept=True,
+          intercept_scaling=1, penalty='l2', random_state=None, tol=0.0001)
+>>> lr.solver
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+AttributeError: 'LogisticRegression' object has no attribute 'solver'
+>>> lr.solver_
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+AttributeError: 'LogisticRegression' object has no attribute 'solver_'
+>>> lr.
+Display all 427 possibilities? (y or n)
+lr.__abstractmethods__         lr.__hash__(                   lr.__setattr__(
+lr.__abstractmethods__         lr.__hash__(                   lr.__setattr__(
+lr.__abstractmethods__         lr.__hash__(                   lr.__setattr__(
+lr.__abstractmethods__         lr.__hash__(                   lr.__setattr__(
+lr.__class__(                  lr.__hash__(                   lr.__setattr__(
+lr.__class__(                  lr.__hash__(                   lr.__sizeof__(
+lr.__class__(                  lr.__hash__(                   lr.__sizeof__(
+lr.__class__(                  lr.__hash__(                   lr.__sizeof__(
+lr.__class__(                  lr.__hash__(                   lr.__sizeof__(
+lr.__class__(                  lr.__hash__(                   lr.__sizeof__(
+lr.__class__(                  lr.__hash__(                   lr.__sizeof__(
+lr.__class__(                  lr.__hash__(                   lr.__sizeof__(
+lr.__class__(                  lr.__init__(                   lr.__sizeof__(
+lr.__class__(                  lr.__init__(                   lr.__sizeof__(
+lr.__class__(                  lr.__init__(                   lr.__sizeof__(
+lr.__class__(                  lr.__init__(                   lr.__sizeof__(
+lr.__class__(                  lr.__init__(                   lr.__sizeof__(
+lr.__class__(                  lr.__init__(                   lr.__sizeof__(
+lr.__class__(                  lr.__init__(                   lr.__sizeof__(
+lr.__delattr__(                lr.__init__(                   lr.__str__(
+lr.__delattr__(                lr.__init__(                   lr.__str__(
+lr.__delattr__(                lr.__init__(                   lr.__str__(
+lr.__delattr__(                lr.__init__(                   lr.__str__(
+lr.__delattr__(                lr.__init__(                   lr.__str__(
+lr.__delattr__(                lr.__init__(                   lr.__str__(
+lr.__delattr__(                lr.__init__(                   lr.__str__(
+lr.__delattr__(                lr.__le__(                     lr.__str__(
+lr.__delattr__(                lr.__le__(                     lr.__str__(
+lr.__delattr__(                lr.__le__(                     lr.__str__(
+lr.__delattr__(                lr.__le__(                     lr.__str__(
+lr.__delattr__(                lr.__le__(                     lr.__str__(
+lr.__delattr__(                lr.__le__(                     lr.__str__(
+lr.__delattr__(                lr.__le__(                     lr.__str__(
+lr.__dict__                    lr.__le__(                     lr.__subclasshook__(
+lr.__dict__                    lr.__le__(                     lr.__subclasshook__(
+lr.__dict__                    lr.__le__(                     lr.__subclasshook__(
+lr.__dict__                    lr.__le__(                     lr.__subclasshook__(
+lr.__dict__                    lr.__le__(                     lr.__subclasshook__(
+lr.__dict__                    lr.__le__(                     lr.__subclasshook__(
+lr.__dict__                    lr.__le__(                     lr.__subclasshook__(
+lr.__dict__                    lr.__lt__(                     lr.__subclasshook__(
+lr.__dict__                    lr.__lt__(                     lr.__subclasshook__(
+lr.__dict__                    lr.__lt__(                     lr.__subclasshook__(
+lr.__dir__(                    lr.__lt__(                     lr.__subclasshook__(
+lr.__dir__(                    lr.__lt__(                     lr.__subclasshook__(
+lr.__dir__(                    lr.__lt__(                     lr.__subclasshook__(
+lr.__dir__(                    lr.__lt__(                     lr.__subclasshook__(
+lr.__dir__(                    lr.__lt__(                     lr.__weakref__
+lr.__dir__(                    lr.__lt__(                     lr.__weakref__
+lr.__dir__(                    lr.__lt__(                     lr.__weakref__
+lr.__dir__(                    lr.__lt__(                     lr.__weakref__
+lr.__dir__(                    lr.__lt__(                     lr.__weakref__
+lr.__dir__(                    lr.__lt__(                     lr.__weakref__
+lr.__dir__(                    lr.__lt__(                     lr.__weakref__
+lr.__dir__(                    lr.__module__                  lr.__weakref__
+lr.__dir__(                    lr.__module__                  lr.__weakref__
+lr.__dir__(                    lr.__module__                  lr.__weakref__
+lr.__doc__                     lr.__module__                  lr._abc_cache
+lr.__doc__                     lr.__module__                  lr._abc_cache
+lr.__doc__                     lr.__module__                  lr._abc_cache
+lr.__doc__                     lr.__module__                  lr._abc_cache
+lr.__doc__                     lr.__module__                  lr._abc_negative_cache
+lr.__doc__                     lr.__module__                  lr._abc_negative_cache
+lr.__doc__                     lr.__module__                  lr._abc_negative_cache
+lr.__doc__                     lr.__ne__(                     lr._abc_negative_cache
+lr.__doc__                     lr.__ne__(                     lr._abc_negative_cache_version
+lr.__doc__                     lr.__ne__(                     lr._abc_negative_cache_version
+lr.__doc__                     lr.__ne__(                     lr._abc_negative_cache_version
+lr.__doc__                     lr.__ne__(                     lr._abc_negative_cache_version
+lr.__doc__                     lr.__ne__(                     lr._abc_registry
+lr.__doc__                     lr.__ne__(                     lr._abc_registry
+lr.__eq__(                     lr.__ne__(                     lr._abc_registry
+lr.__eq__(                     lr.__ne__(                     lr._abc_registry
+lr.__eq__(                     lr.__ne__(                     lr._get_bias(
+lr.__eq__(                     lr.__ne__(                     lr._get_bias(
+lr.__eq__(                     lr.__ne__(                     lr._get_bias(
+lr.__eq__(                     lr.__ne__(                     lr._get_param_names(
+lr.__eq__(                     lr.__ne__(                     lr._get_param_names(
+lr.__eq__(                     lr.__new__(                    lr._get_param_names(
+lr.__eq__(                     lr.__new__(                    lr._get_param_names(
+lr.__eq__(                     lr.__new__(                    lr._get_param_names(
+lr.__eq__(                     lr.__new__(                    lr._get_solver_type(
+lr.__eq__(                     lr.__new__(                    lr._get_solver_type(
+lr.__eq__(                     lr.__new__(                    lr._get_solver_type(
+lr.__eq__(                     lr.__new__(                    lr._predict_proba_lr(
+lr.__format__(                 lr.__new__(                    lr._predict_proba_lr(
+lr.__format__(                 lr.__new__(                    lr._predict_proba_lr(
+lr.__format__(                 lr.__new__(                    lr._solver_type_dict
+lr.__format__(                 lr.__new__(                    lr._solver_type_dict
+lr.__format__(                 lr.__new__(                    lr._solver_type_dict
+lr.__format__(                 lr.__new__(                    lr.C
+lr.__format__(                 lr.__new__(                    lr.class_weight
+lr.__format__(                 lr.__reduce__(                 lr.decision_function(
+lr.__format__(                 lr.__reduce__(                 lr.decision_function(
+lr.__format__(                 lr.__reduce__(                 lr.decision_function(
+lr.__format__(                 lr.__reduce__(                 lr.densify(
+lr.__format__(                 lr.__reduce__(                 lr.densify(
+lr.__format__(                 lr.__reduce__(                 lr.densify(
+lr.__format__(                 lr.__reduce__(                 lr.dual
+lr.__ge__(                     lr.__reduce__(                 lr.fit(
+lr.__ge__(                     lr.__reduce__(                 lr.fit(
+lr.__ge__(                     lr.__reduce__(                 lr.fit(
+lr.__ge__(                     lr.__reduce__(                 lr.fit_intercept
+lr.__ge__(                     lr.__reduce__(                 lr.fit_transform(
+lr.__ge__(                     lr.__reduce__(                 lr.fit_transform(
+lr.__ge__(                     lr.__reduce__(                 lr.fit_transform(
+lr.__ge__(                     lr.__reduce_ex__(              lr.fit_transform(
+lr.__ge__(                     lr.__reduce_ex__(              lr.get_params(
+lr.__ge__(                     lr.__reduce_ex__(              lr.get_params(
+lr.__ge__(                     lr.__reduce_ex__(              lr.get_params(
+lr.__ge__(                     lr.__reduce_ex__(              lr.get_params(
+lr.__ge__(                     lr.__reduce_ex__(              lr.get_params(
+lr.__ge__(                     lr.__reduce_ex__(              lr.intercept_scaling
+lr.__getattribute__(           lr.__reduce_ex__(              lr.loss
+lr.__getattribute__(           lr.__reduce_ex__(              lr.multi_class
+lr.__getattribute__(           lr.__reduce_ex__(              lr.penalty
+lr.__getattribute__(           lr.__reduce_ex__(              lr.predict(
+lr.__getattribute__(           lr.__reduce_ex__(              lr.predict(
+lr.__getattribute__(           lr.__reduce_ex__(              lr.predict(
+lr.__getattribute__(           lr.__reduce_ex__(              lr.predict_log_proba(
+lr.__getattribute__(           lr.__repr__(                   lr.predict_log_proba(
+lr.__getattribute__(           lr.__repr__(                   lr.predict_proba(
+lr.__getattribute__(           lr.__repr__(                   lr.predict_proba(
+lr.__getattribute__(           lr.__repr__(                   lr.random_state
+lr.__getattribute__(           lr.__repr__(                   lr.score(
+lr.__getattribute__(           lr.__repr__(                   lr.score(
+lr.__getattribute__(           lr.__repr__(                   lr.score(
+lr.__gt__(                     lr.__repr__(                   lr.score(
+lr.__gt__(                     lr.__repr__(                   lr.set_params(
+lr.__gt__(                     lr.__repr__(                   lr.set_params(
+lr.__gt__(                     lr.__repr__(                   lr.set_params(
+lr.__gt__(                     lr.__repr__(                   lr.set_params(
+lr.__gt__(                     lr.__repr__(                   lr.set_params(
+lr.__gt__(                     lr.__repr__(                   lr.sparsify(
+lr.__gt__(                     lr.__setattr__(                lr.sparsify(
+lr.__gt__(                     lr.__setattr__(                lr.sparsify(
+lr.__gt__(                     lr.__setattr__(                lr.tol
+lr.__gt__(                     lr.__setattr__(                lr.transform(
+lr.__gt__(                     lr.__setattr__(                lr.transform(
+lr.__gt__(                     lr.__setattr__(                lr.transform(
+lr.__gt__(                     lr.__setattr__(                lr.verbose
+lr.__hash__(                   lr.__setattr__(
+lr.__hash__(                   lr.__setattr__(
+>>> lr.
+  File "<stdin>", line 1
+    lr.
+      ^
+SyntaxError: invalid syntax
+>>> lr.get_params()
+{'penalty': 'l2', 'fit_intercept': True, 'C': 1.0, 'class_weight': None, 'tol': 0.0001, 'random_state': None, 'dual': False, 'intercept_scaling': 1}
+>>> lr.
+  File "<stdin>", line 1
+    lr.
+      ^
+SyntaxError: invalid syntax
+>>> lr._get_solver_type()
+0
+>>>
+>>> param_grid
+{'C': [0.001, 0.01, 0.1, 1, 10, 100, 1000]}
+>>> param_grid['penalty'] = ['l1', 'l2']
+>>> param_grid['multi_class' = [‘ovr’, ‘multinomial’]
+  File "<stdin>", line 1
+    param_grid['multi_class' = [‘ovr’, ‘multinomial’]
+                             ^
+SyntaxError: invalid syntax
+>>> param_grid['multi_class'] = ['ovr', 'multinomial']
+>>> gs = GridSearchCV(lr, param_grid)
+>>> gs.fit(data, labels)
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+  File "/Library/Frameworks/Python.framework/Versions/3.4/lib/python3.4/site-packages/sklearn/grid_search.py", line 596, in fit
+    return self._fit(X, y, ParameterGrid(self.param_grid))
+  File "/Library/Frameworks/Python.framework/Versions/3.4/lib/python3.4/site-packages/sklearn/grid_search.py", line 378, in _fit
+    for parameters in parameter_iterable
+  File "/Library/Frameworks/Python.framework/Versions/3.4/lib/python3.4/site-packages/sklearn/externals/joblib/parallel.py", line 653, in __call__
+    self.dispatch(function, args, kwargs)
+  File "/Library/Frameworks/Python.framework/Versions/3.4/lib/python3.4/site-packages/sklearn/externals/joblib/parallel.py", line 400, in dispatch
+    job = ImmediateApply(func, args, kwargs)
+  File "/Library/Frameworks/Python.framework/Versions/3.4/lib/python3.4/site-packages/sklearn/externals/joblib/parallel.py", line 138, in __init__
+    self.results = func(*args, **kwargs)
+  File "/Library/Frameworks/Python.framework/Versions/3.4/lib/python3.4/site-packages/sklearn/cross_validation.py", line 1230, in _fit_and_score
+    estimator.set_params(**parameters)
+  File "/Library/Frameworks/Python.framework/Versions/3.4/lib/python3.4/site-packages/sklearn/base.py", line 256, in set_params
+    % (key, self.__class__.__name__))
+ValueError: Invalid parameter multi_class for estimator LogisticRegression
+>>> param_grid['multi_class'] = ['ovr', 'multinomial']
+>>> del param_grid['multi_class']
+>>> param_grid
+{'penalty': ['l1', 'l2'], 'C': [0.001, 0.01, 0.1, 1, 10, 100, 1000]}
+>>> gs = GridSearchCV(lr, param_grid)
+>>> gs.fit(data, labels)
+GridSearchCV(cv=None,
+       estimator=LogisticRegression(C=1.0, class_weight=None, dual=False, fit_intercept=True,
+          intercept_scaling=1, penalty='l2', random_state=None, tol=0.0001),
+       fit_params={}, iid=True, loss_func=None, n_jobs=1,
+       param_grid={'penalty': ['l1', 'l2'], 'C': [0.001, 0.01, 0.1, 1, 10, 100, 1000]},
+       pre_dispatch='2*n_jobs', refit=True, score_func=None, scoring=None,
+       verbose=0)
+>>> gs.best_params_
+{'penalty': 'l2', 'C': 100}
+>>> gs.score(data, labels)
+0.70435558439451695
+>>> del param_grid['penalty']
+>>> cross_val(data, labels, 10, 2, gs)
+0.40837257465640431
+>>> gs.best_params_
+{'C': 10}
+>>> ^D
