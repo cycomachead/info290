@@ -64,3 +64,6 @@ target/
 # R stuff
 .Rhistory
 .RData
+
+# Pandas Data
+*.pkl

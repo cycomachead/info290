@@ -2,7 +2,7 @@ from pandas import *
 import os
 import sys
 
-STYLE = sys.argv[1] # "American_Pale_Ale_(APA)"
+STYLE = sys.argv[1] or "American_Pale_Ale_(APA)"
 STYLE = STYLE.split('/')[3] # Just the ending
 if STYLE == 'all_beers.txt' or STYLE == 'American_IPA':
     exit(0)
