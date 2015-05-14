@@ -1,7 +1,8 @@
 #! /usr/bin/env python3
 from pandas import *
 import sklearn
-from sklearn.linear_model import LogisticRegression
+from sklearn.naive_bayes import GaussianNB
+from sklearn.naive_bayes import MultinomialNB
 from sklearn.grid_search import GridSearchCV
 import numpy as np
 import random
@@ -52,44 +53,51 @@ del data['beer_id']
 data = data.fillna(0)
 
 ###########################
-### Basic Random Forest ###
+### Basic Bayes Methods ###
 ###########################
 
-lr = LogisticRegression()
-fit = lr.fit(data, labels)
-score = lr.score(data, labels)
-print('Basic Logistic Regression')
+gnb = GaussianNB()
+fit = gnb.fit(data, labels)
+score = gnb.score(data, labels)
+print('Gaussian NB')
 print(score)
+
+
+mbn = MultinomialNB()
+fit = mbn.fit(data, labels)
+score = mbn.score(data, labels)
+print('Multinomial NB')
+print(score)
+
 
 ########################
 ### Cross Validation ###
 ########################
 
-
-rounds = 2
-pct = 10
-# for c in criterion:
-#     for t in trees:
-#         for s in samples:
-
-param_grid = {'C': [0.001, 0.01, 0.1, 1, 10, 100, 1000] }
-clf = GridSearchCV(LogisticRegression(penalty='l2'), param_grid)
-lr = LogisticRegression(C=1.0, intercept_scaling=1, dual=False,
-                        fit_intercept=True, penalty='l2', tol=0.0001)
-
-gs = GridSearchCV(cv=None, estimator=lr, param_grid=param_grid)
-
+# rounds = 2
+# pct = 10
+# # for c in criterion:
+# #     for t in trees:
+# #         for s in samples:
+#
+# param_grid = {'C': [0.001, 0.01, 0.1, 1, 10, 100, 1000] }
+# clf = GridSearchCV(LogisticRegression(penalty='l2'), param_grid)
+# lr = LogisticRegression(C=1.0, intercept_scaling=1, dual=False,
+#                         fit_intercept=True, penalty='l2', tol=0.0001)
+#
+# gs = GridSearchCV(cv=None, estimator=lr, param_grid=param_grid)
+#
+# # fit = clf.fit(data, labels)
+# # score = clf.score(data, labels)
+# # print('Grid Search Method')
+# # print(score)
+#
+# print("===== Cross Validation ====")
+# lr = LogisticRegression(C=1.0, intercept_scaling=1, dual=False,
+#                         fit_intercept=True, penalty='l2', tol=0.0001)
 # fit = clf.fit(data, labels)
 # score = clf.score(data, labels)
-# print('Grid Search Method')
-# print(score)
-
-print("===== Cross Validation ====")
-lr = LogisticRegression(C=1.0, intercept_scaling=1, dual=False,
-                        fit_intercept=True, penalty='l2', tol=0.0001)
-fit = clf.fit(data, labels)
-score = clf.score(data, labels)
-print("Training Score: %f "% score)
-print("Cross Validation Score: %f" % (cross_val(data, labels, pct, rounds, clf)))
-
+# print("Training Score: %f "% score)
+# print("Cross Validation Score: %f" % (cross_val(data, labels, pct, rounds, clf)))
+#
 
