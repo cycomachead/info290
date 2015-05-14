@@ -1,17 +1,17 @@
 from pandas import *
-from sklearn.ensemble import RandomForestClassifier
+from sklearn import svm
 import numpy as np
 import random
 
 STYLE = "American_Pale_Ale_(APA)"
 
-""" Performs cross validation on data using random forest
+""" Performs cross validation on data using svm
     Returns the average score.
     Percent is the percentage of data to use as validation,
     this should be an integer, not a decimal.
     Rounds is the number of rounds of cv to run.
 """
-def cross_val(data, labels, percent, rounds, rf):
+def cross_val(data, labels, percent, rounds, svc):
     row_count = len(data.index)
     scores = []
 
@@ -34,43 +34,42 @@ def cross_val(data, labels, percent, rounds, rf):
         test_labels = labels.drop(train_rows)
         train_labels = labels.drop(test_rows)
 
-        # train random forest
-        fit_cv = rf.fit(train_data, train_labels)
+        # train svm
+        svc.fit(train_data, train_labels)
 
         # calculate score
-        score_cv = rf.score(test_data, test_labels)
+        score_cv = svc.score(test_data, test_labels)
         scores.append(score_cv)
 
     return sum(scores)/len(scores)
 
-data = read_pickle("../../processed/pandas/%s.pkl"%(STYLE))
+data = read_pickle("./%s.pkl"%(STYLE))
 labels = data['beer_id']
 del data['beer_id']
 data = data.fillna(0)
-
-###########################
-### Basic Random Forest ###
-###########################
-
-rf = RandomForestClassifier()
-fit = rf.fit(data, labels)
-score = rf.score(data, labels)
 
 ########################
 ### Cross Validation ###
 ########################
 
-criterion = ["gini", "entropy"]
-trees = [10,20,50]
-samples = [2,10,20,50,100]
-rounds = 10
+kernels = ['linear', 'poly', 'rbf', 'sigmoid', 'precomputed']
+degrees = [1,2,3,4,5]
+cost = [0.01,0.1,1,10,100]
 
-for c in criterion:
-    for t in trees:
-        for s in samples:
-            print("===== Criterion: %s, Trees: %d, Samples/Leaf: %d ====="%(c, t, s))
-            rf = RandomForestClassifier(criterion=c, n_estimators=t, min_samples_split=s)
-            fit = rf.fit(data, labels)
-            score = rf.score(data, labels)
+for k in kernels:
+    for c in cost:
+        if k == 'poly':
+            for d in degrees:
+                print("===== Kernel: %s, Cost: %f, Degree: %d ====="%(k, c, d))
+                svc = svm.SVC(kernel=k, C=c, degree=d)
+                fit = svc.fit(data, labels)
+                score = svc.score(data, labels)
+                print("Training Score: %f"%(score))
+                print("Cross Validation Score: %f"%(cross_val(data, labels, 10, rounds, svc)))
+        else:
+                print("===== Kernel: %s, Cost: %f ====="%(k, c))
+            svc = svm.SVC(kernel=k, C=c)
+            fit = svc.fit(data, labels)
+            score = svc.score(data, labels)
             print("Training Score: %f"%(score))
-            print("Cross Validation Score: %f"%(cross_val(data, labels, 10, rounds, rf)))
+            print("Cross Validation Score: %f"%(cross_val(data, labels, 10, rounds, svc)))
