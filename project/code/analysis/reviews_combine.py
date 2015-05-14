@@ -1,12 +1,16 @@
 from pandas import *
 import os
+import sys
 
-STYLE = "American_Pale_Ale_(APA)"
+STYLE = sys.argv[1] # "American_Pale_Ale_(APA)"
+STYLE = STYLE.split('/')[3] # Just the ending
+if STYLE == 'all_beers.txt' or STYLE == 'American_IPA':
+    exit(0)
 BEER_DIR = "../../processed/word-freq-by-review/%s/"%(STYLE)
 BEER_COL = "beer_id"
 
 beer_dfs = {}
-
+print(STYLE)
 # Create DataFrame from each beer's csv
 for f in os.listdir(BEER_DIR):
     print(f)
@@ -15,7 +19,7 @@ for f in os.listdir(BEER_DIR):
     # Delete first column with missing character
     del cur_csv[cur_csv.icol(0).name]
     beer_dfs[f] = cur_csv
-    print(cur_csv.head(1))
+    # print(cur_csv.head(1))
 
 # Make DataFrame with all words for this style
 print("Making list of all words...")
@@ -33,7 +37,7 @@ print("Combining DataFrame objects...")
 i = 0
 for beer_id in beer_dfs:
     df = beer_dfs[beer_id]
-    print("Appending beer #%d: %s"%(i, beer_id))
+    # print("Appending beer #%d: %s"%(i, beer_id))
     cols = df.columns.values
 #    avg = 0
 #    for c in cols:
@@ -60,4 +64,4 @@ print("DONE: combining DataFrame objects.")
 # Fill in with 0's
 combined_df = combined_df.fillna(0)
 
-combined_df.to_pickle("./%s.pkl"%(STYLE))
+combined_df.to_pickle("../../processed/pandas/%s.pkl"%(STYLE))
