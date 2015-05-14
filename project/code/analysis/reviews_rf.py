@@ -3,7 +3,7 @@ from sklearn.ensemble import RandomForestClassifier
 import numpy as np
 import random
 
-STYLE = "American_IPA"
+STYLE = "American_Pale_Ale_(APA)"
 
 """ Performs cross validation on data using random forest
     Returns the average score.
