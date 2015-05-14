@@ -3,7 +3,7 @@ from sklearn.ensemble import RandomForestClassifier
 import numpy as np
 import random
 
-STYLE = "American_Pale_Ale_(APA)"
+STYLE = "American_IPA"
 
 """ Performs cross validation on data using random forest
     Returns the average score.
@@ -43,7 +43,7 @@ def cross_val(data, labels, percent, rounds, rf):
 
     return sum(scores)/len(scores)
 
-data = read_pickle("./%s.pkl"%(STYLE))
+data = read_pickle("../../processed/pandas/%s.pkl"%(STYLE))
 labels = data['beer_id']
 del data['beer_id']
 data = data.fillna(0)
