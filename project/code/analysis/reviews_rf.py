@@ -61,9 +61,8 @@ score = rf.score(data, labels)
 ########################
 
 criterion = ["gini", "entropy"]
-trees = [2,5,10,20,50]
+trees = [10,20,50]
 samples = [2,10,20,50,100]
-percents = [1,2,5,10,15,20,25]
 rounds = 10
 
 for c in criterion:
@@ -71,6 +70,7 @@ for c in criterion:
         for s in samples:
             print("===== Criterion: %s, Trees: %d, Samples/Leaf: %d ====="%(c, t, s))
             rf = RandomForestClassifier(criterion=c, n_estimators=t, min_samples_split=s)
-            for percent in percents:
-                print("Cross Validation Score (%d%%): %f"%(percent, cross_val(data, labels, percent, rounds, rf)))
-
+            fit = rf.fit(data, labels)
+            score = rf.score(data, labels)
+            print("Training Score: %f"%(score))
+            print("Cross Validation Score: %f"%(cross_val(data, labels, 10, rounds, rf)))
